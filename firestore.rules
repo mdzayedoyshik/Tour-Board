@@ -138,43 +138,47 @@ service cloud.firestore {
     }
 
     // ------------------------------------------------------------------
-    // Split validation without loops: shares is a map with at most
-    // maxParticipants() entries, so the sum is unrolled over 30 slots.
+    // Split validation without loops. Rules have no iteration and cap each
+    // request at 1000 evaluated expressions, so the share list is padded to
+    // maxParticipants() entries and summed in a fixed number of steps:
+    //   * sum is int        -> every share is an integer (int + float = float)
+    //   * sum == amount     -> shares add up exactly to the expense total
+    //   * sum(|x|) == sum   -> no share is negative
+    // Non-numeric values make `+` error, which denies the write.
     // ------------------------------------------------------------------
 
-    function at(l, i) { return l.size() > i ? l[i] : 0; }
-
-    function okAt(l, i) {
-      return l.size() <= i || (l[i] is int && l[i] >= 0
-          && l[i] <= maxAmountMinor());
+    function padded(l) {
+      return l.concat([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     }
 
-    function allSharesValid(l) {
-      return okAt(l, 0) && okAt(l, 1) && okAt(l, 2) && okAt(l, 3)
-          && okAt(l, 4) && okAt(l, 5) && okAt(l, 6) && okAt(l, 7)
-          && okAt(l, 8) && okAt(l, 9) && okAt(l, 10) && okAt(l, 11)
-          && okAt(l, 12) && okAt(l, 13) && okAt(l, 14) && okAt(l, 15)
-          && okAt(l, 16) && okAt(l, 17) && okAt(l, 18) && okAt(l, 19)
-          && okAt(l, 20) && okAt(l, 21) && okAt(l, 22) && okAt(l, 23)
-          && okAt(l, 24) && okAt(l, 25) && okAt(l, 26) && okAt(l, 27)
-          && okAt(l, 28) && okAt(l, 29);
+    function sumOf(p) {
+      return p[0] + p[1] + p[2] + p[3] + p[4]
+          + p[5] + p[6] + p[7] + p[8] + p[9]
+          + p[10] + p[11] + p[12] + p[13] + p[14]
+          + p[15] + p[16] + p[17] + p[18] + p[19]
+          + p[20] + p[21] + p[22] + p[23] + p[24]
+          + p[25] + p[26] + p[27] + p[28] + p[29];
     }
 
-    function sumShares(l) {
-      return at(l, 0) + at(l, 1) + at(l, 2) + at(l, 3) + at(l, 4)
-          + at(l, 5) + at(l, 6) + at(l, 7) + at(l, 8) + at(l, 9)
-          + at(l, 10) + at(l, 11) + at(l, 12) + at(l, 13) + at(l, 14)
-          + at(l, 15) + at(l, 16) + at(l, 17) + at(l, 18) + at(l, 19)
-          + at(l, 20) + at(l, 21) + at(l, 22) + at(l, 23) + at(l, 24)
-          + at(l, 25) + at(l, 26) + at(l, 27) + at(l, 28) + at(l, 29);
+    function sumOfAbs(p) {
+      return math.abs(p[0]) + math.abs(p[1]) + math.abs(p[2]) + math.abs(p[3]) + math.abs(p[4])
+          + math.abs(p[5]) + math.abs(p[6]) + math.abs(p[7]) + math.abs(p[8]) + math.abs(p[9])
+          + math.abs(p[10]) + math.abs(p[11]) + math.abs(p[12]) + math.abs(p[13]) + math.abs(p[14])
+          + math.abs(p[15]) + math.abs(p[16]) + math.abs(p[17]) + math.abs(p[18]) + math.abs(p[19])
+          + math.abs(p[20]) + math.abs(p[21]) + math.abs(p[22]) + math.abs(p[23]) + math.abs(p[24])
+          + math.abs(p[25]) + math.abs(p[26]) + math.abs(p[27]) + math.abs(p[28]) + math.abs(p[29]);
     }
 
     function validShares(shares, amount, everMembers) {
       return shares is map
           && shares.size() >= 1 && shares.size() <= maxParticipants()
           && shares.keys().hasOnly(everMembers)
-          && allSharesValid(shares.values())
-          && sumShares(shares.values()) == amount;
+          && sharesSumTo(padded(shares.values()), amount);
+    }
+
+    function sharesSumTo(p, amount) {
+      let total = sumOf(p);
+      return total is int && total == amount && sumOfAbs(p) == amount;
     }
 
     // ==================================================================
