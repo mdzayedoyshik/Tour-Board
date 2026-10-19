@@ -1470,4 +1470,216 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get feedUnknown => 'Update from a newer app version';
+
+  @override
+  String get reminderLocalNote => 'Reminder on this device';
+
+  @override
+  String activityNew(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new updates',
+      one: '1 new update',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String inboxJoinRequest(String name) {
+    return '$name asked to join';
+  }
+
+  @override
+  String get inboxJoinApproved => 'Your request to join was approved';
+
+  @override
+  String get inboxJoinRejected => 'Your request to join was declined';
+
+  @override
+  String inboxSettlementSubmitted(String name) {
+    return '$name recorded a payment for you to confirm';
+  }
+
+  @override
+  String inboxSettlementConfirmed(String name) {
+    return '$name confirmed your payment';
+  }
+
+  @override
+  String inboxSettlementDisputed(String name) {
+    return '$name disputed a payment';
+  }
+
+  @override
+  String inboxTourClosed(String name) {
+    return '$name closed the tour';
+  }
+
+  @override
+  String inboxTourReopened(String name) {
+    return '$name reopened the tour';
+  }
+
+  @override
+  String inboxRoleChanged(String name) {
+    return '$name changed your role';
+  }
+
+  @override
+  String get inboxMarkAllRead => 'Mark all read';
+
+  @override
+  String get inboxExplainer =>
+      'Updates appear here while you use the app. Tour Board doesn\'t send push notifications.';
+
+  @override
+  String get inboxEmpty => 'You\'re all caught up';
+
+  @override
+  String get profileEdit => 'Edit name';
+
+  @override
+  String get profileName => 'Display name';
+
+  @override
+  String get profileUpdated => 'Profile updated';
+
+  @override
+  String get profileEmailReadOnly =>
+      'Your email comes from your Google account and can\'t be changed here.';
+
+  @override
+  String get settingsAppearance => 'Appearance';
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get languageSystem => 'Device language';
+
+  @override
+  String get settingsNotifications => 'Notifications';
+
+  @override
+  String get prefImportant => 'Important updates';
+
+  @override
+  String get prefImportantHint =>
+      'Join requests, payments and tour status in your inbox';
+
+  @override
+  String get prefExpenses => 'Expense updates';
+
+  @override
+  String get prefPlans => 'Plan updates';
+
+  @override
+  String get prefReminders => 'Plan reminders on this device';
+
+  @override
+  String get prefRemindersHint =>
+      'Local reminders before planned activities. Other members aren\'t notified.';
+
+  @override
+  String get prefRemindersDenied =>
+      'Notifications are blocked for Tour Board in system settings.';
+
+  @override
+  String get prefReminderLead => 'Remind me';
+
+  @override
+  String minutesBefore(int minutes) {
+    return '$minutes min before';
+  }
+
+  @override
+  String get pushLimitation =>
+      'Tour Board works without its own server, so it can\'t send push notifications to other people. You\'ll see updates when you open the app.';
+
+  @override
+  String get settingsLocation => 'Location';
+
+  @override
+  String get locationHelpTitle => 'How location sharing works';
+
+  @override
+  String get locationHelpBody =>
+      'It\'s off unless you start it from a tour\'s map. Only that tour\'s members can see it, it stops automatically, and it pauses when the app is in the background. It can use extra battery.';
+
+  @override
+  String get locationOpenSettings => 'Location permission settings';
+
+  @override
+  String get settingsPrivacy => 'Privacy & data';
+
+  @override
+  String get privacyTitle => 'Privacy and data retention';
+
+  @override
+  String get privacyBody =>
+      'Only approved members of a tour can see its expenses, plans, notes and shared locations. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nLocation is shared only when you turn it on, only the latest position is kept, and it\'s hidden as soon as the sharing window ends.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired invites, old notifications and expired locations are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group\'s balances remain correct.';
+
+  @override
+  String get diagnosticsTitle => 'Diagnostics';
+
+  @override
+  String get diagListeners => 'Active listeners';
+
+  @override
+  String get diagPendingWrites => 'Writes waiting for server';
+
+  @override
+  String get diagFromCache => 'Last data from cache';
+
+  @override
+  String get diagEnvironment => 'Environment';
+
+  @override
+  String get diagEmulator => 'Using emulator';
+
+  @override
+  String get diagPlaceSearch => 'Place search';
+
+  @override
+  String get diagYes => 'Yes';
+
+  @override
+  String get diagNo => 'No';
+
+  @override
+  String get settingsAccount => 'Account';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get signOutConfirm => 'Sign out of Tour Board?';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteBlockedTitle => 'Transfer hosting first';
+
+  @override
+  String deleteBlockedBody(String tours) {
+    return 'You host: $tours. Make someone else the host (or delete those tours) before deleting your account.';
+  }
+
+  @override
+  String get deleteAccountTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountBody =>
+      'You\'ll leave all tours and your profile will be deleted. Expenses and payments you were part of stay in those tours so balances remain correct. You\'ll be asked to confirm with Google.';
 }

@@ -85,6 +85,12 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
   bool _loading = false;
   bool _exhausted = false;
 
+  @override
+  void initState() {
+    super.initState();
+    ref.read(feedSeenStoreProvider).markSeen(widget.tourId);
+  }
+
   Future<void> _loadMore(DateTime before) async {
     if (_loading) return;
     setState(() => _loading = true);

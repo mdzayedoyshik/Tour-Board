@@ -961,5 +961,134 @@
       }
     }
   },
-  "feedUnknown": "Update from a newer app version"
+  "feedUnknown": "Update from a newer app version",
+  "reminderLocalNote": "Reminder on this device",
+  "activityNew": "{count, plural, =1{1 new update} other{{count} new updates}}",
+  "@activityNew": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inboxJoinRequest": "{name} asked to join",
+  "@inboxJoinRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxJoinApproved": "Your request to join was approved",
+  "inboxJoinRejected": "Your request to join was declined",
+  "inboxSettlementSubmitted": "{name} recorded a payment for you to confirm",
+  "@inboxSettlementSubmitted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSettlementConfirmed": "{name} confirmed your payment",
+  "@inboxSettlementConfirmed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSettlementDisputed": "{name} disputed a payment",
+  "@inboxSettlementDisputed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxTourClosed": "{name} closed the tour",
+  "@inboxTourClosed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxTourReopened": "{name} reopened the tour",
+  "@inboxTourReopened": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxRoleChanged": "{name} changed your role",
+  "@inboxRoleChanged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxMarkAllRead": "Mark all read",
+  "inboxExplainer": "Updates appear here while you use the app. Tour Board doesn't send push notifications.",
+  "inboxEmpty": "You're all caught up",
+  "profileEdit": "Edit name",
+  "profileName": "Display name",
+  "profileUpdated": "Profile updated",
+  "profileEmailReadOnly": "Your email comes from your Google account and can't be changed here.",
+  "settingsAppearance": "Appearance",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "settingsLanguage": "Language",
+  "languageSystem": "Device language",
+  "settingsNotifications": "Notifications",
+  "prefImportant": "Important updates",
+  "prefImportantHint": "Join requests, payments and tour status in your inbox",
+  "prefExpenses": "Expense updates",
+  "prefPlans": "Plan updates",
+  "prefReminders": "Plan reminders on this device",
+  "prefRemindersHint": "Local reminders before planned activities. Other members aren't notified.",
+  "prefRemindersDenied": "Notifications are blocked for Tour Board in system settings.",
+  "prefReminderLead": "Remind me",
+  "minutesBefore": "{minutes} min before",
+  "@minutesBefore": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "pushLimitation": "Tour Board works without its own server, so it can't send push notifications to other people. You'll see updates when you open the app.",
+  "settingsLocation": "Location",
+  "locationHelpTitle": "How location sharing works",
+  "locationHelpBody": "It's off unless you start it from a tour's map. Only that tour's members can see it, it stops automatically, and it pauses when the app is in the background. It can use extra battery.",
+  "locationOpenSettings": "Location permission settings",
+  "settingsPrivacy": "Privacy & data",
+  "privacyTitle": "Privacy and data retention",
+  "privacyBody": "Only approved members of a tour can see its expenses, plans, notes and shared locations. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nLocation is shared only when you turn it on, only the latest position is kept, and it's hidden as soon as the sharing window ends.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired invites, old notifications and expired locations are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group's balances remain correct.",
+  "diagnosticsTitle": "Diagnostics",
+  "diagListeners": "Active listeners",
+  "diagPendingWrites": "Writes waiting for server",
+  "diagFromCache": "Last data from cache",
+  "diagEnvironment": "Environment",
+  "diagEmulator": "Using emulator",
+  "diagPlaceSearch": "Place search",
+  "diagYes": "Yes",
+  "diagNo": "No",
+  "settingsAccount": "Account",
+  "signOut": "Sign out",
+  "signOutConfirm": "Sign out of Tour Board?",
+  "deleteAccount": "Delete account",
+  "deleteBlockedTitle": "Transfer hosting first",
+  "deleteBlockedBody": "You host: {tours}. Make someone else the host (or delete those tours) before deleting your account.",
+  "@deleteBlockedBody": {
+    "placeholders": {
+      "tours": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteAccountTitle": "Delete your account?",
+  "deleteAccountBody": "You'll leave all tours and your profile will be deleted. Expenses and payments you were part of stay in those tours so balances remain correct. You'll be asked to confirm with Google."
 }

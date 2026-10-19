@@ -2535,6 +2535,360 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update from a newer app version'**
   String get feedUnknown;
+
+  /// No description provided for @reminderLocalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder on this device'**
+  String get reminderLocalNote;
+
+  /// No description provided for @activityNew.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 new update} other{{count} new updates}}'**
+  String activityNew(int count);
+
+  /// No description provided for @inboxJoinRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} asked to join'**
+  String inboxJoinRequest(String name);
+
+  /// No description provided for @inboxJoinApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request to join was approved'**
+  String get inboxJoinApproved;
+
+  /// No description provided for @inboxJoinRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request to join was declined'**
+  String get inboxJoinRejected;
+
+  /// No description provided for @inboxSettlementSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} recorded a payment for you to confirm'**
+  String inboxSettlementSubmitted(String name);
+
+  /// No description provided for @inboxSettlementConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} confirmed your payment'**
+  String inboxSettlementConfirmed(String name);
+
+  /// No description provided for @inboxSettlementDisputed.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} disputed a payment'**
+  String inboxSettlementDisputed(String name);
+
+  /// No description provided for @inboxTourClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} closed the tour'**
+  String inboxTourClosed(String name);
+
+  /// No description provided for @inboxTourReopened.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} reopened the tour'**
+  String inboxTourReopened(String name);
+
+  /// No description provided for @inboxRoleChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} changed your role'**
+  String inboxRoleChanged(String name);
+
+  /// No description provided for @inboxMarkAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get inboxMarkAllRead;
+
+  /// No description provided for @inboxExplainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates appear here while you use the app. Tour Board doesn\'t send push notifications.'**
+  String get inboxExplainer;
+
+  /// No description provided for @inboxEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all caught up'**
+  String get inboxEmpty;
+
+  /// No description provided for @profileEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit name'**
+  String get profileEdit;
+
+  /// No description provided for @profileName.
+  ///
+  /// In en, this message translates to:
+  /// **'Display name'**
+  String get profileName;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileUpdated;
+
+  /// No description provided for @profileEmailReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email comes from your Google account and can\'t be changed here.'**
+  String get profileEmailReadOnly;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearance;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// No description provided for @languageSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Device language'**
+  String get languageSystem;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settingsNotifications;
+
+  /// No description provided for @prefImportant.
+  ///
+  /// In en, this message translates to:
+  /// **'Important updates'**
+  String get prefImportant;
+
+  /// No description provided for @prefImportantHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Join requests, payments and tour status in your inbox'**
+  String get prefImportantHint;
+
+  /// No description provided for @prefExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense updates'**
+  String get prefExpenses;
+
+  /// No description provided for @prefPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan updates'**
+  String get prefPlans;
+
+  /// No description provided for @prefReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan reminders on this device'**
+  String get prefReminders;
+
+  /// No description provided for @prefRemindersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Local reminders before planned activities. Other members aren\'t notified.'**
+  String get prefRemindersHint;
+
+  /// No description provided for @prefRemindersDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are blocked for Tour Board in system settings.'**
+  String get prefRemindersDenied;
+
+  /// No description provided for @prefReminderLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me'**
+  String get prefReminderLead;
+
+  /// No description provided for @minutesBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min before'**
+  String minutesBefore(int minutes);
+
+  /// No description provided for @pushLimitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Tour Board works without its own server, so it can\'t send push notifications to other people. You\'ll see updates when you open the app.'**
+  String get pushLimitation;
+
+  /// No description provided for @settingsLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get settingsLocation;
+
+  /// No description provided for @locationHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How location sharing works'**
+  String get locationHelpTitle;
+
+  /// No description provided for @locationHelpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s off unless you start it from a tour\'s map. Only that tour\'s members can see it, it stops automatically, and it pauses when the app is in the background. It can use extra battery.'**
+  String get locationHelpBody;
+
+  /// No description provided for @locationOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission settings'**
+  String get locationOpenSettings;
+
+  /// No description provided for @settingsPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & data'**
+  String get settingsPrivacy;
+
+  /// No description provided for @privacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy and data retention'**
+  String get privacyTitle;
+
+  /// No description provided for @privacyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Only approved members of a tour can see its expenses, plans, notes and shared locations. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nLocation is shared only when you turn it on, only the latest position is kept, and it\'s hidden as soon as the sharing window ends.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired invites, old notifications and expired locations are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group\'s balances remain correct.'**
+  String get privacyBody;
+
+  /// No description provided for @diagnosticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostics'**
+  String get diagnosticsTitle;
+
+  /// No description provided for @diagListeners.
+  ///
+  /// In en, this message translates to:
+  /// **'Active listeners'**
+  String get diagListeners;
+
+  /// No description provided for @diagPendingWrites.
+  ///
+  /// In en, this message translates to:
+  /// **'Writes waiting for server'**
+  String get diagPendingWrites;
+
+  /// No description provided for @diagFromCache.
+  ///
+  /// In en, this message translates to:
+  /// **'Last data from cache'**
+  String get diagFromCache;
+
+  /// No description provided for @diagEnvironment.
+  ///
+  /// In en, this message translates to:
+  /// **'Environment'**
+  String get diagEnvironment;
+
+  /// No description provided for @diagEmulator.
+  ///
+  /// In en, this message translates to:
+  /// **'Using emulator'**
+  String get diagEmulator;
+
+  /// No description provided for @diagPlaceSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Place search'**
+  String get diagPlaceSearch;
+
+  /// No description provided for @diagYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get diagYes;
+
+  /// No description provided for @diagNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get diagNo;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsAccount;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get signOut;
+
+  /// No description provided for @signOutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of Tour Board?'**
+  String get signOutConfirm;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer hosting first'**
+  String get deleteBlockedTitle;
+
+  /// No description provided for @deleteBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You host: {tours}. Make someone else the host (or delete those tours) before deleting your account.'**
+  String deleteBlockedBody(String tours);
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll leave all tours and your profile will be deleted. Expenses and payments you were part of stay in those tours so balances remain correct. You\'ll be asked to confirm with Google.'**
+  String get deleteAccountBody;
 }
 
 class _AppLocalizationsDelegate

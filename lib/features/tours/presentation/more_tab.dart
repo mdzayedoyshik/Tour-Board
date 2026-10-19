@@ -7,6 +7,7 @@ import '../../../app/providers.dart';
 import '../../../app/routes.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/widgets/common.dart';
+import '../../activity_feed/data/feed_repository.dart';
 import '../../membership/data/membership_repository.dart';
 import '../../membership/domain/invite_code.dart';
 import '../domain/tour.dart';
@@ -40,6 +41,7 @@ class MoreTab extends ConsumerWidget {
     final permissions = ref.watch(permissionsProvider(tour.id));
     final pending = ref.watch(pendingRequestsProvider(tour.id)).value ?? [];
     final active = ref.watch(activeMembersProvider(tour.id));
+    final unseen = ref.watch(unseenFeedCountProvider(tour.id));
 
     return ContentWidth(
       child: ListView(
@@ -76,8 +78,13 @@ class MoreTab extends ConsumerWidget {
             onTap: () => context.push(Routes.packing(tour.id)),
           ),
           ListTile(
-            leading: const Icon(Icons.history),
+            leading: Badge(
+              isLabelVisible: unseen > 0,
+              smallSize: 8,
+              child: const Icon(Icons.history),
+            ),
             title: Text(l10n.activityTitle),
+            subtitle: unseen > 0 ? Text(l10n.activityNew(unseen)) : null,
             onTap: () => context.push(Routes.activity(tour.id)),
           ),
           ListTile(

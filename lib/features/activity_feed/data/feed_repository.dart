@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers.dart';
 import '../../../data/firebase/firestore_paths.dart';
 import '../../../data/firebase/firestore_streams.dart';
+import '../../settings/data/preferences.dart';
 import '../domain/feed_event.dart';
 
 class FeedRepository {
@@ -91,3 +92,47 @@ final recentFeedProvider = StreamProvider.autoDispose
     .family<Snapshot<FeedEvent>, String>(
       (ref, tourId) => ref.watch(feedRepositoryProvider).watchRecent(tourId),
     );
+
+/// Last time this device opened a tour's activity feed (device-local).
+class FeedSeenStore {
+  FeedSeenStore(this._ref);
+  final Ref _ref;
+
+  String _key(String tourId) => 'feedSeen.$tourId';
+
+  DateTime? lastSeen(String tourId) {
+    final ms = _ref.read(sharedPreferencesProvider).getInt(_key(tourId));
+    return ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
+  }
+
+  Future<void> markSeen(String tourId) => _ref
+      .read(sharedPreferencesProvider)
+      .setInt(_key(tourId), DateTime.now().millisecondsSinceEpoch);
+}
+
+final feedSeenStoreProvider = Provider<FeedSeenStore>(FeedSeenStore.new);
+
+/// Unseen expense/plan events by others, filtered by the user's
+/// notification preferences. Drives a small dot on the Activity entry.
+final unseenFeedCountProvider = Provider.autoDispose.family<int, String>((
+  ref,
+  tourId,
+) {
+  final prefs = ref.watch(preferencesProvider);
+  if (!prefs.notifyExpenses && !prefs.notifyPlans) return 0;
+  final uid = ref.watch(currentUidProvider);
+  final seen = ref.read(feedSeenStoreProvider).lastSeen(tourId);
+  final events = ref.watch(recentFeedProvider(tourId)).value?.items ?? const [];
+  const expenseTypes = {
+    FeedEventType.expenseAdded,
+    FeedEventType.expenseEdited,
+    FeedEventType.expenseDeleted,
+  };
+  const planTypes = {FeedEventType.planAdded, FeedEventType.planEdited};
+  return events.where((e) {
+    if (e.actorUid == uid) return false;
+    if (seen != null && !e.createdAt.isAfter(seen)) return false;
+    return (prefs.notifyExpenses && expenseTypes.contains(e.type)) ||
+        (prefs.notifyPlans && planTypes.contains(e.type));
+  }).length;
+});
