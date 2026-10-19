@@ -735,6 +735,468 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open tour'**
   String get joinOpenTour;
+
+  /// No description provided for @tabExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get tabExpenses;
+
+  /// No description provided for @tabPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan'**
+  String get tabPlan;
+
+  /// No description provided for @tabMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get tabMap;
+
+  /// No description provided for @tabMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get tabMore;
+
+  /// No description provided for @tourClosedBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'This tour is closed. Records are read-only; settling up still works.'**
+  String get tourClosedBanner;
+
+  /// No description provided for @categoryFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get categoryFood;
+
+  /// No description provided for @categoryTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get categoryTransport;
+
+  /// No description provided for @categoryStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get categoryStay;
+
+  /// No description provided for @categoryActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'Tickets & activities'**
+  String get categoryActivities;
+
+  /// No description provided for @categoryShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get categoryShopping;
+
+  /// No description provided for @categoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get categoryOther;
+
+  /// No description provided for @balanceYouReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'You should receive {amount}'**
+  String balanceYouReceive(String amount);
+
+  /// No description provided for @balanceYouOwe.
+  ///
+  /// In en, this message translates to:
+  /// **'You owe {amount}'**
+  String balanceYouOwe(String amount);
+
+  /// No description provided for @balanceYouSettled.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re settled up'**
+  String get balanceYouSettled;
+
+  /// No description provided for @balanceTheyReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} should receive {amount}'**
+  String balanceTheyReceive(String name, String amount);
+
+  /// No description provided for @balanceTheyOwe.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} owes {amount}'**
+  String balanceTheyOwe(String name, String amount);
+
+  /// No description provided for @balanceTheySettled.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is settled up'**
+  String balanceTheySettled(String name);
+
+  /// No description provided for @expenseAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add expense'**
+  String get expenseAdd;
+
+  /// No description provided for @expenseFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get expenseFilters;
+
+  /// No description provided for @expenseCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get expenseCategory;
+
+  /// No description provided for @expenseFilterMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Involving'**
+  String get expenseFilterMember;
+
+  /// No description provided for @expenseShowDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Show deleted expenses'**
+  String get expenseShowDeleted;
+
+  /// No description provided for @expenseSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search expenses'**
+  String get expenseSearchHint;
+
+  /// No description provided for @expenseLimitReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing the latest {count} expenses. Balances use these records only.'**
+  String expenseLimitReached(int count);
+
+  /// No description provided for @expenseEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses yet'**
+  String get expenseEmptyTitle;
+
+  /// No description provided for @expenseEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Record what the group spends and Tour Board works out who owes whom.'**
+  String get expenseEmptyBody;
+
+  /// No description provided for @expenseNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses match your filters.'**
+  String get expenseNoMatches;
+
+  /// No description provided for @expenseTotalSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Total spent'**
+  String get expenseTotalSpent;
+
+  /// No description provided for @expenseBudgetProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{spent} of {budget} budget'**
+  String expenseBudgetProgress(String spent, String budget);
+
+  /// No description provided for @expenseYourBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Your balance'**
+  String get expenseYourBalance;
+
+  /// No description provided for @balancesOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Balances & settle up'**
+  String get balancesOpen;
+
+  /// No description provided for @expensePaidBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid by {name}'**
+  String expensePaidBy(String name);
+
+  /// No description provided for @expenseAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New expense'**
+  String get expenseAddTitle;
+
+  /// No description provided for @expenseEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit expense'**
+  String get expenseEditTitle;
+
+  /// No description provided for @expenseOtherCurrencyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Balances in this currency are kept separate from {currency}. No conversion is applied.'**
+  String expenseOtherCurrencyNote(String currency);
+
+  /// No description provided for @expenseTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get expenseTitleLabel;
+
+  /// No description provided for @expenseTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Dinner at the beach'**
+  String get expenseTitleHint;
+
+  /// No description provided for @expenseTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a short description'**
+  String get expenseTitleRequired;
+
+  /// No description provided for @expensePayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid by'**
+  String get expensePayer;
+
+  /// No description provided for @expensePayerLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Only hosts and admins can record expenses paid by someone else.'**
+  String get expensePayerLocked;
+
+  /// No description provided for @expenseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get expenseDate;
+
+  /// No description provided for @expenseSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Split'**
+  String get expenseSplit;
+
+  /// No description provided for @splitEqual.
+  ///
+  /// In en, this message translates to:
+  /// **'Equally'**
+  String get splitEqual;
+
+  /// No description provided for @splitCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Amounts'**
+  String get splitCustom;
+
+  /// No description provided for @splitShares.
+  ///
+  /// In en, this message translates to:
+  /// **'Shares'**
+  String get splitShares;
+
+  /// No description provided for @splitPayerHintYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Tick who shares this cost. You can leave yourself out if you paid for others.'**
+  String get splitPayerHintYou;
+
+  /// No description provided for @splitPayerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tick who shares this cost. {name} can be left out if they paid for others.'**
+  String splitPayerHint(String name);
+
+  /// No description provided for @splitNoParticipants.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one person'**
+  String get splitNoParticipants;
+
+  /// No description provided for @splitSumMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Shares must add up to the total ({remaining} left)'**
+  String splitSumMismatch(String remaining);
+
+  /// No description provided for @splitInvalidWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Shares must be between 1 and 1000'**
+  String get splitInvalidWeight;
+
+  /// No description provided for @splitTooMany.
+  ///
+  /// In en, this message translates to:
+  /// **'At most {count} people per expense'**
+  String splitTooMany(int count);
+
+  /// No description provided for @splitPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'{total} split between {count, plural, =1{1 person} other{{count} people}}'**
+  String splitPreview(String total, int count);
+
+  /// No description provided for @splitFewerShares.
+  ///
+  /// In en, this message translates to:
+  /// **'Fewer shares'**
+  String get splitFewerShares;
+
+  /// No description provided for @splitMoreShares.
+  ///
+  /// In en, this message translates to:
+  /// **'More shares'**
+  String get splitMoreShares;
+
+  /// No description provided for @splitShareLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get splitShareLabel;
+
+  /// No description provided for @expenseNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get expenseNote;
+
+  /// No description provided for @expenseSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense saved'**
+  String get expenseSaved;
+
+  /// No description provided for @expenseUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense updated'**
+  String get expenseUpdated;
+
+  /// No description provided for @expenseConfirmEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update balances?'**
+  String get expenseConfirmEditTitle;
+
+  /// No description provided for @expenseConfirmEditBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This change affects what {count, plural, =1{1 other member owes or receives} other{{count} other members owe or receive}}.'**
+  String expenseConfirmEditBody(int count);
+
+  /// No description provided for @conflictTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed by someone else'**
+  String get conflictTitle;
+
+  /// No description provided for @conflictExpenseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Another member edited this expense while you were editing. Your changes weren\'t saved — reopen it to see the latest version.'**
+  String get conflictExpenseBody;
+
+  /// No description provided for @expenseDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get expenseDetailTitle;
+
+  /// No description provided for @expenseDeletedBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted by {name} on {time}. It no longer counts toward balances.'**
+  String expenseDeletedBanner(String name, String time);
+
+  /// No description provided for @viewEdits.
+  ///
+  /// In en, this message translates to:
+  /// **'View edits'**
+  String get viewEdits;
+
+  /// No description provided for @viewEditsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit history'**
+  String get viewEditsTitle;
+
+  /// No description provided for @expensePayerNotParticipant.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} paid on behalf of the people above.'**
+  String expensePayerNotParticipant(String name);
+
+  /// No description provided for @expenseCreatedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Added by {name} · {time}'**
+  String expenseCreatedBy(String name, String time);
+
+  /// No description provided for @expenseDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete expense?'**
+  String get expenseDeleteTitle;
+
+  /// No description provided for @expenseDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It will be removed from balances. A record of the deletion stays in the edit history.'**
+  String get expenseDeleteBody;
+
+  /// No description provided for @expenseDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense deleted'**
+  String get expenseDeleted;
+
+  /// No description provided for @revisionSplitChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'split changed'**
+  String get revisionSplitChanged;
+
+  /// No description provided for @revisionBy.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} · {time}'**
+  String revisionBy(String name, String time);
+
+  /// No description provided for @fieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get fieldTitle;
+
+  /// No description provided for @fieldSplitMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Split method'**
+  String get fieldSplitMethod;
+
+  /// No description provided for @fieldBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get fieldBody;
+
+  /// No description provided for @fieldStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get fieldStatus;
 }
 
 class _AppLocalizationsDelegate

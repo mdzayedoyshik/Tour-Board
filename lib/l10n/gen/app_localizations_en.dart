@@ -383,4 +383,289 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get joinOpenTour => 'Open tour';
+
+  @override
+  String get tabExpenses => 'Expenses';
+
+  @override
+  String get tabPlan => 'Plan';
+
+  @override
+  String get tabMap => 'Map';
+
+  @override
+  String get tabMore => 'More';
+
+  @override
+  String get tourClosedBanner =>
+      'This tour is closed. Records are read-only; settling up still works.';
+
+  @override
+  String get categoryFood => 'Food';
+
+  @override
+  String get categoryTransport => 'Transport';
+
+  @override
+  String get categoryStay => 'Stay';
+
+  @override
+  String get categoryActivities => 'Tickets & activities';
+
+  @override
+  String get categoryShopping => 'Shopping';
+
+  @override
+  String get categoryOther => 'Other';
+
+  @override
+  String balanceYouReceive(String amount) {
+    return 'You should receive $amount';
+  }
+
+  @override
+  String balanceYouOwe(String amount) {
+    return 'You owe $amount';
+  }
+
+  @override
+  String get balanceYouSettled => 'You\'re settled up';
+
+  @override
+  String balanceTheyReceive(String name, String amount) {
+    return '$name should receive $amount';
+  }
+
+  @override
+  String balanceTheyOwe(String name, String amount) {
+    return '$name owes $amount';
+  }
+
+  @override
+  String balanceTheySettled(String name) {
+    return '$name is settled up';
+  }
+
+  @override
+  String get expenseAdd => 'Add expense';
+
+  @override
+  String get expenseFilters => 'Filters';
+
+  @override
+  String get expenseCategory => 'Category';
+
+  @override
+  String get expenseFilterMember => 'Involving';
+
+  @override
+  String get expenseShowDeleted => 'Show deleted expenses';
+
+  @override
+  String get expenseSearchHint => 'Search expenses';
+
+  @override
+  String expenseLimitReached(int count) {
+    return 'Showing the latest $count expenses. Balances use these records only.';
+  }
+
+  @override
+  String get expenseEmptyTitle => 'No expenses yet';
+
+  @override
+  String get expenseEmptyBody =>
+      'Record what the group spends and Tour Board works out who owes whom.';
+
+  @override
+  String get expenseNoMatches => 'No expenses match your filters.';
+
+  @override
+  String get expenseTotalSpent => 'Total spent';
+
+  @override
+  String expenseBudgetProgress(String spent, String budget) {
+    return '$spent of $budget budget';
+  }
+
+  @override
+  String get expenseYourBalance => 'Your balance';
+
+  @override
+  String get balancesOpen => 'Balances & settle up';
+
+  @override
+  String expensePaidBy(String name) {
+    return 'Paid by $name';
+  }
+
+  @override
+  String get expenseAddTitle => 'New expense';
+
+  @override
+  String get expenseEditTitle => 'Edit expense';
+
+  @override
+  String expenseOtherCurrencyNote(String currency) {
+    return 'Balances in this currency are kept separate from $currency. No conversion is applied.';
+  }
+
+  @override
+  String get expenseTitleLabel => 'Description';
+
+  @override
+  String get expenseTitleHint => 'e.g. Dinner at the beach';
+
+  @override
+  String get expenseTitleRequired => 'Add a short description';
+
+  @override
+  String get expensePayer => 'Paid by';
+
+  @override
+  String get expensePayerLocked =>
+      'Only hosts and admins can record expenses paid by someone else.';
+
+  @override
+  String get expenseDate => 'Date';
+
+  @override
+  String get expenseSplit => 'Split';
+
+  @override
+  String get splitEqual => 'Equally';
+
+  @override
+  String get splitCustom => 'Amounts';
+
+  @override
+  String get splitShares => 'Shares';
+
+  @override
+  String get splitPayerHintYou =>
+      'Tick who shares this cost. You can leave yourself out if you paid for others.';
+
+  @override
+  String splitPayerHint(String name) {
+    return 'Tick who shares this cost. $name can be left out if they paid for others.';
+  }
+
+  @override
+  String get splitNoParticipants => 'Choose at least one person';
+
+  @override
+  String splitSumMismatch(String remaining) {
+    return 'Shares must add up to the total ($remaining left)';
+  }
+
+  @override
+  String get splitInvalidWeight => 'Shares must be between 1 and 1000';
+
+  @override
+  String splitTooMany(int count) {
+    return 'At most $count people per expense';
+  }
+
+  @override
+  String splitPreview(String total, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people',
+      one: '1 person',
+    );
+    return '$total split between $_temp0';
+  }
+
+  @override
+  String get splitFewerShares => 'Fewer shares';
+
+  @override
+  String get splitMoreShares => 'More shares';
+
+  @override
+  String get splitShareLabel => 'Share';
+
+  @override
+  String get expenseNote => 'Note (optional)';
+
+  @override
+  String get expenseSaved => 'Expense saved';
+
+  @override
+  String get expenseUpdated => 'Expense updated';
+
+  @override
+  String get expenseConfirmEditTitle => 'Update balances?';
+
+  @override
+  String expenseConfirmEditBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count other members owe or receive',
+      one: '1 other member owes or receives',
+    );
+    return 'This change affects what $_temp0.';
+  }
+
+  @override
+  String get conflictTitle => 'Changed by someone else';
+
+  @override
+  String get conflictExpenseBody =>
+      'Another member edited this expense while you were editing. Your changes weren\'t saved — reopen it to see the latest version.';
+
+  @override
+  String get expenseDetailTitle => 'Expense';
+
+  @override
+  String expenseDeletedBanner(String name, String time) {
+    return 'Deleted by $name on $time. It no longer counts toward balances.';
+  }
+
+  @override
+  String get viewEdits => 'View edits';
+
+  @override
+  String get viewEditsTitle => 'Edit history';
+
+  @override
+  String expensePayerNotParticipant(String name) {
+    return '$name paid on behalf of the people above.';
+  }
+
+  @override
+  String expenseCreatedBy(String name, String time) {
+    return 'Added by $name · $time';
+  }
+
+  @override
+  String get expenseDeleteTitle => 'Delete expense?';
+
+  @override
+  String get expenseDeleteBody =>
+      'It will be removed from balances. A record of the deletion stays in the edit history.';
+
+  @override
+  String get expenseDeleted => 'Expense deleted';
+
+  @override
+  String get revisionSplitChanged => 'split changed';
+
+  @override
+  String revisionBy(String name, String time) {
+    return '$name · $time';
+  }
+
+  @override
+  String get fieldTitle => 'Title';
+
+  @override
+  String get fieldSplitMethod => 'Split method';
+
+  @override
+  String get fieldBody => 'Text';
+
+  @override
+  String get fieldStatus => 'Status';
 }

@@ -158,5 +158,229 @@
   "joinCancelRequest": "Cancel request",
   "joinRejected": "The host declined this request.",
   "joinTooManyAttempts": "You've reached the limit of join requests for this tour.",
-  "joinOpenTour": "Open tour"
+  "joinOpenTour": "Open tour",
+  "tabExpenses": "Expenses",
+  "tabPlan": "Plan",
+  "tabMap": "Map",
+  "tabMore": "More",
+  "tourClosedBanner": "This tour is closed. Records are read-only; settling up still works.",
+  "categoryFood": "Food",
+  "categoryTransport": "Transport",
+  "categoryStay": "Stay",
+  "categoryActivities": "Tickets & activities",
+  "categoryShopping": "Shopping",
+  "categoryOther": "Other",
+  "balanceYouReceive": "You should receive {amount}",
+  "@balanceYouReceive": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceYouOwe": "You owe {amount}",
+  "@balanceYouOwe": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceYouSettled": "You're settled up",
+  "balanceTheyReceive": "{name} should receive {amount}",
+  "@balanceTheyReceive": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceTheyOwe": "{name} owes {amount}",
+  "@balanceTheyOwe": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "balanceTheySettled": "{name} is settled up",
+  "@balanceTheySettled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseAdd": "Add expense",
+  "expenseFilters": "Filters",
+  "expenseCategory": "Category",
+  "expenseFilterMember": "Involving",
+  "expenseShowDeleted": "Show deleted expenses",
+  "expenseSearchHint": "Search expenses",
+  "expenseLimitReached": "Showing the latest {count} expenses. Balances use these records only.",
+  "@expenseLimitReached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "expenseEmptyTitle": "No expenses yet",
+  "expenseEmptyBody": "Record what the group spends and Tour Board works out who owes whom.",
+  "expenseNoMatches": "No expenses match your filters.",
+  "expenseTotalSpent": "Total spent",
+  "expenseBudgetProgress": "{spent} of {budget} budget",
+  "@expenseBudgetProgress": {
+    "placeholders": {
+      "spent": {
+        "type": "String"
+      },
+      "budget": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseYourBalance": "Your balance",
+  "balancesOpen": "Balances & settle up",
+  "expensePaidBy": "Paid by {name}",
+  "@expensePaidBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseAddTitle": "New expense",
+  "expenseEditTitle": "Edit expense",
+  "expenseOtherCurrencyNote": "Balances in this currency are kept separate from {currency}. No conversion is applied.",
+  "@expenseOtherCurrencyNote": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseTitleLabel": "Description",
+  "expenseTitleHint": "e.g. Dinner at the beach",
+  "expenseTitleRequired": "Add a short description",
+  "expensePayer": "Paid by",
+  "expensePayerLocked": "Only hosts and admins can record expenses paid by someone else.",
+  "expenseDate": "Date",
+  "expenseSplit": "Split",
+  "splitEqual": "Equally",
+  "splitCustom": "Amounts",
+  "splitShares": "Shares",
+  "splitPayerHintYou": "Tick who shares this cost. You can leave yourself out if you paid for others.",
+  "splitPayerHint": "Tick who shares this cost. {name} can be left out if they paid for others.",
+  "@splitPayerHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "splitNoParticipants": "Choose at least one person",
+  "splitSumMismatch": "Shares must add up to the total ({remaining} left)",
+  "@splitSumMismatch": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "splitInvalidWeight": "Shares must be between 1 and 1000",
+  "splitTooMany": "At most {count} people per expense",
+  "@splitTooMany": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "splitPreview": "{total} split between {count, plural, =1{1 person} other{{count} people}}",
+  "@splitPreview": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "splitFewerShares": "Fewer shares",
+  "splitMoreShares": "More shares",
+  "splitShareLabel": "Share",
+  "expenseNote": "Note (optional)",
+  "expenseSaved": "Expense saved",
+  "expenseUpdated": "Expense updated",
+  "expenseConfirmEditTitle": "Update balances?",
+  "expenseConfirmEditBody": "This change affects what {count, plural, =1{1 other member owes or receives} other{{count} other members owe or receive}}.",
+  "@expenseConfirmEditBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "conflictTitle": "Changed by someone else",
+  "conflictExpenseBody": "Another member edited this expense while you were editing. Your changes weren't saved — reopen it to see the latest version.",
+  "expenseDetailTitle": "Expense",
+  "expenseDeletedBanner": "Deleted by {name} on {time}. It no longer counts toward balances.",
+  "@expenseDeletedBanner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "viewEdits": "View edits",
+  "viewEditsTitle": "Edit history",
+  "expensePayerNotParticipant": "{name} paid on behalf of the people above.",
+  "@expensePayerNotParticipant": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseCreatedBy": "Added by {name} · {time}",
+  "@expenseCreatedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDeleteTitle": "Delete expense?",
+  "expenseDeleteBody": "It will be removed from balances. A record of the deletion stays in the edit history.",
+  "expenseDeleted": "Expense deleted",
+  "revisionSplitChanged": "split changed",
+  "revisionBy": "{name} · {time}",
+  "@revisionBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "fieldTitle": "Title",
+  "fieldSplitMethod": "Split method",
+  "fieldBody": "Text",
+  "fieldStatus": "Status"
 }
