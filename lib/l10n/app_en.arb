@@ -1,5 +1,68 @@
 {
   "@@locale": "en",
   "appTitle": "Tour Board",
-  "@appTitle": {"description": "Application name"}
+  "@appTitle": {
+    "description": "Application name"
+  },
+  "tagline": "Plan together. Spend clearly. Travel better.",
+  "commonRetry": "Try again",
+  "commonCancel": "Cancel",
+  "commonConfirm": "Confirm",
+  "commonSave": "Save",
+  "commonDelete": "Delete",
+  "commonEdit": "Edit",
+  "commonDone": "Done",
+  "commonClose": "Close",
+  "commonBack": "Back",
+  "commonNext": "Next",
+  "commonAdd": "Add",
+  "commonRemove": "Remove",
+  "commonCopy": "Copy",
+  "commonShare": "Share",
+  "commonCopied": "Copied",
+  "commonLoadMore": "Load more",
+  "commonOptional": "Optional",
+  "commonNone": "None",
+  "commonYou": "You",
+  "commonUnknownMember": "Former member",
+  "commonSearch": "Search",
+  "commonClear": "Clear",
+  "commonOk": "OK",
+  "commonLoading": "Loading…",
+  "errorGeneric": "Something went wrong. Please try again.",
+  "errorNetwork": "Can't reach the server. Check your connection and try again.",
+  "errorPermission": "You don't have access to this.",
+  "errorNotFound": "This item no longer exists.",
+  "errorConflict": "Someone else changed this at the same time. Reload and try again.",
+  "errorCancelled": "Cancelled.",
+  "errorQuota": "The app is busy right now. Please try again later.",
+  "errorInvalid": "Some details aren't valid. Please check and try again.",
+  "stateOfflineCached": "Offline — showing saved data",
+  "statePendingSync": "Pending sync",
+  "stateSavedOffline": "Saved on this device. It will sync when you're back online.",
+  "stateAccessRevoked": "You're no longer a member of this tour.",
+  "stateAccessRevokedBody": "Your access was removed or you left. Past records stay with the group.",
+  "stateStale": "Last updated {time}",
+  "@stateStale": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "stateEdited": "Edited",
+  "stateDeleted": "Deleted",
+  "amountLabel": "Amount",
+  "amountRequired": "Enter an amount",
+  "amountInvalid": "Enter a valid number",
+  "amountTooManyDecimals": "Use at most {digits} decimal places",
+  "@amountTooManyDecimals": {
+    "placeholders": {
+      "digits": {
+        "type": "int"
+      }
+    }
+  },
+  "amountMustBePositive": "Amount must be more than zero",
+  "amountTooLarge": "Amount is too large"
 }
