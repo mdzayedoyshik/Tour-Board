@@ -818,3 +818,130 @@ describe('content ownership', () => {
     await assertSucceeds(event('alice', 'alice'));
   });
 });
+
+describe('app write shapes', () => {
+  beforeEach(() => seedTour());
+
+  test('leaving: feed event, location delete, status and index in one batch', async () => {
+    await seed((f) =>
+      setDoc(doc(f, `users/bob/tourMemberships/${T}`), { tourId: T, joinedAt: ts() }),
+    );
+    const f = db('bob');
+    const b = writeBatch(f);
+    b.set(doc(f, `tours/${T}/activityFeed/f-leave`), {
+      type: 'memberLeft',
+      actorUid: 'bob',
+      label: 'Bob',
+      createdAt: serverTimestamp(),
+    });
+    b.delete(doc(f, `tours/${T}/locations/bob`));
+    b.update(doc(f, `tours/${T}/members/bob`), {
+      status: 'left',
+      removedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    b.delete(doc(f, `users/bob/tourMemberships/${T}`));
+    await assertSucceeds(b.commit());
+    await assertFails(getDoc(doc(db('bob'), `tours/${T}`)));
+  });
+
+  test('re-admitting a removed member through an approved request', async () => {
+    await seed((f) =>
+      setDoc(doc(f, `tours/${T}/joinRequests/gone`), {
+        uid: 'gone',
+        displayNameSnapshot: 'gone',
+        status: 'pending',
+        attemptCount: 2,
+        inviteCode: CODE,
+        createdAt: ts(-DAY),
+        updatedAt: ts(-1000),
+      }),
+    );
+    const f = db('admin');
+    const b = writeBatch(f);
+    b.update(doc(f, `tours/${T}/joinRequests/gone`), {
+      status: 'approved',
+      reviewedBy: 'admin',
+      reviewedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    b.update(doc(f, `tours/${T}/members/gone`), {
+      uid: 'gone',
+      displayNameSnapshot: 'gone',
+      photoUrlSnapshot: null,
+      role: 'member',
+      status: 'active',
+      joinedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      removedAt: null,
+    });
+    b.set(doc(f, `users/gone/tourMemberships/${T}`), {
+      tourId: T,
+      joinedAt: serverTimestamp(),
+    });
+    await assertSucceeds(b.commit());
+    await assertSucceeds(getDoc(doc(db('gone'), `tours/${T}`)));
+  });
+
+  test('note edit requires the matching revision; others cannot edit', async () => {
+    await seed((f) =>
+      setDoc(doc(f, `tours/${T}/notes/n1`), {
+        body: 'Hotel code 1234',
+        createdBy: 'alice',
+        updatedBy: 'alice',
+        createdAt: ts(-1000),
+        updatedAt: ts(-1000),
+        revisionCount: 0,
+      }),
+    );
+    const edit = (uid, withRevision) => {
+      const f = db(uid);
+      const b = writeBatch(f);
+      b.update(doc(f, `tours/${T}/notes/n1`), {
+        body: 'Hotel code 4321',
+        updatedBy: uid,
+        updatedAt: serverTimestamp(),
+        revisionCount: 1,
+      });
+      if (withRevision) {
+        b.set(doc(f, `tours/${T}/notes/n1/revisions/1`), {
+          editorUid: uid,
+          editedAt: serverTimestamp(),
+          changedFields: ['body'],
+          before: { body: 'Hotel code 1234' },
+          after: { body: 'Hotel code 4321' },
+        });
+      }
+      return b.commit();
+    };
+    await assertFails(edit('bob', true));
+    await assertFails(edit('alice', false));
+    await assertSucceeds(edit('alice', true));
+  });
+
+  test('packing: members tick items; label edits need ownership', async () => {
+    await seed((f) =>
+      setDoc(doc(f, `tours/${T}/packingItems/p1`), {
+        label: 'Sunscreen',
+        checked: false,
+        createdBy: 'alice',
+        createdAt: ts(-1000),
+        updatedAt: ts(-1000),
+      }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(db('bob'), `tours/${T}/packingItems/p1`), {
+        checked: true,
+        checkedBy: 'bob',
+        updatedAt: serverTimestamp(),
+      }),
+    );
+    await assertFails(
+      updateDoc(doc(db('bob'), `tours/${T}/packingItems/p1`), {
+        label: 'Hacked',
+        updatedAt: serverTimestamp(),
+      }),
+    );
+    await assertFails(deleteDoc(doc(db('bob'), `tours/${T}/packingItems/p1`)));
+  });
+});
