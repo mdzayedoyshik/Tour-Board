@@ -34,8 +34,9 @@ AmountParseResult parseAmount(
   bool allowZero = false,
 }) {
   var text = input.trim().replaceAll(RegExp(r'[\s  ]'), '');
-  if (text.isEmpty)
+  if (text.isEmpty) {
     return const AmountParseResult.failed(AmountParseError.empty);
+  }
 
   // Normalise the decimal separator to '.' and drop grouping characters.
   if (groupSeparator != decimalSeparator && groupSeparator.isNotEmpty) {
