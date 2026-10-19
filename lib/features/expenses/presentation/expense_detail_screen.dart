@@ -208,7 +208,7 @@ class _BodyState extends ConsumerState<_Body> {
               ),
             ),
           ],
-          SectionHeaderBare(
+          FormSectionLabel(
             '${l10n.expenseSplit} · ${_methodLabel(l10n, e.splitMethod)}',
           ),
           for (final uid in participants)
@@ -245,7 +245,7 @@ class _BodyState extends ConsumerState<_Body> {
               ),
             ),
           if (e.note != null) ...[
-            SectionHeaderBare(l10n.expenseNote),
+            FormSectionLabel(l10n.expenseNote),
             Text(e.note!),
           ],
           const SizedBox(height: AppSpacing.lg),
@@ -283,26 +283,6 @@ String _methodLabel(AppLocalizations l10n, SplitMethod m) => switch (m) {
   SplitMethod.custom => l10n.splitCustom,
   SplitMethod.shares => l10n.splitShares,
 };
-
-class SectionHeaderBare extends StatelessWidget {
-  const SectionHeaderBare(this.text, {super.key});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: AppSpacing.xl, bottom: AppSpacing.sm),
-    child: Semantics(
-      header: true,
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-        ),
-      ),
-    ),
-  );
-}
 
 class _RevisionsSheet extends ConsumerWidget {
   const _RevisionsSheet({

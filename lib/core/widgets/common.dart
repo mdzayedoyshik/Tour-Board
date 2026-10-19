@@ -254,3 +254,24 @@ class SurfaceCard extends StatelessWidget {
     ),
   );
 }
+
+/// Small section label inside forms and detail pages.
+class FormSectionLabel extends StatelessWidget {
+  const FormSectionLabel(this.text, {super.key});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: AppSpacing.xl, bottom: AppSpacing.sm),
+    child: Semantics(
+      header: true,
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+      ),
+    ),
+  );
+}
