@@ -160,4 +160,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get amountTooLarge => 'Amount is too large';
+
+  @override
+  String get signInWithGoogle => 'Continue with Google';
+
+  @override
+  String get privacyNote =>
+      'Your tours are shared only with people who are members.';
+
+  @override
+  String get signInErrorNetwork =>
+      'You\'re offline. Connect to the internet to sign in.';
+
+  @override
+  String get signInErrorConfig =>
+      'Google sign-in isn\'t set up for this build yet. Enable it in Firebase and re-run `flutterfire configure`.';
+
+  @override
+  String get signInErrorGeneric => 'Couldn\'t sign in. Please try again.';
+
+  @override
+  String get configErrorTitle => 'Setup needed';
+
+  @override
+  String get configErrorBody =>
+      'Firebase isn\'t configured for this build yet. Run `flutterfire configure` as described in README.md, then rebuild the app.';
 }

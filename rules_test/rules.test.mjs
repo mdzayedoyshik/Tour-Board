@@ -108,6 +108,7 @@ async function seedTour(tourOverrides = {}) {
     await setDoc(doc(f, `invites/${CODE}`), {
       tourId: T,
       tourName: 'Cox’s Bazar',
+      hostUid: 'host',
       hostName: 'host',
       startAt: ts(),
       endAt: ts(3 * DAY),
@@ -190,6 +191,7 @@ describe('tour creation', () => {
     b.set(doc(f, 'invites/ABCDEFGHJKMN'), {
       tourId: 'new',
       tourName: 'Trip',
+      hostUid: 'host',
       hostName: 'host',
       startAt: ts(),
       endAt: ts(DAY),

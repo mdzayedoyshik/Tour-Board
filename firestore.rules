@@ -278,12 +278,13 @@ service cloud.firestore {
 
     match /invites/{code} {
       function validInvite(d) {
-        return d.keys().hasOnly(['tourId', 'tourName', 'hostName', 'startAt',
-                                 'endAt', 'expiresAt', 'revoked', 'createdBy',
-                                 'createdAt'])
+        return d.keys().hasOnly(['tourId', 'tourName', 'hostUid', 'hostName',
+                                 'startAt', 'endAt', 'expiresAt', 'revoked',
+                                 'createdBy', 'createdAt'])
             && code.size() == 12
             && isStr(d.tourId, 1, 128)
             && isStr(d.tourName, 1, 80)
+            && isStr(d.hostUid, 1, 128)
             && isStr(d.hostName, 1, 60)
             && d.startAt is timestamp && d.endAt is timestamp
             && d.expiresAt is timestamp

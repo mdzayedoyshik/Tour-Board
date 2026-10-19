@@ -381,6 +381,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Amount is too large'**
   String get amountTooLarge;
+
+  /// No description provided for @signInWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get signInWithGoogle;
+
+  /// No description provided for @privacyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tours are shared only with people who are members.'**
+  String get privacyNote;
+
+  /// No description provided for @signInErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline. Connect to the internet to sign in.'**
+  String get signInErrorNetwork;
+
+  /// No description provided for @signInErrorConfig.
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign-in isn\'t set up for this build yet. Enable it in Firebase and re-run `flutterfire configure`.'**
+  String get signInErrorConfig;
+
+  /// No description provided for @signInErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t sign in. Please try again.'**
+  String get signInErrorGeneric;
+
+  /// No description provided for @configErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup needed'**
+  String get configErrorTitle;
+
+  /// No description provided for @configErrorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase isn\'t configured for this build yet. Run `flutterfire configure` as described in README.md, then rebuild the app.'**
+  String get configErrorBody;
 }
 
 class _AppLocalizationsDelegate

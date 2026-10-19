@@ -10,22 +10,12 @@ const String appEnvironment = String.fromEnvironment(
 
 /// Non-secret runtime configuration loaded from `env/<ENV>.env`.
 ///
-/// Firebase client options are public by design (access is enforced by
-/// Security Rules). Never place service-account keys or server credentials
-/// in these files.
+/// Firebase itself is configured by the FlutterFire CLI
+/// (lib/firebase_options.dart), not by env values. Never place
+/// service-account keys or server credentials in these files.
 class AppConfig {
   const AppConfig({
     required this.environment,
-    required this.firebaseProjectId,
-    required this.firebaseMessagingSenderId,
-    required this.firebaseStorageBucket,
-    required this.firebaseAndroidApiKey,
-    required this.firebaseAndroidAppId,
-    required this.firebaseIosApiKey,
-    required this.firebaseIosAppId,
-    required this.firebaseIosBundleId,
-    required this.googleServerClientId,
-    required this.googleIosClientId,
     required this.inviteLinkBase,
     required this.mapTileUrl,
     required this.mapTileAttribution,
@@ -45,16 +35,6 @@ class AppConfig {
 
     return AppConfig(
       environment: environment,
-      firebaseProjectId: value('FIREBASE_PROJECT_ID'),
-      firebaseMessagingSenderId: value('FIREBASE_MESSAGING_SENDER_ID'),
-      firebaseStorageBucket: value('FIREBASE_STORAGE_BUCKET'),
-      firebaseAndroidApiKey: value('FIREBASE_ANDROID_API_KEY'),
-      firebaseAndroidAppId: value('FIREBASE_ANDROID_APP_ID'),
-      firebaseIosApiKey: value('FIREBASE_IOS_API_KEY'),
-      firebaseIosAppId: value('FIREBASE_IOS_APP_ID'),
-      firebaseIosBundleId: value('FIREBASE_IOS_BUNDLE_ID'),
-      googleServerClientId: value('GOOGLE_SERVER_CLIENT_ID'),
-      googleIosClientId: value('GOOGLE_IOS_CLIENT_ID'),
       inviteLinkBase: value('INVITE_LINK_BASE', 'https://tourboard.app/join'),
       mapTileUrl: value(
         'MAP_TILE_URL',
@@ -79,30 +59,19 @@ class AppConfig {
     );
   }
 
-  /// Loads `env/<environment>.env`. Throws [ConfigException] when the file
-  /// is missing so the app can show setup instructions instead of crashing.
+  /// Loads `env/<environment>.env`. Every key has a safe default, so a
+  /// missing file simply means "use defaults".
   static Future<AppConfig> load({String environment = appEnvironment}) async {
-    final file = 'env/$environment.env';
     try {
-      final text = await rootBundle.loadString(file);
+      final text = await rootBundle.loadString('env/$environment.env');
       final env = DotEnv()..loadFromString(envString: text);
       return AppConfig.fromMap(environment, Map.of(env.env));
     } on FlutterError {
-      throw ConfigException(missingFile: file);
+      return AppConfig.fromMap(environment, const {});
     }
   }
 
   final String environment;
-  final String firebaseProjectId;
-  final String firebaseMessagingSenderId;
-  final String firebaseStorageBucket;
-  final String firebaseAndroidApiKey;
-  final String firebaseAndroidAppId;
-  final String firebaseIosApiKey;
-  final String firebaseIosAppId;
-  final String firebaseIosBundleId;
-  final String googleServerClientId;
-  final String googleIosClientId;
   final String inviteLinkBase;
   final String mapTileUrl;
   final String mapTileAttribution;
@@ -116,35 +85,14 @@ class AppConfig {
   final String firebaseEmulatorHost;
 
   bool get isProduction => environment == 'prod';
-
-  /// Names of required keys that are empty for the current platform.
-  List<String> missingFirebaseKeys() {
-    final missing = <String>[
-      if (firebaseProjectId.isEmpty) 'FIREBASE_PROJECT_ID',
-      if (firebaseMessagingSenderId.isEmpty) 'FIREBASE_MESSAGING_SENDER_ID',
-    ];
-    final platform = defaultTargetPlatform;
-    if (platform == TargetPlatform.iOS) {
-      if (firebaseIosApiKey.isEmpty) missing.add('FIREBASE_IOS_API_KEY');
-      if (firebaseIosAppId.isEmpty) missing.add('FIREBASE_IOS_APP_ID');
-    } else {
-      if (firebaseAndroidApiKey.isEmpty) {
-        missing.add('FIREBASE_ANDROID_API_KEY');
-      }
-      if (firebaseAndroidAppId.isEmpty) missing.add('FIREBASE_ANDROID_APP_ID');
-    }
-    return missing;
-  }
 }
 
+/// Raised when Firebase has not been configured with `flutterfire configure`.
 class ConfigException implements Exception {
-  const ConfigException({this.missingFile, this.missingKeys = const []});
+  const ConfigException(this.message);
 
-  final String? missingFile;
-  final List<String> missingKeys;
+  final String message;
 
   @override
-  String toString() => missingFile != null
-      ? 'Missing configuration file $missingFile'
-      : 'Missing configuration keys: ${missingKeys.join(', ')}';
+  String toString() => message;
 }
