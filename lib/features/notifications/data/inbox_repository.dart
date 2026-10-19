@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers.dart';
 import '../../../data/firebase/firestore_paths.dart';
 import '../../../data/firebase/firestore_streams.dart';
+import '../../settings/data/preferences.dart';
 import '../domain/inbox_item.dart';
 
 /// In-app notifications at users/{uid}/inbox.
@@ -136,6 +137,7 @@ final inboxProvider = StreamProvider.autoDispose<Snapshot<InboxItem>>((ref) {
 
 /// Unread, unexpired items in the first page — the Home badge count.
 final unreadInboxCountProvider = Provider.autoDispose<int>((ref) {
+  if (!ref.watch(preferencesProvider).notifyImportant) return 0;
   final now = ref.watch(clockProvider)();
   final items = ref.watch(inboxProvider).value?.items ?? const [];
   return items.where((i) => !i.read && !i.isExpired(now)).length;

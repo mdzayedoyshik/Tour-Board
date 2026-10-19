@@ -12,6 +12,7 @@ import '../../expenses/presentation/expenses_tab.dart';
 import '../../itinerary/presentation/plan_tab.dart';
 import '../../map/presentation/map_tab.dart';
 import '../../membership/data/membership_repository.dart';
+import '../../notifications/presentation/reminder_sync.dart';
 import '../data/tour_repository.dart';
 import 'more_tab.dart';
 
@@ -95,82 +96,86 @@ class _TourShellState extends ConsumerState<TourShell> {
       child: Icon(icon),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(onPressed: back),
-        titleSpacing: 0,
-        title: Semantics(
-          header: true,
-          child: Text(tour.name, overflow: TextOverflow.ellipsis),
-        ),
-        actions: [
-          InkWell(
-            borderRadius: BorderRadius.circular(AppRadii.pill),
-            onTap: () => context.push(Routes.members(tour.id)),
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.sm),
-              child: AvatarStack(
-                semanticLabel: l10n.memberCount(members.length),
-                people: [
-                  for (final m in members)
-                    (name: m.displayName, photoUrl: m.photoUrl),
-                ],
+    return ReminderSync(
+      tour: tour,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: BackButton(onPressed: back),
+          titleSpacing: 0,
+          title: Semantics(
+            header: true,
+            child: Text(tour.name, overflow: TextOverflow.ellipsis),
+          ),
+          actions: [
+            InkWell(
+              borderRadius: BorderRadius.circular(AppRadii.pill),
+              onTap: () => context.push(Routes.members(tour.id)),
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.sm),
+                child: AvatarStack(
+                  semanticLabel: l10n.memberCount(members.length),
+                  people: [
+                    for (final m in members)
+                      (name: m.displayName, photoUrl: m.photoUrl),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-        ],
-      ),
-      body: Column(
-        children: [
-          if (!tour.isOpen)
-            InlineBanner(
-              icon: Icons.lock_outline,
-              message: l10n.tourClosedBanner,
+            const SizedBox(width: AppSpacing.sm),
+          ],
+        ),
+        body: Column(
+          children: [
+            if (!tour.isOpen)
+              InlineBanner(
+                icon: Icons.lock_outline,
+                message: l10n.tourClosedBanner,
+              ),
+            Expanded(
+              child: wide
+                  ? Row(
+                      children: [
+                        NavigationRail(
+                          selectedIndex: _tab,
+                          labelType: NavigationRailLabelType.all,
+                          onDestinationSelected: (i) =>
+                              setState(() => _tab = i),
+                          destinations: [
+                            for (var i = 0; i < destinations.length; i++)
+                              NavigationRailDestination(
+                                icon: i == 3
+                                    ? moreIcon(destinations[i].$1)
+                                    : Icon(destinations[i].$1),
+                                selectedIcon: Icon(destinations[i].$2),
+                                label: Text(destinations[i].$3),
+                              ),
+                          ],
+                        ),
+                        const VerticalDivider(width: 1),
+                        Expanded(child: body),
+                      ],
+                    )
+                  : body,
             ),
-          Expanded(
-            child: wide
-                ? Row(
-                    children: [
-                      NavigationRail(
-                        selectedIndex: _tab,
-                        labelType: NavigationRailLabelType.all,
-                        onDestinationSelected: (i) => setState(() => _tab = i),
-                        destinations: [
-                          for (var i = 0; i < destinations.length; i++)
-                            NavigationRailDestination(
-                              icon: i == 3
-                                  ? moreIcon(destinations[i].$1)
-                                  : Icon(destinations[i].$1),
-                              selectedIcon: Icon(destinations[i].$2),
-                              label: Text(destinations[i].$3),
-                            ),
-                        ],
-                      ),
-                      const VerticalDivider(width: 1),
-                      Expanded(child: body),
-                    ],
-                  )
-                : body,
-          ),
-        ],
+          ],
+        ),
+        bottomNavigationBar: wide
+            ? null
+            : NavigationBar(
+                selectedIndex: _tab,
+                onDestinationSelected: (i) => setState(() => _tab = i),
+                destinations: [
+                  for (var i = 0; i < destinations.length; i++)
+                    NavigationDestination(
+                      icon: i == 3
+                          ? moreIcon(destinations[i].$1)
+                          : Icon(destinations[i].$1),
+                      selectedIcon: Icon(destinations[i].$2),
+                      label: destinations[i].$3,
+                    ),
+                ],
+              ),
       ),
-      bottomNavigationBar: wide
-          ? null
-          : NavigationBar(
-              selectedIndex: _tab,
-              onDestinationSelected: (i) => setState(() => _tab = i),
-              destinations: [
-                for (var i = 0; i < destinations.length; i++)
-                  NavigationDestination(
-                    icon: i == 3
-                        ? moreIcon(destinations[i].$1)
-                        : Icon(destinations[i].$1),
-                    selectedIcon: Icon(destinations[i].$2),
-                    label: destinations[i].$3,
-                  ),
-              ],
-            ),
     );
   }
 }
