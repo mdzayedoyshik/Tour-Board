@@ -468,5 +468,94 @@
   "settlementRef": "Transaction reference (optional)",
   "settlementOfflineNote": "The other person confirms the payment in the app. Only confirmed payments change balances.",
   "settlementSubmit": "Submit for confirmation",
-  "settlementSubmitted": "Sent for confirmation"
+  "settlementSubmitted": "Sent for confirmation",
+  "planStatusPlanned": "Planned",
+  "planStatusDone": "Done",
+  "planStatusSkipped": "Skipped",
+  "planAdd": "Add plan",
+  "planAddToDay": "Add to this day",
+  "planTimesInZone": "Times are in the tour's time zone: {zone} ({offset})",
+  "@planTimesInZone": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      },
+      "offset": {
+        "type": "String"
+      }
+    }
+  },
+  "planEmptyTitle": "Nothing planned yet",
+  "planEmptyBody": "Add places and activities for each day. Coordinates are optional.",
+  "planDayLabel": "Day {number} · {date}",
+  "@planDayLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "planDayEmpty": "Free day",
+  "planEstimated": "≈ {amount}",
+  "@planEstimated": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "planFavorite": "Pinned stop",
+  "planUnfavorite": "Unpin",
+  "planHasLocation": "Has location",
+  "planOpenInMaps": "Open in maps",
+  "planOpenMapsFailed": "Couldn't open a maps app.",
+  "planMarkAs": "Mark as {status}",
+  "@planMarkAs": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "planMoveUp": "Move up",
+  "planMoveDown": "Move down",
+  "planDeleteTitle": "Delete this plan?",
+  "planAddTitle": "New plan",
+  "planEditTitle": "Edit plan",
+  "planTitleLabel": "What",
+  "planTitleHint": "e.g. Sunset at Inani Beach",
+  "planTitleRequired": "Add a title",
+  "planDay": "Day",
+  "planStart": "Start (optional)",
+  "planEnd": "End (optional)",
+  "planEndBeforeStart": "Ends before it starts",
+  "planClearTimes": "Clear times",
+  "planTimeZoneNote": "Times are local to the tour ({zone}).",
+  "@planTimeZoneNote": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "planPlace": "Place",
+  "placeSearchHint": "Search for a place",
+  "placeSearchAttribution": "Search by OpenStreetMap Nominatim",
+  "placeNoResults": "No places found. You can enter it manually.",
+  "placeRateLimited": "Search is busy. Wait a moment or enter the place manually.",
+  "placeOffline": "Search needs a connection. You can enter the place manually.",
+  "placeUnavailable": "Search isn't available right now. Enter the place manually.",
+  "placeManualOnly": "Place search is turned off. Enter a name and, if you know them, coordinates.",
+  "placeEnterManually": "Enter manually",
+  "placeUseSearch": "Search instead",
+  "planPlaceName": "Place name (optional)",
+  "planLatitude": "Latitude",
+  "planLongitude": "Longitude",
+  "planInvalidCoordinates": "Enter both latitude (−90 to 90) and longitude (−180 to 180), or leave both empty.",
+  "planRemoveCoordinates": "Remove coordinates",
+  "planEstimatedCost": "Estimated cost (optional)",
+  "planSaved": "Plan saved"
 }

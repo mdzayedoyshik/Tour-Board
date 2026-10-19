@@ -1425,6 +1425,294 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sent for confirmation'**
   String get settlementSubmitted;
+
+  /// No description provided for @planStatusPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned'**
+  String get planStatusPlanned;
+
+  /// No description provided for @planStatusDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get planStatusDone;
+
+  /// No description provided for @planStatusSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get planStatusSkipped;
+
+  /// No description provided for @planAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add plan'**
+  String get planAdd;
+
+  /// No description provided for @planAddToDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to this day'**
+  String get planAddToDay;
+
+  /// No description provided for @planTimesInZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Times are in the tour\'s time zone: {zone} ({offset})'**
+  String planTimesInZone(String zone, String offset);
+
+  /// No description provided for @planEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned yet'**
+  String get planEmptyTitle;
+
+  /// No description provided for @planEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add places and activities for each day. Coordinates are optional.'**
+  String get planEmptyBody;
+
+  /// No description provided for @planDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {number} · {date}'**
+  String planDayLabel(int number, String date);
+
+  /// No description provided for @planDayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Free day'**
+  String get planDayEmpty;
+
+  /// No description provided for @planEstimated.
+  ///
+  /// In en, this message translates to:
+  /// **'≈ {amount}'**
+  String planEstimated(String amount);
+
+  /// No description provided for @planFavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned stop'**
+  String get planFavorite;
+
+  /// No description provided for @planUnfavorite.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin'**
+  String get planUnfavorite;
+
+  /// No description provided for @planHasLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Has location'**
+  String get planHasLocation;
+
+  /// No description provided for @planOpenInMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in maps'**
+  String get planOpenInMaps;
+
+  /// No description provided for @planOpenMapsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open a maps app.'**
+  String get planOpenMapsFailed;
+
+  /// No description provided for @planMarkAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as {status}'**
+  String planMarkAs(String status);
+
+  /// No description provided for @planMoveUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Move up'**
+  String get planMoveUp;
+
+  /// No description provided for @planMoveDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Move down'**
+  String get planMoveDown;
+
+  /// No description provided for @planDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this plan?'**
+  String get planDeleteTitle;
+
+  /// No description provided for @planAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New plan'**
+  String get planAddTitle;
+
+  /// No description provided for @planEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit plan'**
+  String get planEditTitle;
+
+  /// No description provided for @planTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What'**
+  String get planTitleLabel;
+
+  /// No description provided for @planTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Sunset at Inani Beach'**
+  String get planTitleHint;
+
+  /// No description provided for @planTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a title'**
+  String get planTitleRequired;
+
+  /// No description provided for @planDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get planDay;
+
+  /// No description provided for @planStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start (optional)'**
+  String get planStart;
+
+  /// No description provided for @planEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End (optional)'**
+  String get planEnd;
+
+  /// No description provided for @planEndBeforeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends before it starts'**
+  String get planEndBeforeStart;
+
+  /// No description provided for @planClearTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear times'**
+  String get planClearTimes;
+
+  /// No description provided for @planTimeZoneNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Times are local to the tour ({zone}).'**
+  String planTimeZoneNote(String zone);
+
+  /// No description provided for @planPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Place'**
+  String get planPlace;
+
+  /// No description provided for @placeSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a place'**
+  String get placeSearchHint;
+
+  /// No description provided for @placeSearchAttribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by OpenStreetMap Nominatim'**
+  String get placeSearchAttribution;
+
+  /// No description provided for @placeNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No places found. You can enter it manually.'**
+  String get placeNoResults;
+
+  /// No description provided for @placeRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Search is busy. Wait a moment or enter the place manually.'**
+  String get placeRateLimited;
+
+  /// No description provided for @placeOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Search needs a connection. You can enter the place manually.'**
+  String get placeOffline;
+
+  /// No description provided for @placeUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Search isn\'t available right now. Enter the place manually.'**
+  String get placeUnavailable;
+
+  /// No description provided for @placeManualOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Place search is turned off. Enter a name and, if you know them, coordinates.'**
+  String get placeManualOnly;
+
+  /// No description provided for @placeEnterManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter manually'**
+  String get placeEnterManually;
+
+  /// No description provided for @placeUseSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search instead'**
+  String get placeUseSearch;
+
+  /// No description provided for @planPlaceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Place name (optional)'**
+  String get planPlaceName;
+
+  /// No description provided for @planLatitude.
+  ///
+  /// In en, this message translates to:
+  /// **'Latitude'**
+  String get planLatitude;
+
+  /// No description provided for @planLongitude.
+  ///
+  /// In en, this message translates to:
+  /// **'Longitude'**
+  String get planLongitude;
+
+  /// No description provided for @planInvalidCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter both latitude (−90 to 90) and longitude (−180 to 180), or leave both empty.'**
+  String get planInvalidCoordinates;
+
+  /// No description provided for @planRemoveCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove coordinates'**
+  String get planRemoveCoordinates;
+
+  /// No description provided for @planEstimatedCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated cost (optional)'**
+  String get planEstimatedCost;
+
+  /// No description provided for @planSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan saved'**
+  String get planSaved;
 }
 
 class _AppLocalizationsDelegate

@@ -798,4 +798,164 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settlementSubmitted => 'Sent for confirmation';
+
+  @override
+  String get planStatusPlanned => 'Planned';
+
+  @override
+  String get planStatusDone => 'Done';
+
+  @override
+  String get planStatusSkipped => 'Skipped';
+
+  @override
+  String get planAdd => 'Add plan';
+
+  @override
+  String get planAddToDay => 'Add to this day';
+
+  @override
+  String planTimesInZone(String zone, String offset) {
+    return 'Times are in the tour\'s time zone: $zone ($offset)';
+  }
+
+  @override
+  String get planEmptyTitle => 'Nothing planned yet';
+
+  @override
+  String get planEmptyBody =>
+      'Add places and activities for each day. Coordinates are optional.';
+
+  @override
+  String planDayLabel(int number, String date) {
+    return 'Day $number · $date';
+  }
+
+  @override
+  String get planDayEmpty => 'Free day';
+
+  @override
+  String planEstimated(String amount) {
+    return '≈ $amount';
+  }
+
+  @override
+  String get planFavorite => 'Pinned stop';
+
+  @override
+  String get planUnfavorite => 'Unpin';
+
+  @override
+  String get planHasLocation => 'Has location';
+
+  @override
+  String get planOpenInMaps => 'Open in maps';
+
+  @override
+  String get planOpenMapsFailed => 'Couldn\'t open a maps app.';
+
+  @override
+  String planMarkAs(String status) {
+    return 'Mark as $status';
+  }
+
+  @override
+  String get planMoveUp => 'Move up';
+
+  @override
+  String get planMoveDown => 'Move down';
+
+  @override
+  String get planDeleteTitle => 'Delete this plan?';
+
+  @override
+  String get planAddTitle => 'New plan';
+
+  @override
+  String get planEditTitle => 'Edit plan';
+
+  @override
+  String get planTitleLabel => 'What';
+
+  @override
+  String get planTitleHint => 'e.g. Sunset at Inani Beach';
+
+  @override
+  String get planTitleRequired => 'Add a title';
+
+  @override
+  String get planDay => 'Day';
+
+  @override
+  String get planStart => 'Start (optional)';
+
+  @override
+  String get planEnd => 'End (optional)';
+
+  @override
+  String get planEndBeforeStart => 'Ends before it starts';
+
+  @override
+  String get planClearTimes => 'Clear times';
+
+  @override
+  String planTimeZoneNote(String zone) {
+    return 'Times are local to the tour ($zone).';
+  }
+
+  @override
+  String get planPlace => 'Place';
+
+  @override
+  String get placeSearchHint => 'Search for a place';
+
+  @override
+  String get placeSearchAttribution => 'Search by OpenStreetMap Nominatim';
+
+  @override
+  String get placeNoResults => 'No places found. You can enter it manually.';
+
+  @override
+  String get placeRateLimited =>
+      'Search is busy. Wait a moment or enter the place manually.';
+
+  @override
+  String get placeOffline =>
+      'Search needs a connection. You can enter the place manually.';
+
+  @override
+  String get placeUnavailable =>
+      'Search isn\'t available right now. Enter the place manually.';
+
+  @override
+  String get placeManualOnly =>
+      'Place search is turned off. Enter a name and, if you know them, coordinates.';
+
+  @override
+  String get placeEnterManually => 'Enter manually';
+
+  @override
+  String get placeUseSearch => 'Search instead';
+
+  @override
+  String get planPlaceName => 'Place name (optional)';
+
+  @override
+  String get planLatitude => 'Latitude';
+
+  @override
+  String get planLongitude => 'Longitude';
+
+  @override
+  String get planInvalidCoordinates =>
+      'Enter both latitude (−90 to 90) and longitude (−180 to 180), or leave both empty.';
+
+  @override
+  String get planRemoveCoordinates => 'Remove coordinates';
+
+  @override
+  String get planEstimatedCost => 'Estimated cost (optional)';
+
+  @override
+  String get planSaved => 'Plan saved';
 }
