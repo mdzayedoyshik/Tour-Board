@@ -18,6 +18,7 @@ class AmountField extends StatefulWidget {
     this.label,
     this.large = false,
     this.allowZero = false,
+    this.optional = false,
     this.autofocus = false,
     this.focusNode,
     this.textInputAction,
@@ -30,6 +31,9 @@ class AmountField extends StatefulWidget {
   final String? label;
   final bool large;
   final bool allowZero;
+
+  /// Empty input is valid (reported as null) for optional amounts.
+  final bool optional;
   final bool autofocus;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
@@ -83,6 +87,7 @@ class _AmountFieldState extends State<AmountField> {
   }
 
   String? _validate(String? text) {
+    if (widget.optional && (text ?? '').trim().isEmpty) return null;
     final result = _parse(text ?? '');
     final l10n = context.l10n;
     return switch (result.error) {
