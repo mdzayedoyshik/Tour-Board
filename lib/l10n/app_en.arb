@@ -621,5 +621,140 @@
   "sharePermissionDenied": "Location permission wasn't granted, so sharing stopped.",
   "sharePermissionForever": "Location access is blocked for Tour Board. Enable it in system settings to share.",
   "shareWriteFailed": "Couldn't update your location. It'll retry with the next update.",
-  "shareOpenSettings": "Open settings"
+  "shareOpenSettings": "Open settings",
+  "inviteOff": "Invites are turned off",
+  "inviteShareText": "Join \"{tour}\" on Tour Board: {link}\nOr open the app and enter code {code}",
+  "@inviteShareText": {
+    "placeholders": {
+      "tour": {
+        "type": "String"
+      },
+      "link": {
+        "type": "String"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteShareSubject": "Join {tour} on Tour Board",
+  "@inviteShareSubject": {
+    "placeholders": {
+      "tour": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteMembers": "Invite people",
+  "inviteMembersHint": "Share a link — you'll approve each request",
+  "membersTitle": "Members",
+  "membersPendingCount": "{count, plural, =1{1 pending request} other{{count} pending requests}}",
+  "@membersPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "membersFormer": "Former members",
+  "membersCapReached": "Tours are limited to {count} members in this version.",
+  "@membersCapReached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "memberLeft": "Left the tour",
+  "memberRemoved": "Removed",
+  "notesTitle": "Notes",
+  "packingTitle": "Packing list",
+  "activityTitle": "Activity",
+  "tourSettingsTitle": "Tour settings",
+  "tourSettingsHint": "Details, invites, permissions and status",
+  "roleHost": "Host",
+  "roleAdmin": "Admin",
+  "roleMember": "Member",
+  "requestedOn": "Requested {date}",
+  "@requestedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "requestApprove": "Approve",
+  "requestReject": "Decline",
+  "requestApproved": "Request approved",
+  "requestRejected": "Request declined",
+  "memberActions": "Member actions",
+  "memberMakeAdmin": "Make admin",
+  "memberMakeMember": "Make regular member",
+  "memberTransferHost": "Make host",
+  "memberRemove": "Remove from tour",
+  "memberRoleChanged": "Role updated",
+  "memberTransferTitle": "Make {name} the host?",
+  "@memberTransferTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberTransferBody": "They'll manage the tour and members. You'll become an admin.",
+  "memberHostTransferred": "Host changed",
+  "memberRemoveTitle": "Remove {name}?",
+  "@memberRemoveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberRemoveBody": "They lose access right away. Their past expenses and balance stay so the group can settle up.",
+  "memberRemovedDone": "Member removed",
+  "tourDetails": "Details",
+  "tourBudgetValue": "Budget {amount}",
+  "@tourBudgetValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteSection": "Invite link",
+  "inviteCreate": "Create link",
+  "inviteCreated": "New invite link ready",
+  "inviteRotate": "Get a new link",
+  "inviteRotateHint": "The old link and code stop working immediately.",
+  "inviteTurnOff": "Turn off invites",
+  "inviteExplainer": "Anyone with the link can ask to join. Nobody gets access until a host or admin approves. Links expire after 14 days.",
+  "permissionsSection": "Permissions",
+  "permAdminsManage": "Admins can edit details and close the tour",
+  "permMembersPacking": "Members can edit the packing list",
+  "permMembersForOthers": "Members can record expenses paid by others",
+  "permMembersForOthersHint": "Off by default: members record what they paid themselves.",
+  "settingsSaved": "Saved",
+  "lifecycleSection": "Tour status",
+  "tourClose": "Close tour",
+  "tourCloseHint": "Freeze expenses and plans; settling up stays open.",
+  "tourCloseTitle": "Close this tour?",
+  "tourCloseBody": "Expenses, plans and notes become read-only for everyone. Members can still record and confirm payments. You can reopen it later.",
+  "tourReopen": "Reopen tour",
+  "tourReopenTitle": "Reopen this tour?",
+  "tourReopenBody": "Members will be able to add and edit expenses and plans again. This is recorded in the activity feed.",
+  "tourArchive": "Archive tour",
+  "tourArchiveHint": "Hide it from your main list. Records stay available.",
+  "tourArchiveTitle": "Archive this tour?",
+  "tourArchiveBody": "It moves to the archived section on Home. Nothing is deleted.",
+  "tourStatusChanged": "Tour status updated",
+  "tourDelete": "Delete tour permanently",
+  "tourDeleteTitle": "Delete this tour for everyone?",
+  "tourDeleteBody": "All expenses, payments, plans and notes are removed for all members. This can't be undone.",
+  "tourDeleted": "Tour deleted",
+  "tourDeletePartial": "Part of the tour was deleted. Run delete again to finish.",
+  "tourLeave": "Leave tour",
+  "tourLeaveTitle": "Leave this tour?",
+  "tourLeaveBody": "You'll lose access. Your past expenses and balance stay with the group so it can still be settled.",
+  "tourHostCannotLeave": "As host, make someone else the host before leaving."
 }

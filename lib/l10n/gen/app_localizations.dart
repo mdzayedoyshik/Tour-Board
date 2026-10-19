@@ -1887,6 +1887,444 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open settings'**
   String get shareOpenSettings;
+
+  /// No description provided for @inviteOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Invites are turned off'**
+  String get inviteOff;
+
+  /// No description provided for @inviteShareText.
+  ///
+  /// In en, this message translates to:
+  /// **'Join \"{tour}\" on Tour Board: {link}\nOr open the app and enter code {code}'**
+  String inviteShareText(String tour, String link, String code);
+
+  /// No description provided for @inviteShareSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Join {tour} on Tour Board'**
+  String inviteShareSubject(String tour);
+
+  /// No description provided for @inviteMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite people'**
+  String get inviteMembers;
+
+  /// No description provided for @inviteMembersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Share a link — you\'ll approve each request'**
+  String get inviteMembersHint;
+
+  /// No description provided for @membersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get membersTitle;
+
+  /// No description provided for @membersPendingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 pending request} other{{count} pending requests}}'**
+  String membersPendingCount(int count);
+
+  /// No description provided for @membersFormer.
+  ///
+  /// In en, this message translates to:
+  /// **'Former members'**
+  String get membersFormer;
+
+  /// No description provided for @membersCapReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Tours are limited to {count} members in this version.'**
+  String membersCapReached(int count);
+
+  /// No description provided for @memberLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Left the tour'**
+  String get memberLeft;
+
+  /// No description provided for @memberRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed'**
+  String get memberRemoved;
+
+  /// No description provided for @notesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notesTitle;
+
+  /// No description provided for @packingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Packing list'**
+  String get packingTitle;
+
+  /// No description provided for @activityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activityTitle;
+
+  /// No description provided for @tourSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tour settings'**
+  String get tourSettingsTitle;
+
+  /// No description provided for @tourSettingsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Details, invites, permissions and status'**
+  String get tourSettingsHint;
+
+  /// No description provided for @roleHost.
+  ///
+  /// In en, this message translates to:
+  /// **'Host'**
+  String get roleHost;
+
+  /// No description provided for @roleAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get roleAdmin;
+
+  /// No description provided for @roleMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get roleMember;
+
+  /// No description provided for @requestedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested {date}'**
+  String requestedOn(String date);
+
+  /// No description provided for @requestApprove.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get requestApprove;
+
+  /// No description provided for @requestReject.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get requestReject;
+
+  /// No description provided for @requestApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Request approved'**
+  String get requestApproved;
+
+  /// No description provided for @requestRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Request declined'**
+  String get requestRejected;
+
+  /// No description provided for @memberActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Member actions'**
+  String get memberActions;
+
+  /// No description provided for @memberMakeAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Make admin'**
+  String get memberMakeAdmin;
+
+  /// No description provided for @memberMakeMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Make regular member'**
+  String get memberMakeMember;
+
+  /// No description provided for @memberTransferHost.
+  ///
+  /// In en, this message translates to:
+  /// **'Make host'**
+  String get memberTransferHost;
+
+  /// No description provided for @memberRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from tour'**
+  String get memberRemove;
+
+  /// No description provided for @memberRoleChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Role updated'**
+  String get memberRoleChanged;
+
+  /// No description provided for @memberTransferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make {name} the host?'**
+  String memberTransferTitle(String name);
+
+  /// No description provided for @memberTransferBody.
+  ///
+  /// In en, this message translates to:
+  /// **'They\'ll manage the tour and members. You\'ll become an admin.'**
+  String get memberTransferBody;
+
+  /// No description provided for @memberHostTransferred.
+  ///
+  /// In en, this message translates to:
+  /// **'Host changed'**
+  String get memberHostTransferred;
+
+  /// No description provided for @memberRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}?'**
+  String memberRemoveTitle(String name);
+
+  /// No description provided for @memberRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'They lose access right away. Their past expenses and balance stay so the group can settle up.'**
+  String get memberRemoveBody;
+
+  /// No description provided for @memberRemovedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Member removed'**
+  String get memberRemovedDone;
+
+  /// No description provided for @tourDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get tourDetails;
+
+  /// No description provided for @tourBudgetValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget {amount}'**
+  String tourBudgetValue(String amount);
+
+  /// No description provided for @inviteSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite link'**
+  String get inviteSection;
+
+  /// No description provided for @inviteCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create link'**
+  String get inviteCreate;
+
+  /// No description provided for @inviteCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'New invite link ready'**
+  String get inviteCreated;
+
+  /// No description provided for @inviteRotate.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a new link'**
+  String get inviteRotate;
+
+  /// No description provided for @inviteRotateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The old link and code stop working immediately.'**
+  String get inviteRotateHint;
+
+  /// No description provided for @inviteTurnOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off invites'**
+  String get inviteTurnOff;
+
+  /// No description provided for @inviteExplainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Anyone with the link can ask to join. Nobody gets access until a host or admin approves. Links expire after 14 days.'**
+  String get inviteExplainer;
+
+  /// No description provided for @permissionsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions'**
+  String get permissionsSection;
+
+  /// No description provided for @permAdminsManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Admins can edit details and close the tour'**
+  String get permAdminsManage;
+
+  /// No description provided for @permMembersPacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Members can edit the packing list'**
+  String get permMembersPacking;
+
+  /// No description provided for @permMembersForOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members can record expenses paid by others'**
+  String get permMembersForOthers;
+
+  /// No description provided for @permMembersForOthersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Off by default: members record what they paid themselves.'**
+  String get permMembersForOthersHint;
+
+  /// No description provided for @settingsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get settingsSaved;
+
+  /// No description provided for @lifecycleSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Tour status'**
+  String get lifecycleSection;
+
+  /// No description provided for @tourClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close tour'**
+  String get tourClose;
+
+  /// No description provided for @tourCloseHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Freeze expenses and plans; settling up stays open.'**
+  String get tourCloseHint;
+
+  /// No description provided for @tourCloseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Close this tour?'**
+  String get tourCloseTitle;
+
+  /// No description provided for @tourCloseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses, plans and notes become read-only for everyone. Members can still record and confirm payments. You can reopen it later.'**
+  String get tourCloseBody;
+
+  /// No description provided for @tourReopen.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen tour'**
+  String get tourReopen;
+
+  /// No description provided for @tourReopenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen this tour?'**
+  String get tourReopenTitle;
+
+  /// No description provided for @tourReopenBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Members will be able to add and edit expenses and plans again. This is recorded in the activity feed.'**
+  String get tourReopenBody;
+
+  /// No description provided for @tourArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive tour'**
+  String get tourArchive;
+
+  /// No description provided for @tourArchiveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide it from your main list. Records stay available.'**
+  String get tourArchiveHint;
+
+  /// No description provided for @tourArchiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive this tour?'**
+  String get tourArchiveTitle;
+
+  /// No description provided for @tourArchiveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It moves to the archived section on Home. Nothing is deleted.'**
+  String get tourArchiveBody;
+
+  /// No description provided for @tourStatusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Tour status updated'**
+  String get tourStatusChanged;
+
+  /// No description provided for @tourDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete tour permanently'**
+  String get tourDelete;
+
+  /// No description provided for @tourDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this tour for everyone?'**
+  String get tourDeleteTitle;
+
+  /// No description provided for @tourDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'All expenses, payments, plans and notes are removed for all members. This can\'t be undone.'**
+  String get tourDeleteBody;
+
+  /// No description provided for @tourDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Tour deleted'**
+  String get tourDeleted;
+
+  /// No description provided for @tourDeletePartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of the tour was deleted. Run delete again to finish.'**
+  String get tourDeletePartial;
+
+  /// No description provided for @tourLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave tour'**
+  String get tourLeave;
+
+  /// No description provided for @tourLeaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this tour?'**
+  String get tourLeaveTitle;
+
+  /// No description provided for @tourLeaveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll lose access. Your past expenses and balance stay with the group so it can still be settled.'**
+  String get tourLeaveBody;
+
+  /// No description provided for @tourHostCannotLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'As host, make someone else the host before leaving.'**
+  String get tourHostCannotLeave;
 }
 
 class _AppLocalizationsDelegate

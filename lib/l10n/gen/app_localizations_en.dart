@@ -1066,4 +1066,260 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareOpenSettings => 'Open settings';
+
+  @override
+  String get inviteOff => 'Invites are turned off';
+
+  @override
+  String inviteShareText(String tour, String link, String code) {
+    return 'Join \"$tour\" on Tour Board: $link\nOr open the app and enter code $code';
+  }
+
+  @override
+  String inviteShareSubject(String tour) {
+    return 'Join $tour on Tour Board';
+  }
+
+  @override
+  String get inviteMembers => 'Invite people';
+
+  @override
+  String get inviteMembersHint => 'Share a link — you\'ll approve each request';
+
+  @override
+  String get membersTitle => 'Members';
+
+  @override
+  String membersPendingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pending requests',
+      one: '1 pending request',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get membersFormer => 'Former members';
+
+  @override
+  String membersCapReached(int count) {
+    return 'Tours are limited to $count members in this version.';
+  }
+
+  @override
+  String get memberLeft => 'Left the tour';
+
+  @override
+  String get memberRemoved => 'Removed';
+
+  @override
+  String get notesTitle => 'Notes';
+
+  @override
+  String get packingTitle => 'Packing list';
+
+  @override
+  String get activityTitle => 'Activity';
+
+  @override
+  String get tourSettingsTitle => 'Tour settings';
+
+  @override
+  String get tourSettingsHint => 'Details, invites, permissions and status';
+
+  @override
+  String get roleHost => 'Host';
+
+  @override
+  String get roleAdmin => 'Admin';
+
+  @override
+  String get roleMember => 'Member';
+
+  @override
+  String requestedOn(String date) {
+    return 'Requested $date';
+  }
+
+  @override
+  String get requestApprove => 'Approve';
+
+  @override
+  String get requestReject => 'Decline';
+
+  @override
+  String get requestApproved => 'Request approved';
+
+  @override
+  String get requestRejected => 'Request declined';
+
+  @override
+  String get memberActions => 'Member actions';
+
+  @override
+  String get memberMakeAdmin => 'Make admin';
+
+  @override
+  String get memberMakeMember => 'Make regular member';
+
+  @override
+  String get memberTransferHost => 'Make host';
+
+  @override
+  String get memberRemove => 'Remove from tour';
+
+  @override
+  String get memberRoleChanged => 'Role updated';
+
+  @override
+  String memberTransferTitle(String name) {
+    return 'Make $name the host?';
+  }
+
+  @override
+  String get memberTransferBody =>
+      'They\'ll manage the tour and members. You\'ll become an admin.';
+
+  @override
+  String get memberHostTransferred => 'Host changed';
+
+  @override
+  String memberRemoveTitle(String name) {
+    return 'Remove $name?';
+  }
+
+  @override
+  String get memberRemoveBody =>
+      'They lose access right away. Their past expenses and balance stay so the group can settle up.';
+
+  @override
+  String get memberRemovedDone => 'Member removed';
+
+  @override
+  String get tourDetails => 'Details';
+
+  @override
+  String tourBudgetValue(String amount) {
+    return 'Budget $amount';
+  }
+
+  @override
+  String get inviteSection => 'Invite link';
+
+  @override
+  String get inviteCreate => 'Create link';
+
+  @override
+  String get inviteCreated => 'New invite link ready';
+
+  @override
+  String get inviteRotate => 'Get a new link';
+
+  @override
+  String get inviteRotateHint =>
+      'The old link and code stop working immediately.';
+
+  @override
+  String get inviteTurnOff => 'Turn off invites';
+
+  @override
+  String get inviteExplainer =>
+      'Anyone with the link can ask to join. Nobody gets access until a host or admin approves. Links expire after 14 days.';
+
+  @override
+  String get permissionsSection => 'Permissions';
+
+  @override
+  String get permAdminsManage => 'Admins can edit details and close the tour';
+
+  @override
+  String get permMembersPacking => 'Members can edit the packing list';
+
+  @override
+  String get permMembersForOthers =>
+      'Members can record expenses paid by others';
+
+  @override
+  String get permMembersForOthersHint =>
+      'Off by default: members record what they paid themselves.';
+
+  @override
+  String get settingsSaved => 'Saved';
+
+  @override
+  String get lifecycleSection => 'Tour status';
+
+  @override
+  String get tourClose => 'Close tour';
+
+  @override
+  String get tourCloseHint =>
+      'Freeze expenses and plans; settling up stays open.';
+
+  @override
+  String get tourCloseTitle => 'Close this tour?';
+
+  @override
+  String get tourCloseBody =>
+      'Expenses, plans and notes become read-only for everyone. Members can still record and confirm payments. You can reopen it later.';
+
+  @override
+  String get tourReopen => 'Reopen tour';
+
+  @override
+  String get tourReopenTitle => 'Reopen this tour?';
+
+  @override
+  String get tourReopenBody =>
+      'Members will be able to add and edit expenses and plans again. This is recorded in the activity feed.';
+
+  @override
+  String get tourArchive => 'Archive tour';
+
+  @override
+  String get tourArchiveHint =>
+      'Hide it from your main list. Records stay available.';
+
+  @override
+  String get tourArchiveTitle => 'Archive this tour?';
+
+  @override
+  String get tourArchiveBody =>
+      'It moves to the archived section on Home. Nothing is deleted.';
+
+  @override
+  String get tourStatusChanged => 'Tour status updated';
+
+  @override
+  String get tourDelete => 'Delete tour permanently';
+
+  @override
+  String get tourDeleteTitle => 'Delete this tour for everyone?';
+
+  @override
+  String get tourDeleteBody =>
+      'All expenses, payments, plans and notes are removed for all members. This can\'t be undone.';
+
+  @override
+  String get tourDeleted => 'Tour deleted';
+
+  @override
+  String get tourDeletePartial =>
+      'Part of the tour was deleted. Run delete again to finish.';
+
+  @override
+  String get tourLeave => 'Leave tour';
+
+  @override
+  String get tourLeaveTitle => 'Leave this tour?';
+
+  @override
+  String get tourLeaveBody =>
+      'You\'ll lose access. Your past expenses and balance stay with the group so it can still be settled.';
+
+  @override
+  String get tourHostCannotLeave =>
+      'As host, make someone else the host before leaving.';
 }
