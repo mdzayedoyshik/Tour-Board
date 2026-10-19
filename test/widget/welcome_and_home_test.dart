@@ -56,9 +56,9 @@ void main() {
 
     testWidgets('shows a recoverable error on network failure', (tester) async {
       final auth = _MockAuth();
-      when(auth.signInWithGoogle).thenThrow(
-        const SignInException(SignInFailure.network),
-      );
+      when(
+        auth.signInWithGoogle,
+      ).thenThrow(const SignInException(SignInFailure.network));
       await pumpApp(
         tester,
         const WelcomeScreen(),
@@ -73,9 +73,9 @@ void main() {
 
     testWidgets('cancelling sign-in shows no error', (tester) async {
       final auth = _MockAuth();
-      when(auth.signInWithGoogle).thenThrow(
-        const SignInException(SignInFailure.cancelled),
-      );
+      when(
+        auth.signInWithGoogle,
+      ).thenThrow(const SignInException(SignInFailure.cancelled));
       await pumpApp(
         tester,
         const WelcomeScreen(),
