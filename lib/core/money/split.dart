@@ -102,8 +102,9 @@ Map<String, int> validateCustomSplit(int totalMinor, Map<String, int> shares) {
     cleaned[entry.key] = entry.value;
     sum += entry.value;
   }
-  _normalise(cleaned.keys);
+  // Report the mismatch first: "nothing entered yet" is a sum problem.
   if (sum != totalMinor) throw const SplitException(SplitError.sumMismatch);
+  _normalise(cleaned.keys);
   return cleaned;
 }
 

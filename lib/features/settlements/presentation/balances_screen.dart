@@ -254,9 +254,11 @@ class _SettlementTileState extends ConsumerState<_SettlementTile> {
     final members = widget.members;
     String name(String u) =>
         memberName(context, members, u, viewerUid: widget.uid);
-    final repo = ref.read(settlementRepositoryProvider);
-    final tourName = ref.read(tourProvider(widget.tourId)).value?.name ?? '';
-    final myName = ref.read(profileProvider).value?.displayName ?? '—';
+    // Read lazily inside handlers, not during build.
+    SettlementRepository repo() => ref.read(settlementRepositoryProvider);
+    String tourName() =>
+        ref.read(tourProvider(widget.tourId)).value?.name ?? '';
+    String myName() => ref.read(profileProvider).value?.displayName ?? '—';
     final actions = p == null
         ? null
         : SettlementActions(
@@ -386,12 +388,12 @@ class _SettlementTileState extends ConsumerState<_SettlementTile> {
                           );
                           if (!ok) return;
                           await _run(
-                            () => repo.confirm(
+                            () => repo().confirm(
                               tourId: widget.tourId,
-                              tourName: tourName,
+                              tourName: tourName(),
                               settlement: s,
                               uid: widget.uid!,
-                              senderName: myName,
+                              senderName: myName(),
                             ),
                             l10n.settlementConfirmed,
                           );
@@ -409,12 +411,12 @@ class _SettlementTileState extends ConsumerState<_SettlementTile> {
                           );
                           if (reason == null) return;
                           await _run(
-                            () => repo.dispute(
+                            () => repo().dispute(
                               tourId: widget.tourId,
-                              tourName: tourName,
+                              tourName: tourName(),
                               settlement: s,
                               uid: widget.uid!,
-                              senderName: myName,
+                              senderName: myName(),
                               reason: reason,
                             ),
                             l10n.settlementDisputed,
@@ -433,7 +435,7 @@ class _SettlementTileState extends ConsumerState<_SettlementTile> {
                           );
                           if (!ok) return;
                           await _run(
-                            () => repo.cancel(
+                            () => repo().cancel(
                               tourId: widget.tourId,
                               settlement: s,
                               uid: widget.uid!,

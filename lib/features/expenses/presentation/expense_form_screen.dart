@@ -153,6 +153,9 @@ class _ExpenseFormState extends ConsumerState<_ExpenseForm> {
     if (total == null || total <= 0) {
       return (shares: null, error: SplitError.nonPositiveTotal);
     }
+    if (_participants.isEmpty) {
+      return (shares: null, error: SplitError.noParticipants);
+    }
     try {
       final shares = switch (_method) {
         SplitMethod.equal => splitEqual(total, _participants),
