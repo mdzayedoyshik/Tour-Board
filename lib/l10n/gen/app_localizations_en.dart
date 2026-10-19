@@ -958,4 +958,112 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planSaved => 'Plan saved';
+
+  @override
+  String get mapTilesUnavailable =>
+      'Map tiles couldn\'t load. Saved places and member status still work.';
+
+  @override
+  String get mapLocationsUnavailable =>
+      'Live locations are unavailable right now.';
+
+  @override
+  String get mapPeople => 'People';
+
+  @override
+  String get mapNoPlaces =>
+      'No plans have coordinates yet. Add a place to see it on the map.';
+
+  @override
+  String mapDistance(String distance) {
+    return 'About $distance from you';
+  }
+
+  @override
+  String distanceMeters(int meters) {
+    return '$meters m';
+  }
+
+  @override
+  String distanceKm(String km) {
+    return '$km km';
+  }
+
+  @override
+  String get shareLive => 'Live';
+
+  @override
+  String get shareStale => 'Stale';
+
+  @override
+  String get sharePaused => 'Paused';
+
+  @override
+  String get shareNotSharing => 'Not sharing';
+
+  @override
+  String get shareStartTitle => 'Share your location';
+
+  @override
+  String get shareStartBody =>
+      'Only current members of this tour can see it. It updates while the app is open and stops automatically.';
+
+  @override
+  String get share30Min => 'For 30 minutes';
+
+  @override
+  String get share2Hours => 'For 2 hours (recommended)';
+
+  @override
+  String get shareUntilTripEnds => 'Until the trip ends';
+
+  @override
+  String get shareActive => 'Sharing your location';
+
+  @override
+  String get shareActivePaused =>
+      'Sharing paused while the app is in the background';
+
+  @override
+  String shareUntil(String time) {
+    return 'Until $time';
+  }
+
+  @override
+  String get shareStop => 'Stop';
+
+  @override
+  String shareLeftover(String time) {
+    return 'Your last shared location ($time) is still visible to members.';
+  }
+
+  @override
+  String get shareOff =>
+      'Location sharing is off. Members only see you if you turn it on.';
+
+  @override
+  String get shareStart => 'Share';
+
+  @override
+  String get shareClosedTour =>
+      'Location sharing is unavailable for closed tours.';
+
+  @override
+  String get shareServiceOff =>
+      'Location services are turned off on this device.';
+
+  @override
+  String get sharePermissionDenied =>
+      'Location permission wasn\'t granted, so sharing stopped.';
+
+  @override
+  String get sharePermissionForever =>
+      'Location access is blocked for Tour Board. Enable it in system settings to share.';
+
+  @override
+  String get shareWriteFailed =>
+      'Couldn\'t update your location. It\'ll retry with the next update.';
+
+  @override
+  String get shareOpenSettings => 'Open settings';
 }

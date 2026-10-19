@@ -1713,6 +1713,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Plan saved'**
   String get planSaved;
+
+  /// No description provided for @mapTilesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Map tiles couldn\'t load. Saved places and member status still work.'**
+  String get mapTilesUnavailable;
+
+  /// No description provided for @mapLocationsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Live locations are unavailable right now.'**
+  String get mapLocationsUnavailable;
+
+  /// No description provided for @mapPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get mapPeople;
+
+  /// No description provided for @mapNoPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'No plans have coordinates yet. Add a place to see it on the map.'**
+  String get mapNoPlaces;
+
+  /// No description provided for @mapDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'About {distance} from you'**
+  String mapDistance(String distance);
+
+  /// No description provided for @distanceMeters.
+  ///
+  /// In en, this message translates to:
+  /// **'{meters} m'**
+  String distanceMeters(int meters);
+
+  /// No description provided for @distanceKm.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km'**
+  String distanceKm(String km);
+
+  /// No description provided for @shareLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get shareLive;
+
+  /// No description provided for @shareStale.
+  ///
+  /// In en, this message translates to:
+  /// **'Stale'**
+  String get shareStale;
+
+  /// No description provided for @sharePaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get sharePaused;
+
+  /// No description provided for @shareNotSharing.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sharing'**
+  String get shareNotSharing;
+
+  /// No description provided for @shareStartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your location'**
+  String get shareStartTitle;
+
+  /// No description provided for @shareStartBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Only current members of this tour can see it. It updates while the app is open and stops automatically.'**
+  String get shareStartBody;
+
+  /// No description provided for @share30Min.
+  ///
+  /// In en, this message translates to:
+  /// **'For 30 minutes'**
+  String get share30Min;
+
+  /// No description provided for @share2Hours.
+  ///
+  /// In en, this message translates to:
+  /// **'For 2 hours (recommended)'**
+  String get share2Hours;
+
+  /// No description provided for @shareUntilTripEnds.
+  ///
+  /// In en, this message translates to:
+  /// **'Until the trip ends'**
+  String get shareUntilTripEnds;
+
+  /// No description provided for @shareActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing your location'**
+  String get shareActive;
+
+  /// No description provided for @shareActivePaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing paused while the app is in the background'**
+  String get shareActivePaused;
+
+  /// No description provided for @shareUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Until {time}'**
+  String shareUntil(String time);
+
+  /// No description provided for @shareStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get shareStop;
+
+  /// No description provided for @shareLeftover.
+  ///
+  /// In en, this message translates to:
+  /// **'Your last shared location ({time}) is still visible to members.'**
+  String shareLeftover(String time);
+
+  /// No description provided for @shareOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Location sharing is off. Members only see you if you turn it on.'**
+  String get shareOff;
+
+  /// No description provided for @shareStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareStart;
+
+  /// No description provided for @shareClosedTour.
+  ///
+  /// In en, this message translates to:
+  /// **'Location sharing is unavailable for closed tours.'**
+  String get shareClosedTour;
+
+  /// No description provided for @shareServiceOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Location services are turned off on this device.'**
+  String get shareServiceOff;
+
+  /// No description provided for @sharePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission wasn\'t granted, so sharing stopped.'**
+  String get sharePermissionDenied;
+
+  /// No description provided for @sharePermissionForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Location access is blocked for Tour Board. Enable it in system settings to share.'**
+  String get sharePermissionForever;
+
+  /// No description provided for @shareWriteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update your location. It\'ll retry with the next update.'**
+  String get shareWriteFailed;
+
+  /// No description provided for @shareOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get shareOpenSettings;
 }
 
 class _AppLocalizationsDelegate

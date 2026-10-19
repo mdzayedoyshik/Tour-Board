@@ -557,5 +557,69 @@
   "planInvalidCoordinates": "Enter both latitude (−90 to 90) and longitude (−180 to 180), or leave both empty.",
   "planRemoveCoordinates": "Remove coordinates",
   "planEstimatedCost": "Estimated cost (optional)",
-  "planSaved": "Plan saved"
+  "planSaved": "Plan saved",
+  "mapTilesUnavailable": "Map tiles couldn't load. Saved places and member status still work.",
+  "mapLocationsUnavailable": "Live locations are unavailable right now.",
+  "mapPeople": "People",
+  "mapNoPlaces": "No plans have coordinates yet. Add a place to see it on the map.",
+  "mapDistance": "About {distance} from you",
+  "@mapDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "distanceMeters": "{meters} m",
+  "@distanceMeters": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "distanceKm": "{km} km",
+  "@distanceKm": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "shareLive": "Live",
+  "shareStale": "Stale",
+  "sharePaused": "Paused",
+  "shareNotSharing": "Not sharing",
+  "shareStartTitle": "Share your location",
+  "shareStartBody": "Only current members of this tour can see it. It updates while the app is open and stops automatically.",
+  "share30Min": "For 30 minutes",
+  "share2Hours": "For 2 hours (recommended)",
+  "shareUntilTripEnds": "Until the trip ends",
+  "shareActive": "Sharing your location",
+  "shareActivePaused": "Sharing paused while the app is in the background",
+  "shareUntil": "Until {time}",
+  "@shareUntil": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "shareStop": "Stop",
+  "shareLeftover": "Your last shared location ({time}) is still visible to members.",
+  "@shareLeftover": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "shareOff": "Location sharing is off. Members only see you if you turn it on.",
+  "shareStart": "Share",
+  "shareClosedTour": "Location sharing is unavailable for closed tours.",
+  "shareServiceOff": "Location services are turned off on this device.",
+  "sharePermissionDenied": "Location permission wasn't granted, so sharing stopped.",
+  "sharePermissionForever": "Location access is blocked for Tour Board. Enable it in system settings to share.",
+  "shareWriteFailed": "Couldn't update your location. It'll retry with the next update.",
+  "shareOpenSettings": "Open settings"
 }
