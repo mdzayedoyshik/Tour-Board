@@ -70,8 +70,8 @@ echo
 if command -v firebase >/dev/null && ask_yes "Register these fingerprints with Firebase and refresh google-services.json?"; then
   firebase apps:android:sha:create "$ANDROID_APP_ID" "$SHA1" --project "$FIREBASE_PROJECT"
   firebase apps:android:sha:create "$ANDROID_APP_ID" "$SHA256" --project "$FIREBASE_PROJECT"
-  CONFIG="$(firebase apps:sdkconfig ANDROID "$ANDROID_APP_ID" --project "$FIREBASE_PROJECT")"
-  printf '%s\n' "${CONFIG#*\{}" | sed '1s/^/{/' > "$ROOT/android/app/google-services.json"
+  firebase apps:sdkconfig ANDROID "$ANDROID_APP_ID" --project "$FIREBASE_PROJECT" \
+    > "$ROOT/android/app/google-services.json"
   echo "Updated android/app/google-services.json — commit it."
 fi
 
