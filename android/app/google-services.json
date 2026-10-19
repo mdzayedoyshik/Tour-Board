@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "230585437551",
+    "project_id": "tour-board-20bd4",
+    "storage_bucket": "tour-board-20bd4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230585437551:android:85946ccdd7d999284bac9a",
+        "android_client_info": {
+          "package_name": "com.techorbit.tour_board"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA2Lm6Xx9LZDxQpxrFJagJ3y7T11o233c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

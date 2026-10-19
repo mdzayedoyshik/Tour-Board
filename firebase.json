@@ -4,9 +4,36 @@
     "indexes": "firestore.indexes.json"
   },
   "emulators": {
-    "auth": { "port": 9099 },
-    "firestore": { "port": 8080 },
-    "ui": { "enabled": true, "port": 4000 },
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
     "singleProjectMode": true
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "tour-board-20bd4",
+          "appId": "1:230585437551:android:85946ccdd7d999284bac9a",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "tour-board-20bd4",
+          "configurations": {
+            "android": "1:230585437551:android:85946ccdd7d999284bac9a",
+            "ios": "1:230585437551:ios:0c9f6bc5bf0abd534bac9a"
+          }
+        }
+      }
+    }
   }
 }
