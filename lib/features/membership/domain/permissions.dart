@@ -78,9 +78,4 @@ class TourPermissions {
   bool get canChangeStatus => canEditTourDetails;
   bool get canChangeSettings => isHost;
   bool get canDeleteTour => isHost && tour.status == TourStatus.archived;
-
-  // --- Location -----------------------------------------------------------------
-
-  bool get canShareLocation => isMember && tour.isOpen;
-  bool get canViewLocations => isMember;
 }

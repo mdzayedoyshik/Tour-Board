@@ -359,7 +359,6 @@ class TourRepository {
         await drain(FirestorePaths.activities(id)) &&
         await drain(FirestorePaths.packingItems(id)) &&
         await drain(FirestorePaths.activityFeed(id)) &&
-        await drain(FirestorePaths.locations(id)) &&
         await drain(FirestorePaths.joinRequests(id));
     if (!complete) return false;
 

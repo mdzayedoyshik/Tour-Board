@@ -926,37 +926,6 @@ service cloud.firestore {
         allow update: if false;
         allow delete: if tourBeingDeleted(t);
       }
-
-      // ----------------------------------------------------------------
-      // locations/{uid} — latest location only, owner-written
-      // ----------------------------------------------------------------
-      match /locations/{uid} {
-        function validLocation(d) {
-          return d.keys().hasOnly(['uid', 'latitude', 'longitude',
-                                   'accuracyMeters', 'updatedAt',
-                                   'sharingUntil', 'sourceStatus'])
-              && d.uid == uid
-              && d.latitude is number && d.longitude is number
-              && d.latitude >= -90 && d.latitude <= 90
-              && d.longitude >= -180 && d.longitude <= 180
-              && (absentOrNull(d, 'accuracyMeters')
-                  || (d.accuracyMeters is number && d.accuracyMeters >= 0))
-              && d.updatedAt == request.time
-              && d.sharingUntil is timestamp
-              && d.sharingUntil > request.time
-              && d.sharingUntil <= request.time + duration.value(30, 'd')
-              && d.sourceStatus in ['live', 'paused'];
-        }
-
-        allow read: if isMember(t);
-        allow create, update: if signedIn() && me() == uid
-            && isMember(t) && tourOpen(t)
-            && validLocation(incoming());
-        // Owner stops sharing; any member may clean up an expired record.
-        allow delete: if (signedIn() && me() == uid)
-            || (isMember(t) && existing().sharingUntil < request.time)
-            || tourBeingDeleted(t);
-      }
     }
   }
 }

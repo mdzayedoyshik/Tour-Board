@@ -232,7 +232,6 @@ describe('read access', () => {
       `tours/${T}/expenses/e1`,
       `tours/${T}/settlements/s1`,
       `tours/${T}/notes/n1`,
-      `tours/${T}/locations/alice`,
     ]) {
       await assertFails(getDoc(doc(db(null), path)));
       await assertFails(getDoc(doc(db('stranger'), path)));
@@ -673,58 +672,6 @@ describe('settlements', () => {
   });
 });
 
-describe('locations', () => {
-  beforeEach(() => seedTour());
-
-  const share = (uid, target = uid, overrides = {}) =>
-    setDoc(doc(db(uid), `tours/${T}/locations/${target}`), {
-      uid: target,
-      latitude: 21.43,
-      longitude: 91.98,
-      updatedAt: serverTimestamp(),
-      sharingUntil: ts(2 * 60 * 60 * 1000),
-      sourceStatus: 'live',
-      ...overrides,
-    });
-
-  test('users write only their own location', async () => {
-    await assertSucceeds(share('alice'));
-    await assertFails(share('alice', 'bob'));
-    await assertFails(share('stranger'));
-    await assertFails(share('gone'));
-  });
-
-  test('coordinates and window are validated', async () => {
-    await assertFails(share('alice', 'alice', { latitude: 91 }));
-    await assertFails(share('alice', 'alice', { sharingUntil: ts(-1000) }));
-    await assertFails(share('alice', 'alice', { sharingUntil: ts(40 * DAY) }));
-  });
-
-  test('only active members read locations', async () => {
-    await assertSucceeds(share('alice'));
-    await assertSucceeds(getDoc(doc(db('bob'), `tours/${T}/locations/alice`)));
-    await assertFails(getDoc(doc(db('gone'), `tours/${T}/locations/alice`)));
-    await assertFails(getDoc(doc(db('stranger'), `tours/${T}/locations/alice`)));
-  });
-
-  test('owner can stop sharing; others only clean up expired records', async () => {
-    await assertSucceeds(share('alice'));
-    await assertFails(deleteDoc(doc(db('bob'), `tours/${T}/locations/alice`)));
-    await assertSucceeds(deleteDoc(doc(db('alice'), `tours/${T}/locations/alice`)));
-    await seed((f) =>
-      setDoc(doc(f, `tours/${T}/locations/alice`), {
-        uid: 'alice',
-        latitude: 0,
-        longitude: 0,
-        updatedAt: ts(-DAY),
-        sharingUntil: ts(-1000),
-        sourceStatus: 'live',
-      }),
-    );
-    await assertSucceeds(deleteDoc(doc(db('bob'), `tours/${T}/locations/alice`)));
-  });
-});
-
 describe('inbox', () => {
   beforeEach(() => seedTour());
 
@@ -822,7 +769,7 @@ describe('content ownership', () => {
 describe('app write shapes', () => {
   beforeEach(() => seedTour());
 
-  test('leaving: feed event, location delete, status and index in one batch', async () => {
+  test('leaving: feed event, status and index in one batch', async () => {
     await seed((f) =>
       setDoc(doc(f, `users/bob/tourMemberships/${T}`), { tourId: T, joinedAt: ts() }),
     );
@@ -834,7 +781,6 @@ describe('app write shapes', () => {
       label: 'Bob',
       createdAt: serverTimestamp(),
     });
-    b.delete(doc(f, `tours/${T}/locations/bob`));
     b.update(doc(f, `tours/${T}/members/bob`), {
       status: 'left',
       removedAt: serverTimestamp(),

@@ -282,7 +282,6 @@ class MembershipRepository {
           label: me.displayName,
         ),
       )
-      ..delete(_db.doc(FirestorePaths.location(tourId, me.uid)))
       ..update(_member(tourId, me.uid), {
         'status': 'left',
         'removedAt': FieldValue.serverTimestamp(),

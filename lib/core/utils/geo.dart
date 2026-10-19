@@ -1,0 +1,10 @@
+/// Latitude/longitude bounds check for manually entered or searched places.
+bool isValidCoordinate(double? latitude, double? longitude) =>
+    latitude != null &&
+    longitude != null &&
+    latitude.isFinite &&
+    longitude.isFinite &&
+    latitude >= -90 &&
+    latitude <= 90 &&
+    longitude >= -180 &&
+    longitude <= 180;

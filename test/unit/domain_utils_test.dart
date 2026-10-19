@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tour_board/core/utils/dates.dart';
-import 'package:tour_board/features/location_sharing/domain/location_share.dart';
+import 'package:tour_board/core/utils/geo.dart';
 import 'package:tour_board/features/membership/domain/invite_code.dart';
 import 'package:tour_board/features/tours/domain/tour.dart';
 
@@ -73,101 +73,7 @@ void main() {
     });
   });
 
-  group('LocationShare', () {
-    final now = DateTime.utc(2026, 5, 1, 12);
-    LocationShare share({
-      Duration age = Duration.zero,
-      Duration remaining = const Duration(hours: 1),
-      String status = 'live',
-    }) => LocationShare(
-      uid: 'u',
-      latitude: 21.4,
-      longitude: 92.0,
-      updatedAt: now.subtract(age),
-      sharingUntil: now.add(remaining),
-      sourceStatus: status,
-    );
-
-    test('live, stale, paused and expired states', () {
-      expect(share().statusAt(now), LocationShareStatus.live);
-      expect(
-        share(age: const Duration(minutes: 6)).statusAt(now),
-        LocationShareStatus.stale,
-      );
-      expect(share(status: 'paused').statusAt(now), LocationShareStatus.paused);
-      expect(
-        share(remaining: Duration.zero).statusAt(now),
-        LocationShareStatus.notSharing,
-      );
-      expect(share(remaining: Duration.zero).isVisibleAt(now), isFalse);
-      expect(share(status: 'paused').isVisibleAt(now), isFalse);
-      expect(share(age: const Duration(minutes: 6)).isVisibleAt(now), isTrue);
-    });
-
-    test('sharing windows are capped and sensible', () {
-      final tripEnd = DateTime.utc(2026, 5, 3);
-      expect(
-        sharingUntilFor(SharingDuration.twoHours, now, tripEnd),
-        now.add(const Duration(hours: 2)),
-      );
-      expect(
-        sharingUntilFor(SharingDuration.untilTripEnds, now, tripEnd),
-        DateTime.utc(2026, 5, 4),
-      );
-      expect(
-        sharingUntilFor(SharingDuration.untilTripEnds, now, DateTime.utc(2027)),
-        now.add(LocationShare.maxSharingWindow),
-      );
-      expect(
-        sharingUntilFor(SharingDuration.untilTripEnds, now, DateTime.utc(2026)),
-        now.add(const Duration(hours: 2)),
-      );
-    });
-
-    test('write policy throttles by time and distance', () {
-      const policy = LocationWritePolicy();
-      expect(
-        policy.shouldWrite(
-          now: now,
-          lastWriteAt: null,
-          metersSinceLastWrite: null,
-        ),
-        isTrue,
-      );
-      expect(
-        policy.shouldWrite(
-          now: now,
-          lastWriteAt: now.subtract(const Duration(seconds: 10)),
-          metersSinceLastWrite: 500,
-        ),
-        isFalse,
-      );
-      expect(
-        policy.shouldWrite(
-          now: now,
-          lastWriteAt: now.subtract(const Duration(minutes: 1)),
-          metersSinceLastWrite: 10,
-        ),
-        isFalse,
-      );
-      expect(
-        policy.shouldWrite(
-          now: now,
-          lastWriteAt: now.subtract(const Duration(minutes: 1)),
-          metersSinceLastWrite: 100,
-        ),
-        isTrue,
-      );
-      expect(
-        policy.shouldWrite(
-          now: now,
-          lastWriteAt: now.subtract(const Duration(minutes: 11)),
-          metersSinceLastWrite: 0,
-        ),
-        isTrue,
-      );
-    });
-
+  group('geo', () {
     test('coordinate validation', () {
       expect(isValidCoordinate(21.4, 92.0), isTrue);
       expect(isValidCoordinate(91, 0), isFalse);

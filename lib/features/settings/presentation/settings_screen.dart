@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/providers.dart';
@@ -150,18 +149,6 @@ class SettingsScreen extends ConsumerWidget {
                 l10n.pushLimitation,
                 style: theme.textTheme.bodySmall,
               ),
-            ),
-            SectionHeader(l10n.settingsLocation),
-            ListTile(
-              leading: const Icon(Icons.my_location),
-              title: Text(l10n.locationHelpTitle),
-              subtitle: Text(l10n.locationHelpBody),
-              isThreeLine: true,
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings_applications_outlined),
-              title: Text(l10n.locationOpenSettings),
-              onTap: Geolocator.openAppSettings,
             ),
             SectionHeader(l10n.settingsPrivacy),
             ListTile(

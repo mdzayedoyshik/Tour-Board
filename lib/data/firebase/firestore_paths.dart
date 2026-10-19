@@ -28,7 +28,4 @@ abstract final class FirestorePaths {
       '${notes(tourId)}/$id/revisions';
   static String packingItems(String tourId) => '${tour(tourId)}/packingItems';
   static String activityFeed(String tourId) => '${tour(tourId)}/activityFeed';
-  static String locations(String tourId) => '${tour(tourId)}/locations';
-  static String location(String tourId, String uid) =>
-      '${locations(tourId)}/$uid';
 }
