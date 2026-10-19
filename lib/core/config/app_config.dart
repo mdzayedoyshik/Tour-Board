@@ -128,8 +128,9 @@ class AppConfig {
       if (firebaseIosApiKey.isEmpty) missing.add('FIREBASE_IOS_API_KEY');
       if (firebaseIosAppId.isEmpty) missing.add('FIREBASE_IOS_APP_ID');
     } else {
-      if (firebaseAndroidApiKey.isEmpty)
+      if (firebaseAndroidApiKey.isEmpty) {
         missing.add('FIREBASE_ANDROID_API_KEY');
+      }
       if (firebaseAndroidAppId.isEmpty) missing.add('FIREBASE_ANDROID_APP_ID');
     }
     return missing;
