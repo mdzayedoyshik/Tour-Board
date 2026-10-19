@@ -12,6 +12,13 @@
 # updates until Google approves an upload-key reset.
 set -euo pipefail
 
+if [[ ! -t 0 ]]; then
+  echo "This script asks for passwords, so it needs an interactive terminal."
+  echo "Open a normal terminal (outside Claude Code) and run:"
+  echo "  cd $(pwd) && bash scripts/setup_release_signing.sh"
+  exit 1
+fi
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PROPS_DIR="$ROOT/android/properties"
 JKS="$PROPS_DIR/upload.jks"
