@@ -1197,6 +1197,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Status'**
   String get fieldStatus;
+
+  /// No description provided for @balancesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Balances'**
+  String get balancesTitle;
+
+  /// No description provided for @balancesExplainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Balances are worked out from recorded expenses and confirmed payments. Tour Board never moves money — pay each other however you like, then record it here.'**
+  String get balancesExplainer;
+
+  /// No description provided for @balancesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to settle yet.'**
+  String get balancesEmpty;
+
+  /// No description provided for @balancesInCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'In {currency}'**
+  String balancesInCurrency(String currency);
+
+  /// No description provided for @balancesSuggested.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested payments'**
+  String get balancesSuggested;
+
+  /// No description provided for @memberFormer.
+  ///
+  /// In en, this message translates to:
+  /// **'Former member'**
+  String get memberFormer;
+
+  /// No description provided for @transferLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} → {to}'**
+  String transferLine(String from, String to);
+
+  /// No description provided for @settlementRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a payment'**
+  String get settlementRecord;
+
+  /// No description provided for @settlementMarkPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as paid'**
+  String get settlementMarkPaid;
+
+  /// No description provided for @settlementMarkReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Record received'**
+  String get settlementMarkReceived;
+
+  /// No description provided for @settlementsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get settlementsTitle;
+
+  /// No description provided for @settlementPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting confirmation'**
+  String get settlementPending;
+
+  /// No description provided for @settlementConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get settlementConfirmed;
+
+  /// No description provided for @settlementDisputed.
+  ///
+  /// In en, this message translates to:
+  /// **'Disputed'**
+  String get settlementDisputed;
+
+  /// No description provided for @settlementCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get settlementCancelled;
+
+  /// No description provided for @settlementRefShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Ref {ref}'**
+  String settlementRefShort(String ref);
+
+  /// No description provided for @settlementDisputeReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason: {reason}'**
+  String settlementDisputeReason(String reason);
+
+  /// No description provided for @settlementConfirmedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed by {name}'**
+  String settlementConfirmedBy(String name);
+
+  /// No description provided for @settlementConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm this payment?'**
+  String get settlementConfirmTitle;
+
+  /// No description provided for @settlementConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm that {amount} from {name} was settled. This updates balances and can\'t be undone.'**
+  String settlementConfirmBody(String amount, String name);
+
+  /// No description provided for @settlementConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get settlementConfirmAction;
+
+  /// No description provided for @settlementDisputeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dispute payment'**
+  String get settlementDisputeTitle;
+
+  /// No description provided for @settlementDisputeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s wrong?'**
+  String get settlementDisputeLabel;
+
+  /// No description provided for @settlementDisputeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Dispute'**
+  String get settlementDisputeAction;
+
+  /// No description provided for @settlementCancelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this payment record?'**
+  String get settlementCancelTitle;
+
+  /// No description provided for @settlementCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel record'**
+  String get settlementCancelAction;
+
+  /// No description provided for @settlementAlreadyChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'This payment was already updated by someone else.'**
+  String get settlementAlreadyChanged;
+
+  /// No description provided for @settlementIPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'I paid'**
+  String get settlementIPaid;
+
+  /// No description provided for @settlementIReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'I received'**
+  String get settlementIReceived;
+
+  /// No description provided for @settlementPaidTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid to'**
+  String get settlementPaidTo;
+
+  /// No description provided for @settlementReceivedFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Received from'**
+  String get settlementReceivedFrom;
+
+  /// No description provided for @settlementPartialHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Partial payments are fine — record each one separately.'**
+  String get settlementPartialHint;
+
+  /// No description provided for @settlementMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method (optional)'**
+  String get settlementMethod;
+
+  /// No description provided for @settlementMethodHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. cash, bKash, bank transfer'**
+  String get settlementMethodHint;
+
+  /// No description provided for @settlementRef.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction reference (optional)'**
+  String get settlementRef;
+
+  /// No description provided for @settlementOfflineNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The other person confirms the payment in the app. Only confirmed payments change balances.'**
+  String get settlementOfflineNote;
+
+  /// No description provided for @settlementSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for confirmation'**
+  String get settlementSubmit;
+
+  /// No description provided for @settlementSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent for confirmation'**
+  String get settlementSubmitted;
 }
 
 class _AppLocalizationsDelegate

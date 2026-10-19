@@ -382,5 +382,91 @@
   "fieldTitle": "Title",
   "fieldSplitMethod": "Split method",
   "fieldBody": "Text",
-  "fieldStatus": "Status"
+  "fieldStatus": "Status",
+  "balancesTitle": "Balances",
+  "balancesExplainer": "Balances are worked out from recorded expenses and confirmed payments. Tour Board never moves money — pay each other however you like, then record it here.",
+  "balancesEmpty": "Nothing to settle yet.",
+  "balancesInCurrency": "In {currency}",
+  "@balancesInCurrency": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "balancesSuggested": "Suggested payments",
+  "memberFormer": "Former member",
+  "transferLine": "{from} → {to}",
+  "@transferLine": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "settlementRecord": "Record a payment",
+  "settlementMarkPaid": "Mark as paid",
+  "settlementMarkReceived": "Record received",
+  "settlementsTitle": "Payments",
+  "settlementPending": "Awaiting confirmation",
+  "settlementConfirmed": "Confirmed",
+  "settlementDisputed": "Disputed",
+  "settlementCancelled": "Cancelled",
+  "settlementRefShort": "Ref {ref}",
+  "@settlementRefShort": {
+    "placeholders": {
+      "ref": {
+        "type": "String"
+      }
+    }
+  },
+  "settlementDisputeReason": "Reason: {reason}",
+  "@settlementDisputeReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "settlementConfirmedBy": "Confirmed by {name}",
+  "@settlementConfirmedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settlementConfirmTitle": "Confirm this payment?",
+  "settlementConfirmBody": "Confirm that {amount} from {name} was settled. This updates balances and can't be undone.",
+  "@settlementConfirmBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settlementConfirmAction": "Confirm",
+  "settlementDisputeTitle": "Dispute payment",
+  "settlementDisputeLabel": "What's wrong?",
+  "settlementDisputeAction": "Dispute",
+  "settlementCancelTitle": "Cancel this payment record?",
+  "settlementCancelAction": "Cancel record",
+  "settlementAlreadyChanged": "This payment was already updated by someone else.",
+  "settlementIPaid": "I paid",
+  "settlementIReceived": "I received",
+  "settlementPaidTo": "Paid to",
+  "settlementReceivedFrom": "Received from",
+  "settlementPartialHint": "Partial payments are fine — record each one separately.",
+  "settlementMethod": "Payment method (optional)",
+  "settlementMethodHint": "e.g. cash, bKash, bank transfer",
+  "settlementRef": "Transaction reference (optional)",
+  "settlementOfflineNote": "The other person confirms the payment in the app. Only confirmed payments change balances.",
+  "settlementSubmit": "Submit for confirmation",
+  "settlementSubmitted": "Sent for confirmation"
 }

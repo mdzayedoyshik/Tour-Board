@@ -668,4 +668,134 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fieldStatus => 'Status';
+
+  @override
+  String get balancesTitle => 'Balances';
+
+  @override
+  String get balancesExplainer =>
+      'Balances are worked out from recorded expenses and confirmed payments. Tour Board never moves money — pay each other however you like, then record it here.';
+
+  @override
+  String get balancesEmpty => 'Nothing to settle yet.';
+
+  @override
+  String balancesInCurrency(String currency) {
+    return 'In $currency';
+  }
+
+  @override
+  String get balancesSuggested => 'Suggested payments';
+
+  @override
+  String get memberFormer => 'Former member';
+
+  @override
+  String transferLine(String from, String to) {
+    return '$from → $to';
+  }
+
+  @override
+  String get settlementRecord => 'Record a payment';
+
+  @override
+  String get settlementMarkPaid => 'Mark as paid';
+
+  @override
+  String get settlementMarkReceived => 'Record received';
+
+  @override
+  String get settlementsTitle => 'Payments';
+
+  @override
+  String get settlementPending => 'Awaiting confirmation';
+
+  @override
+  String get settlementConfirmed => 'Confirmed';
+
+  @override
+  String get settlementDisputed => 'Disputed';
+
+  @override
+  String get settlementCancelled => 'Cancelled';
+
+  @override
+  String settlementRefShort(String ref) {
+    return 'Ref $ref';
+  }
+
+  @override
+  String settlementDisputeReason(String reason) {
+    return 'Reason: $reason';
+  }
+
+  @override
+  String settlementConfirmedBy(String name) {
+    return 'Confirmed by $name';
+  }
+
+  @override
+  String get settlementConfirmTitle => 'Confirm this payment?';
+
+  @override
+  String settlementConfirmBody(String amount, String name) {
+    return 'Confirm that $amount from $name was settled. This updates balances and can\'t be undone.';
+  }
+
+  @override
+  String get settlementConfirmAction => 'Confirm';
+
+  @override
+  String get settlementDisputeTitle => 'Dispute payment';
+
+  @override
+  String get settlementDisputeLabel => 'What\'s wrong?';
+
+  @override
+  String get settlementDisputeAction => 'Dispute';
+
+  @override
+  String get settlementCancelTitle => 'Cancel this payment record?';
+
+  @override
+  String get settlementCancelAction => 'Cancel record';
+
+  @override
+  String get settlementAlreadyChanged =>
+      'This payment was already updated by someone else.';
+
+  @override
+  String get settlementIPaid => 'I paid';
+
+  @override
+  String get settlementIReceived => 'I received';
+
+  @override
+  String get settlementPaidTo => 'Paid to';
+
+  @override
+  String get settlementReceivedFrom => 'Received from';
+
+  @override
+  String get settlementPartialHint =>
+      'Partial payments are fine — record each one separately.';
+
+  @override
+  String get settlementMethod => 'Payment method (optional)';
+
+  @override
+  String get settlementMethodHint => 'e.g. cash, bKash, bank transfer';
+
+  @override
+  String get settlementRef => 'Transaction reference (optional)';
+
+  @override
+  String get settlementOfflineNote =>
+      'The other person confirms the payment in the app. Only confirmed payments change balances.';
+
+  @override
+  String get settlementSubmit => 'Submit for confirmation';
+
+  @override
+  String get settlementSubmitted => 'Sent for confirmation';
 }
