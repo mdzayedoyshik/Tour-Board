@@ -210,4 +210,177 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get statusUpcoming => 'Upcoming';
+
+  @override
+  String get statusActive => 'Active';
+
+  @override
+  String get statusClosed => 'Closed';
+
+  @override
+  String get statusArchived => 'Archived';
+
+  @override
+  String get statusEnded => 'Ended';
+
+  @override
+  String get homeTitle => 'Your tours';
+
+  @override
+  String get inboxTitle => 'Inbox';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get homeEmptyTitle => 'No tours yet';
+
+  @override
+  String get homeEmptyBody =>
+      'Create a tour for your group, or join one with a link or code from a friend.';
+
+  @override
+  String get createTour => 'Create tour';
+
+  @override
+  String get createTourShort => 'Create';
+
+  @override
+  String get joinTour => 'Join with link or code';
+
+  @override
+  String get joinTourShort => 'Join';
+
+  @override
+  String get homeSectionCurrent => 'Active & upcoming';
+
+  @override
+  String get homeSectionClosed => 'Recently closed';
+
+  @override
+  String homeSectionArchived(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count archived tours',
+      one: '1 archived tour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String memberCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get createTourTitle => 'New tour';
+
+  @override
+  String get editTourTitle => 'Edit tour';
+
+  @override
+  String get tourNameLabel => 'Tour name';
+
+  @override
+  String get tourNameHint => 'e.g. Cox\'s Bazar weekend';
+
+  @override
+  String get tourNameRequired => 'Give the tour a name';
+
+  @override
+  String get tourDatesLabel => 'Dates';
+
+  @override
+  String get tourDatesEndBeforeStart =>
+      'End date can\'t be before the start date';
+
+  @override
+  String get tourDatesTooLong => 'Tours can be at most one year long';
+
+  @override
+  String get currencyLabel => 'Currency';
+
+  @override
+  String get timeZoneLabel => 'Time zone';
+
+  @override
+  String get tourCurrencyChangeNote =>
+      'Existing expenses keep their own currency. Balances are shown per currency.';
+
+  @override
+  String get tourBudgetLabel => 'Budget (optional)';
+
+  @override
+  String get tourDescriptionLabel => 'Description (optional)';
+
+  @override
+  String get tourCreated => 'Tour created';
+
+  @override
+  String get tourUpdated => 'Tour updated';
+
+  @override
+  String get joinTitle => 'Join a tour';
+
+  @override
+  String get joinIntro =>
+      'Paste the invite link or enter the code you received. The host will approve your request.';
+
+  @override
+  String get joinCodeLabel => 'Invite link or code';
+
+  @override
+  String get joinPaste => 'Paste';
+
+  @override
+  String get joinFind => 'Find tour';
+
+  @override
+  String get joinInvalidCode =>
+      'That doesn\'t look like an invite code. Check it and try again.';
+
+  @override
+  String get joinCodeNotFound => 'No tour found for this code.';
+
+  @override
+  String get joinCodeExpired =>
+      'This invite has expired or was turned off. Ask the host for a new one.';
+
+  @override
+  String joinHostedBy(String name) {
+    return 'Hosted by $name';
+  }
+
+  @override
+  String get joinRequest => 'Request to join';
+
+  @override
+  String get joinRequestAgain => 'Request again';
+
+  @override
+  String get joinPending =>
+      'Request sent. You\'ll get access once the host approves.';
+
+  @override
+  String get joinCancelRequest => 'Cancel request';
+
+  @override
+  String get joinRejected => 'The host declined this request.';
+
+  @override
+  String get joinTooManyAttempts =>
+      'You\'ve reached the limit of join requests for this tour.';
+
+  @override
+  String get joinOpenTour => 'Open tour';
 }

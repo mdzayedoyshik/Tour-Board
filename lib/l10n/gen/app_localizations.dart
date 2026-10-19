@@ -441,6 +441,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 h ago} other{{count} h ago}}'**
   String timeHoursAgo(num count);
+
+  /// No description provided for @statusUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get statusUpcoming;
+
+  /// No description provided for @statusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get statusActive;
+
+  /// No description provided for @statusClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get statusClosed;
+
+  /// No description provided for @statusArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get statusArchived;
+
+  /// No description provided for @statusEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get statusEnded;
+
+  /// No description provided for @homeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tours'**
+  String get homeTitle;
+
+  /// No description provided for @inboxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox'**
+  String get inboxTitle;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @homeEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No tours yet'**
+  String get homeEmptyTitle;
+
+  /// No description provided for @homeEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a tour for your group, or join one with a link or code from a friend.'**
+  String get homeEmptyBody;
+
+  /// No description provided for @createTour.
+  ///
+  /// In en, this message translates to:
+  /// **'Create tour'**
+  String get createTour;
+
+  /// No description provided for @createTourShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get createTourShort;
+
+  /// No description provided for @joinTour.
+  ///
+  /// In en, this message translates to:
+  /// **'Join with link or code'**
+  String get joinTour;
+
+  /// No description provided for @joinTourShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get joinTourShort;
+
+  /// No description provided for @homeSectionCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Active & upcoming'**
+  String get homeSectionCurrent;
+
+  /// No description provided for @homeSectionClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently closed'**
+  String get homeSectionClosed;
+
+  /// No description provided for @homeSectionArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 archived tour} other{{count} archived tours}}'**
+  String homeSectionArchived(num count);
+
+  /// No description provided for @memberCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 member} other{{count} members}}'**
+  String memberCount(num count);
+
+  /// No description provided for @createTourTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New tour'**
+  String get createTourTitle;
+
+  /// No description provided for @editTourTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit tour'**
+  String get editTourTitle;
+
+  /// No description provided for @tourNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tour name'**
+  String get tourNameLabel;
+
+  /// No description provided for @tourNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Cox\'s Bazar weekend'**
+  String get tourNameHint;
+
+  /// No description provided for @tourNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the tour a name'**
+  String get tourNameRequired;
+
+  /// No description provided for @tourDatesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates'**
+  String get tourDatesLabel;
+
+  /// No description provided for @tourDatesEndBeforeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'End date can\'t be before the start date'**
+  String get tourDatesEndBeforeStart;
+
+  /// No description provided for @tourDatesTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Tours can be at most one year long'**
+  String get tourDatesTooLong;
+
+  /// No description provided for @currencyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get currencyLabel;
+
+  /// No description provided for @timeZoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time zone'**
+  String get timeZoneLabel;
+
+  /// No description provided for @tourCurrencyChangeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Existing expenses keep their own currency. Balances are shown per currency.'**
+  String get tourCurrencyChangeNote;
+
+  /// No description provided for @tourBudgetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget (optional)'**
+  String get tourBudgetLabel;
+
+  /// No description provided for @tourDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description (optional)'**
+  String get tourDescriptionLabel;
+
+  /// No description provided for @tourCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Tour created'**
+  String get tourCreated;
+
+  /// No description provided for @tourUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Tour updated'**
+  String get tourUpdated;
+
+  /// No description provided for @joinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Join a tour'**
+  String get joinTitle;
+
+  /// No description provided for @joinIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the invite link or enter the code you received. The host will approve your request.'**
+  String get joinIntro;
+
+  /// No description provided for @joinCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite link or code'**
+  String get joinCodeLabel;
+
+  /// No description provided for @joinPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste'**
+  String get joinPaste;
+
+  /// No description provided for @joinFind.
+  ///
+  /// In en, this message translates to:
+  /// **'Find tour'**
+  String get joinFind;
+
+  /// No description provided for @joinInvalidCode.
+  ///
+  /// In en, this message translates to:
+  /// **'That doesn\'t look like an invite code. Check it and try again.'**
+  String get joinInvalidCode;
+
+  /// No description provided for @joinCodeNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No tour found for this code.'**
+  String get joinCodeNotFound;
+
+  /// No description provided for @joinCodeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This invite has expired or was turned off. Ask the host for a new one.'**
+  String get joinCodeExpired;
+
+  /// No description provided for @joinHostedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Hosted by {name}'**
+  String joinHostedBy(String name);
+
+  /// No description provided for @joinRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Request to join'**
+  String get joinRequest;
+
+  /// No description provided for @joinRequestAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Request again'**
+  String get joinRequestAgain;
+
+  /// No description provided for @joinPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Request sent. You\'ll get access once the host approves.'**
+  String get joinPending;
+
+  /// No description provided for @joinCancelRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request'**
+  String get joinCancelRequest;
+
+  /// No description provided for @joinRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'The host declined this request.'**
+  String get joinRejected;
+
+  /// No description provided for @joinTooManyAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the limit of join requests for this tour.'**
+  String get joinTooManyAttempts;
+
+  /// No description provided for @joinOpenTour.
+  ///
+  /// In en, this message translates to:
+  /// **'Open tour'**
+  String get joinOpenTour;
 }
 
 class _AppLocalizationsDelegate

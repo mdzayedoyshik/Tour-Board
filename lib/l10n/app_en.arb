@@ -88,5 +88,75 @@
         "type": "num"
       }
     }
-  }
+  },
+  "statusUpcoming": "Upcoming",
+  "statusActive": "Active",
+  "statusClosed": "Closed",
+  "statusArchived": "Archived",
+  "statusEnded": "Ended",
+  "homeTitle": "Your tours",
+  "inboxTitle": "Inbox",
+  "settingsTitle": "Settings",
+  "homeEmptyTitle": "No tours yet",
+  "homeEmptyBody": "Create a tour for your group, or join one with a link or code from a friend.",
+  "createTour": "Create tour",
+  "createTourShort": "Create",
+  "joinTour": "Join with link or code",
+  "joinTourShort": "Join",
+  "homeSectionCurrent": "Active & upcoming",
+  "homeSectionClosed": "Recently closed",
+  "homeSectionArchived": "{count, plural, =1{1 archived tour} other{{count} archived tours}}",
+  "@homeSectionArchived": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "memberCount": "{count, plural, =1{1 member} other{{count} members}}",
+  "@memberCount": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "createTourTitle": "New tour",
+  "editTourTitle": "Edit tour",
+  "tourNameLabel": "Tour name",
+  "tourNameHint": "e.g. Cox's Bazar weekend",
+  "tourNameRequired": "Give the tour a name",
+  "tourDatesLabel": "Dates",
+  "tourDatesEndBeforeStart": "End date can't be before the start date",
+  "tourDatesTooLong": "Tours can be at most one year long",
+  "currencyLabel": "Currency",
+  "timeZoneLabel": "Time zone",
+  "tourCurrencyChangeNote": "Existing expenses keep their own currency. Balances are shown per currency.",
+  "tourBudgetLabel": "Budget (optional)",
+  "tourDescriptionLabel": "Description (optional)",
+  "tourCreated": "Tour created",
+  "tourUpdated": "Tour updated",
+  "joinTitle": "Join a tour",
+  "joinIntro": "Paste the invite link or enter the code you received. The host will approve your request.",
+  "joinCodeLabel": "Invite link or code",
+  "joinPaste": "Paste",
+  "joinFind": "Find tour",
+  "joinInvalidCode": "That doesn't look like an invite code. Check it and try again.",
+  "joinCodeNotFound": "No tour found for this code.",
+  "joinCodeExpired": "This invite has expired or was turned off. Ask the host for a new one.",
+  "joinHostedBy": "Hosted by {name}",
+  "@joinHostedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "joinRequest": "Request to join",
+  "joinRequestAgain": "Request again",
+  "joinPending": "Request sent. You'll get access once the host approves.",
+  "joinCancelRequest": "Cancel request",
+  "joinRejected": "The host declined this request.",
+  "joinTooManyAttempts": "You've reached the limit of join requests for this tour.",
+  "joinOpenTour": "Open tour"
 }
