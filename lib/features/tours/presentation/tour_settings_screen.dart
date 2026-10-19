@@ -163,7 +163,7 @@ class _BodyState extends ConsumerState<_Body> {
     if (!ok || !mounted) return;
     setState(() => _busy = true);
     try {
-      await ref.read(membershipRepositoryProvider).leave(widget.tour, me);
+      await ref.read(membershipRepositoryProvider).leave(widget.tour.id, me);
       if (mounted) context.go(Routes.home);
     } catch (e) {
       if (mounted) showAppSnack(context, errorMessage(context, e), error: true);

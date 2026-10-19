@@ -131,10 +131,9 @@ class AuthRepository {
     await _auth.signOut();
   }
 
-  /// Re-authenticates with Google (required by Firebase before deleting an
-  /// account), then deletes the auth user. Data cleanup happens before this
-  /// in AccountDeletionService.
-  Future<void> reauthenticateAndDelete() async {
+  /// Re-authenticates with Google. Firebase requires a recent sign-in
+  /// before deleting an account, so this runs before any data is removed.
+  Future<void> reauthenticate() async {
     final user = _auth.currentUser;
     if (user == null) return;
     await _ensureGoogleInitialised();
@@ -146,7 +145,12 @@ class AuthRepository {
     await user.reauthenticateWithCredential(
       GoogleAuthProvider.credential(idToken: idToken),
     );
-    await user.delete();
+  }
+
+  /// Deletes the Firebase Auth user (after [reauthenticate] and data
+  /// cleanup in AccountDeletionService).
+  Future<void> deleteAuthUser() async {
+    await _auth.currentUser?.delete();
     try {
       await GoogleSignIn.instance.disconnect();
     } catch (_) {}

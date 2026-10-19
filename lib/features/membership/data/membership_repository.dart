@@ -272,23 +272,23 @@ class MembershipRepository {
     await batch.commit().timeout(_timeout);
   }
 
-  Future<void> leave(Tour tour, Member me) async {
+  Future<void> leave(String tourId, Member me) async {
     final batch = _db.batch()
       ..set(
-        _feed.newRef(tour.id),
+        _feed.newRef(tourId),
         _feed.eventData(
           type: FeedEventType.memberLeft,
           actorUid: me.uid,
           label: me.displayName,
         ),
       )
-      ..delete(_db.doc(FirestorePaths.location(tour.id, me.uid)))
-      ..update(_member(tour.id, me.uid), {
+      ..delete(_db.doc(FirestorePaths.location(tourId, me.uid)))
+      ..update(_member(tourId, me.uid), {
         'status': 'left',
         'removedAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       })
-      ..delete(_index(me.uid, tour.id));
+      ..delete(_index(me.uid, tourId));
     await batch.commit().timeout(_timeout);
   }
 
