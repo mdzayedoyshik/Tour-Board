@@ -82,6 +82,7 @@ class InvitePreview {
     required this.code,
     required this.tourId,
     required this.tourName,
+    required this.hostUid,
     required this.hostName,
     required this.startAt,
     required this.endAt,
@@ -94,6 +95,7 @@ class InvitePreview {
         code: id,
         tourId: readString(data['tourId']),
         tourName: readString(data['tourName']),
+        hostUid: readString(data['hostUid']),
         hostName: readString(data['hostName']),
         startAt: readDate(data['startAt']),
         endAt: readDate(data['endAt']),
@@ -104,6 +106,7 @@ class InvitePreview {
   final String code;
   final String tourId;
   final String tourName;
+  final String hostUid;
   final String hostName;
   final DateTime startAt;
   final DateTime endAt;

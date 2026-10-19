@@ -51,6 +51,7 @@ void main() {
         code: 'X',
         tourId: 't',
         tourName: 'n',
+        hostUid: 'hu',
         hostName: 'h',
         startAt: now,
         endAt: now,
