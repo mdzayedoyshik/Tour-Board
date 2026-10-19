@@ -2325,6 +2325,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'As host, make someone else the host before leaving.'**
   String get tourHostCannotLeave;
+
+  /// No description provided for @noteAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'New note'**
+  String get noteAdd;
+
+  /// No description provided for @noteEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit note'**
+  String get noteEdit;
+
+  /// No description provided for @noteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get noteTitle;
+
+  /// No description provided for @noteTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title (optional)'**
+  String get noteTitleLabel;
+
+  /// No description provided for @noteBodyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get noteBodyLabel;
+
+  /// No description provided for @noteDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this note?'**
+  String get noteDeleteTitle;
+
+  /// No description provided for @noteConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone else edited this note at the same time. Reopen it to see their version, then edit again.'**
+  String get noteConflict;
+
+  /// No description provided for @notesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No notes yet'**
+  String get notesEmptyTitle;
+
+  /// No description provided for @notesEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep booking codes, addresses and reminders here for the whole group.'**
+  String get notesEmptyBody;
+
+  /// No description provided for @packingAddHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an item, e.g. sunscreen'**
+  String get packingAddHint;
+
+  /// No description provided for @packingEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Packing list is empty'**
+  String get packingEmpty;
+
+  /// No description provided for @packingEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add things the group should bring. Anyone can tick them off.'**
+  String get packingEmptyBody;
+
+  /// No description provided for @packingProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} packed'**
+  String packingProgress(int done, int total);
+
+  /// No description provided for @packingAssignedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'For {name}'**
+  String packingAssignedTo(String name);
+
+  /// No description provided for @packingAssign.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to'**
+  String get packingAssign;
+
+  /// No description provided for @activityEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity yet'**
+  String get activityEmpty;
+
+  /// No description provided for @feedMemberJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} approved {name}'**
+  String feedMemberJoined(String actor, String name);
+
+  /// No description provided for @feedMemberRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} removed {name}'**
+  String feedMemberRemoved(String actor, String name);
+
+  /// No description provided for @feedMemberLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} left the tour'**
+  String feedMemberLeft(String actor);
+
+  /// No description provided for @feedRoleChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} changed {name}\'s role'**
+  String feedRoleChanged(String actor, String name);
+
+  /// No description provided for @feedHostTransferred.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} made {name} the host'**
+  String feedHostTransferred(String actor, String name);
+
+  /// No description provided for @feedExpenseAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} added “{title}”'**
+  String feedExpenseAdded(String actor, String title);
+
+  /// No description provided for @feedExpenseEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} edited “{title}”'**
+  String feedExpenseEdited(String actor, String title);
+
+  /// No description provided for @feedExpenseDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} deleted “{title}”'**
+  String feedExpenseDeleted(String actor, String title);
+
+  /// No description provided for @feedPlanAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} planned “{title}”'**
+  String feedPlanAdded(String actor, String title);
+
+  /// No description provided for @feedPlanEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} updated “{title}”'**
+  String feedPlanEdited(String actor, String title);
+
+  /// No description provided for @feedSettlementSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} recorded a payment'**
+  String feedSettlementSubmitted(String actor);
+
+  /// No description provided for @feedSettlementConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} confirmed a payment'**
+  String feedSettlementConfirmed(String actor);
+
+  /// No description provided for @feedSettlementDisputed.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} disputed a payment'**
+  String feedSettlementDisputed(String actor);
+
+  /// No description provided for @feedSettlementCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} cancelled a payment record'**
+  String feedSettlementCancelled(String actor);
+
+  /// No description provided for @feedTourClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} closed the tour'**
+  String feedTourClosed(String actor);
+
+  /// No description provided for @feedTourReopened.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} reopened the tour'**
+  String feedTourReopened(String actor);
+
+  /// No description provided for @feedTourArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} archived the tour'**
+  String feedTourArchived(String actor);
+
+  /// No description provided for @feedTourUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{actor} updated tour details'**
+  String feedTourUpdated(String actor);
+
+  /// No description provided for @feedUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Update from a newer app version'**
+  String get feedUnknown;
 }
 
 class _AppLocalizationsDelegate

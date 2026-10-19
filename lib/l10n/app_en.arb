@@ -756,5 +756,210 @@
   "tourLeave": "Leave tour",
   "tourLeaveTitle": "Leave this tour?",
   "tourLeaveBody": "You'll lose access. Your past expenses and balance stay with the group so it can still be settled.",
-  "tourHostCannotLeave": "As host, make someone else the host before leaving."
+  "tourHostCannotLeave": "As host, make someone else the host before leaving.",
+  "noteAdd": "New note",
+  "noteEdit": "Edit note",
+  "noteTitle": "Note",
+  "noteTitleLabel": "Title (optional)",
+  "noteBodyLabel": "Note",
+  "noteDeleteTitle": "Delete this note?",
+  "noteConflict": "Someone else edited this note at the same time. Reopen it to see their version, then edit again.",
+  "notesEmptyTitle": "No notes yet",
+  "notesEmptyBody": "Keep booking codes, addresses and reminders here for the whole group.",
+  "packingAddHint": "Add an item, e.g. sunscreen",
+  "packingEmpty": "Packing list is empty",
+  "packingEmptyBody": "Add things the group should bring. Anyone can tick them off.",
+  "packingProgress": "{done} of {total} packed",
+  "@packingProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "packingAssignedTo": "For {name}",
+  "@packingAssignedTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "packingAssign": "Assign to",
+  "activityEmpty": "No activity yet",
+  "feedMemberJoined": "{actor} approved {name}",
+  "@feedMemberJoined": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "feedMemberRemoved": "{actor} removed {name}",
+  "@feedMemberRemoved": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "feedMemberLeft": "{actor} left the tour",
+  "@feedMemberLeft": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedRoleChanged": "{actor} changed {name}'s role",
+  "@feedRoleChanged": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "feedHostTransferred": "{actor} made {name} the host",
+  "@feedHostTransferred": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "feedExpenseAdded": "{actor} added “{title}”",
+  "@feedExpenseAdded": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "feedExpenseEdited": "{actor} edited “{title}”",
+  "@feedExpenseEdited": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "feedExpenseDeleted": "{actor} deleted “{title}”",
+  "@feedExpenseDeleted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "feedPlanAdded": "{actor} planned “{title}”",
+  "@feedPlanAdded": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "feedPlanEdited": "{actor} updated “{title}”",
+  "@feedPlanEdited": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "feedSettlementSubmitted": "{actor} recorded a payment",
+  "@feedSettlementSubmitted": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedSettlementConfirmed": "{actor} confirmed a payment",
+  "@feedSettlementConfirmed": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedSettlementDisputed": "{actor} disputed a payment",
+  "@feedSettlementDisputed": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedSettlementCancelled": "{actor} cancelled a payment record",
+  "@feedSettlementCancelled": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedTourClosed": "{actor} closed the tour",
+  "@feedTourClosed": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedTourReopened": "{actor} reopened the tour",
+  "@feedTourReopened": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedTourArchived": "{actor} archived the tour",
+  "@feedTourArchived": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedTourUpdated": "{actor} updated tour details",
+  "@feedTourUpdated": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
+  "feedUnknown": "Update from a newer app version"
 }

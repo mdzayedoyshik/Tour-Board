@@ -1322,4 +1322,152 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tourHostCannotLeave =>
       'As host, make someone else the host before leaving.';
+
+  @override
+  String get noteAdd => 'New note';
+
+  @override
+  String get noteEdit => 'Edit note';
+
+  @override
+  String get noteTitle => 'Note';
+
+  @override
+  String get noteTitleLabel => 'Title (optional)';
+
+  @override
+  String get noteBodyLabel => 'Note';
+
+  @override
+  String get noteDeleteTitle => 'Delete this note?';
+
+  @override
+  String get noteConflict =>
+      'Someone else edited this note at the same time. Reopen it to see their version, then edit again.';
+
+  @override
+  String get notesEmptyTitle => 'No notes yet';
+
+  @override
+  String get notesEmptyBody =>
+      'Keep booking codes, addresses and reminders here for the whole group.';
+
+  @override
+  String get packingAddHint => 'Add an item, e.g. sunscreen';
+
+  @override
+  String get packingEmpty => 'Packing list is empty';
+
+  @override
+  String get packingEmptyBody =>
+      'Add things the group should bring. Anyone can tick them off.';
+
+  @override
+  String packingProgress(int done, int total) {
+    return '$done of $total packed';
+  }
+
+  @override
+  String packingAssignedTo(String name) {
+    return 'For $name';
+  }
+
+  @override
+  String get packingAssign => 'Assign to';
+
+  @override
+  String get activityEmpty => 'No activity yet';
+
+  @override
+  String feedMemberJoined(String actor, String name) {
+    return '$actor approved $name';
+  }
+
+  @override
+  String feedMemberRemoved(String actor, String name) {
+    return '$actor removed $name';
+  }
+
+  @override
+  String feedMemberLeft(String actor) {
+    return '$actor left the tour';
+  }
+
+  @override
+  String feedRoleChanged(String actor, String name) {
+    return '$actor changed $name\'s role';
+  }
+
+  @override
+  String feedHostTransferred(String actor, String name) {
+    return '$actor made $name the host';
+  }
+
+  @override
+  String feedExpenseAdded(String actor, String title) {
+    return '$actor added “$title”';
+  }
+
+  @override
+  String feedExpenseEdited(String actor, String title) {
+    return '$actor edited “$title”';
+  }
+
+  @override
+  String feedExpenseDeleted(String actor, String title) {
+    return '$actor deleted “$title”';
+  }
+
+  @override
+  String feedPlanAdded(String actor, String title) {
+    return '$actor planned “$title”';
+  }
+
+  @override
+  String feedPlanEdited(String actor, String title) {
+    return '$actor updated “$title”';
+  }
+
+  @override
+  String feedSettlementSubmitted(String actor) {
+    return '$actor recorded a payment';
+  }
+
+  @override
+  String feedSettlementConfirmed(String actor) {
+    return '$actor confirmed a payment';
+  }
+
+  @override
+  String feedSettlementDisputed(String actor) {
+    return '$actor disputed a payment';
+  }
+
+  @override
+  String feedSettlementCancelled(String actor) {
+    return '$actor cancelled a payment record';
+  }
+
+  @override
+  String feedTourClosed(String actor) {
+    return '$actor closed the tour';
+  }
+
+  @override
+  String feedTourReopened(String actor) {
+    return '$actor reopened the tour';
+  }
+
+  @override
+  String feedTourArchived(String actor) {
+    return '$actor archived the tour';
+  }
+
+  @override
+  String feedTourUpdated(String actor) {
+    return '$actor updated tour details';
+  }
+
+  @override
+  String get feedUnknown => 'Update from a newer app version';
 }

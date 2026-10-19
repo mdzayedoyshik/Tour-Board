@@ -27,6 +27,17 @@ class NotesRepository {
     limit: Note.pageSize,
   );
 
+  /// Single-note listener for the detail screen (also covers older notes
+  /// that are not in the live first page).
+  Stream<Note?> watchNote(String tourId, String noteId) => watchDoc(
+    _col(tourId).doc(noteId),
+    (doc) => Note.fromDoc(
+      doc.id,
+      doc.data()!,
+      hasPendingWrites: doc.metadata.hasPendingWrites,
+    ),
+  );
+
   Future<List<Note>> fetchOlder(String tourId, DateTime before) async {
     final snap = await _col(tourId)
         .orderBy('updatedAt', descending: true)
@@ -127,4 +138,10 @@ final notesRepositoryProvider = Provider<NotesRepository>(
 final recentNotesProvider = StreamProvider.autoDispose
     .family<Snapshot<Note>, String>(
       (ref, tourId) => ref.watch(notesRepositoryProvider).watchRecent(tourId),
+    );
+
+final noteProvider = StreamProvider.autoDispose
+    .family<Note?, ({String tourId, String noteId})>(
+      (ref, key) =>
+          ref.watch(notesRepositoryProvider).watchNote(key.tourId, key.noteId),
     );
