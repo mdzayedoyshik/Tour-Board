@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "230585437551-73v0rhe77b2hd2krr64o0gloln2v9v69.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.techorbit.tour_board",
+            "certificate_hash": "8bcb67f25a217dd7ede21c0ae5a008c3a377492e"
+          }
+        },
+        {
           "client_id": "230585437551-cfks69lnc9vjer52g1b1fvnc9g4q6knl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
