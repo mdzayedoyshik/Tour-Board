@@ -423,6 +423,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Firebase isn\'t configured for this build yet. Run `flutterfire configure` as described in README.md, then rebuild the app.'**
   String get configErrorBody;
+
+  /// No description provided for @timeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get timeJustNow;
+
+  /// No description provided for @timeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 min ago} other{{count} min ago}}'**
+  String timeMinutesAgo(num count);
+
+  /// No description provided for @timeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 h ago} other{{count} h ago}}'**
+  String timeHoursAgo(num count);
 }
 
 class _AppLocalizationsDelegate
