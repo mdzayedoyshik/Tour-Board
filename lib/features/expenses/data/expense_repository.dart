@@ -96,8 +96,9 @@ class ExpenseRepository {
           final snap = await tx.get(ref);
           if (!snap.exists) throw const AppException(AppErrorKind.notFound);
           final current = Expense.fromDoc(snap.id, snap.data()!);
-          if (current.isDeleted)
+          if (current.isDeleted) {
             throw const AppException(AppErrorKind.notFound);
+          }
           if (current.revisionCount != expectedRevision) {
             throw const AppException(AppErrorKind.conflict);
           }
