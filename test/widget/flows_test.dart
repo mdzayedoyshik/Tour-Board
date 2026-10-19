@@ -39,7 +39,7 @@ void main() {
       await tester.tap(find.text('Find tour'));
       await tester.pump();
       expect(
-        find.textContaining("doesn't look like an invite"),
+        find.textContaining("doesn't look like a join code"),
         findsOneWidget,
       );
       verifyNever(() => repo.fetchInvite(any()));

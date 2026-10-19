@@ -18,11 +18,6 @@ if (keystorePropertiesFile.exists()) {
     keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
 }
 
-// Host used for verified Android App Links (https://<host>/join/<code>).
-// Override with -PinviteLinkHost=example.com or in gradle.properties.
-val inviteLinkHost: String =
-    (project.findProperty("inviteLinkHost") as String?) ?: "tourboard.app"
-
 android {
     namespace = "com.techorbit.tour_board"
     compileSdk = flutter.compileSdkVersion
@@ -43,7 +38,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        manifestPlaceholders["inviteLinkHost"] = inviteLinkHost
     }
 
     signingConfigs {

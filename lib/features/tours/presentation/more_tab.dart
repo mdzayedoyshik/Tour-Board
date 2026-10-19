@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../app/providers.dart';
 import '../../../app/routes.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/widgets/common.dart';
@@ -12,7 +11,8 @@ import '../../membership/data/membership_repository.dart';
 import '../../membership/domain/invite_code.dart';
 import '../domain/tour.dart';
 
-/// Shares the tour's current invite link via the system share sheet.
+/// Shares the tour's join code via the system share sheet. Recipients
+/// open Tour Board → Join and type the code (no web links are used).
 Future<void> shareInvite(BuildContext context, WidgetRef ref, Tour tour) async {
   final l10n = context.l10n;
   final code = tour.inviteCode;
@@ -20,11 +20,9 @@ Future<void> shareInvite(BuildContext context, WidgetRef ref, Tour tour) async {
     showAppSnack(context, l10n.inviteOff);
     return;
   }
-  final base = ref.read(appConfigProvider).inviteLinkBase;
-  final link = InviteCodes.link(base, code);
   await SharePlus.instance.share(
     ShareParams(
-      text: l10n.inviteShareText(tour.name, link, InviteCodes.format(code)),
+      text: l10n.inviteShareText(tour.name, InviteCodes.format(code)),
       subject: l10n.inviteShareSubject(tour.name),
     ),
   );

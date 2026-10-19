@@ -240,7 +240,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeEmptyBody =>
-      'Create a tour for your group, or join one with a link or code from a friend.';
+      'Create a tour for your group, or join one with a code from a friend.';
 
   @override
   String get createTour => 'Create tour';
@@ -249,7 +249,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createTourShort => 'Create';
 
   @override
-  String get joinTour => 'Join with link or code';
+  String get joinTour => 'Join with a code';
 
   @override
   String get joinTourShort => 'Join';
@@ -334,10 +334,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get joinIntro =>
-      'Paste the invite link or enter the code you received. The host will approve your request.';
+      'Enter the join code you received from the host. They\'ll approve your request.';
 
   @override
-  String get joinCodeLabel => 'Invite link or code';
+  String get joinCodeLabel => 'Join code';
 
   @override
   String get joinPaste => 'Paste';
@@ -347,7 +347,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get joinInvalidCode =>
-      'That doesn\'t look like an invite code. Check it and try again.';
+      'That doesn\'t look like a join code. It has 12 letters and numbers, like K7QM-4XPT-9C2B.';
 
   @override
   String get joinCodeNotFound => 'No tour found for this code.';
@@ -964,115 +964,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Map tiles couldn\'t load. Saved places and member status still work.';
 
   @override
-  String get mapLocationsUnavailable =>
-      'Live locations are unavailable right now.';
-
-  @override
-  String get mapPeople => 'People';
-
-  @override
   String get mapNoPlaces =>
-      'No plans have coordinates yet. Add a place to see it on the map.';
+      'No plans have a location yet. Add a place with coordinates to see it here.';
 
   @override
-  String mapDistance(String distance) {
-    return 'About $distance from you';
-  }
+  String get inviteOff => 'Joining is turned off';
 
   @override
-  String distanceMeters(int meters) {
-    return '$meters m';
-  }
-
-  @override
-  String distanceKm(String km) {
-    return '$km km';
-  }
-
-  @override
-  String get shareLive => 'Live';
-
-  @override
-  String get shareStale => 'Stale';
-
-  @override
-  String get sharePaused => 'Paused';
-
-  @override
-  String get shareNotSharing => 'Not sharing';
-
-  @override
-  String get shareStartTitle => 'Share your location';
-
-  @override
-  String get shareStartBody =>
-      'Only current members of this tour can see it. It updates while the app is open and stops automatically.';
-
-  @override
-  String get share30Min => 'For 30 minutes';
-
-  @override
-  String get share2Hours => 'For 2 hours (recommended)';
-
-  @override
-  String get shareUntilTripEnds => 'Until the trip ends';
-
-  @override
-  String get shareActive => 'Sharing your location';
-
-  @override
-  String get shareActivePaused =>
-      'Sharing paused while the app is in the background';
-
-  @override
-  String shareUntil(String time) {
-    return 'Until $time';
-  }
-
-  @override
-  String get shareStop => 'Stop';
-
-  @override
-  String shareLeftover(String time) {
-    return 'Your last shared location ($time) is still visible to members.';
-  }
-
-  @override
-  String get shareOff =>
-      'Location sharing is off. Members only see you if you turn it on.';
-
-  @override
-  String get shareStart => 'Share';
-
-  @override
-  String get shareClosedTour =>
-      'Location sharing is unavailable for closed tours.';
-
-  @override
-  String get shareServiceOff =>
-      'Location services are turned off on this device.';
-
-  @override
-  String get sharePermissionDenied =>
-      'Location permission wasn\'t granted, so sharing stopped.';
-
-  @override
-  String get sharePermissionForever =>
-      'Location access is blocked for Tour Board. Enable it in system settings to share.';
-
-  @override
-  String get shareWriteFailed =>
-      'Couldn\'t update your location. It\'ll retry with the next update.';
-
-  @override
-  String get shareOpenSettings => 'Open settings';
-
-  @override
-  String get inviteOff => 'Invites are turned off';
-
-  @override
-  String inviteShareText(String tour, String link, String code) {
-    return 'Join \"$tour\" on Tour Board: $link\nOr open the app and enter code $code';
+  String inviteShareText(String tour, String code) {
+    return 'Join \"$tour\" on Tour Board.\nOpen the app, tap Join and enter code: $code';
   }
 
   @override
@@ -1084,7 +984,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inviteMembers => 'Invite people';
 
   @override
-  String get inviteMembersHint => 'Share a link — you\'ll approve each request';
+  String get inviteMembersHint =>
+      'Share the join code — you\'ll approve each request';
 
   @override
   String get membersTitle => 'Members';
@@ -1206,27 +1107,26 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get inviteSection => 'Invite link';
+  String get inviteSection => 'Join code';
 
   @override
-  String get inviteCreate => 'Create link';
+  String get inviteCreate => 'Create code';
 
   @override
-  String get inviteCreated => 'New invite link ready';
+  String get inviteCreated => 'New join code ready';
 
   @override
-  String get inviteRotate => 'Get a new link';
+  String get inviteRotate => 'Get a new code';
 
   @override
-  String get inviteRotateHint =>
-      'The old link and code stop working immediately.';
+  String get inviteRotateHint => 'The old code stops working immediately.';
 
   @override
-  String get inviteTurnOff => 'Turn off invites';
+  String get inviteTurnOff => 'Turn off joining';
 
   @override
   String get inviteExplainer =>
-      'Anyone with the link can ask to join. Nobody gets access until a host or admin approves. Links expire after 14 days.';
+      'Anyone with the code can ask to join. Nobody gets access until a host or admin approves. Codes expire after 14 days.';
 
   @override
   String get permissionsSection => 'Permissions';
@@ -1607,19 +1507,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tour Board works without its own server, so it can\'t send push notifications to other people. You\'ll see updates when you open the app.';
 
   @override
-  String get settingsLocation => 'Location';
-
-  @override
-  String get locationHelpTitle => 'How location sharing works';
-
-  @override
-  String get locationHelpBody =>
-      'It\'s off unless you start it from a tour\'s map. Only that tour\'s members can see it, it stops automatically, and it pauses when the app is in the background. It can use extra battery.';
-
-  @override
-  String get locationOpenSettings => 'Location permission settings';
-
-  @override
   String get settingsPrivacy => 'Privacy & data';
 
   @override
@@ -1627,7 +1514,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyBody =>
-      'Only approved members of a tour can see its expenses, plans, notes and shared locations. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nLocation is shared only when you turn it on, only the latest position is kept, and it\'s hidden as soon as the sharing window ends.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired invites, old notifications and expired locations are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group\'s balances remain correct.';
+      'Only approved members of a tour can see its expenses, plans and notes. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nTour Board doesn\'t access your location.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired join codes and old notifications are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group\'s balances remain correct.';
 
   @override
   String get diagnosticsTitle => 'Diagnostics';
@@ -1685,4 +1572,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get placeQueryTooShort => 'Type at least 3 characters, then search.';
+
+  @override
+  String get inviteCodeHint => 'Friends enter this in Tour Board → Join';
+
+  @override
+  String get mapPlaces => 'Places';
 }

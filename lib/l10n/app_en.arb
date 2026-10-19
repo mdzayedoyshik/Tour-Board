@@ -98,10 +98,10 @@
   "inboxTitle": "Inbox",
   "settingsTitle": "Settings",
   "homeEmptyTitle": "No tours yet",
-  "homeEmptyBody": "Create a tour for your group, or join one with a link or code from a friend.",
+  "homeEmptyBody": "Create a tour for your group, or join one with a code from a friend.",
   "createTour": "Create tour",
   "createTourShort": "Create",
-  "joinTour": "Join with link or code",
+  "joinTour": "Join with a code",
   "joinTourShort": "Join",
   "homeSectionCurrent": "Active & upcoming",
   "homeSectionClosed": "Recently closed",
@@ -137,11 +137,11 @@
   "tourCreated": "Tour created",
   "tourUpdated": "Tour updated",
   "joinTitle": "Join a tour",
-  "joinIntro": "Paste the invite link or enter the code you received. The host will approve your request.",
-  "joinCodeLabel": "Invite link or code",
+  "joinIntro": "Enter the join code you received from the host. They'll approve your request.",
+  "joinCodeLabel": "Join code",
   "joinPaste": "Paste",
   "joinFind": "Find tour",
-  "joinInvalidCode": "That doesn't look like an invite code. Check it and try again.",
+  "joinInvalidCode": "That doesn't look like a join code. It has 12 letters and numbers, like K7QM-4XPT-9C2B.",
   "joinCodeNotFound": "No tour found for this code.",
   "joinCodeExpired": "This invite has expired or was turned off. Ask the host for a new one.",
   "joinHostedBy": "Hosted by {name}",
@@ -559,77 +559,12 @@
   "planEstimatedCost": "Estimated cost (optional)",
   "planSaved": "Plan saved",
   "mapTilesUnavailable": "Map tiles couldn't load. Saved places and member status still work.",
-  "mapLocationsUnavailable": "Live locations are unavailable right now.",
-  "mapPeople": "People",
-  "mapNoPlaces": "No plans have coordinates yet. Add a place to see it on the map.",
-  "mapDistance": "About {distance} from you",
-  "@mapDistance": {
-    "placeholders": {
-      "distance": {
-        "type": "String"
-      }
-    }
-  },
-  "distanceMeters": "{meters} m",
-  "@distanceMeters": {
-    "placeholders": {
-      "meters": {
-        "type": "int"
-      }
-    }
-  },
-  "distanceKm": "{km} km",
-  "@distanceKm": {
-    "placeholders": {
-      "km": {
-        "type": "String"
-      }
-    }
-  },
-  "shareLive": "Live",
-  "shareStale": "Stale",
-  "sharePaused": "Paused",
-  "shareNotSharing": "Not sharing",
-  "shareStartTitle": "Share your location",
-  "shareStartBody": "Only current members of this tour can see it. It updates while the app is open and stops automatically.",
-  "share30Min": "For 30 minutes",
-  "share2Hours": "For 2 hours (recommended)",
-  "shareUntilTripEnds": "Until the trip ends",
-  "shareActive": "Sharing your location",
-  "shareActivePaused": "Sharing paused while the app is in the background",
-  "shareUntil": "Until {time}",
-  "@shareUntil": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "shareStop": "Stop",
-  "shareLeftover": "Your last shared location ({time}) is still visible to members.",
-  "@shareLeftover": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "shareOff": "Location sharing is off. Members only see you if you turn it on.",
-  "shareStart": "Share",
-  "shareClosedTour": "Location sharing is unavailable for closed tours.",
-  "shareServiceOff": "Location services are turned off on this device.",
-  "sharePermissionDenied": "Location permission wasn't granted, so sharing stopped.",
-  "sharePermissionForever": "Location access is blocked for Tour Board. Enable it in system settings to share.",
-  "shareWriteFailed": "Couldn't update your location. It'll retry with the next update.",
-  "shareOpenSettings": "Open settings",
-  "inviteOff": "Invites are turned off",
-  "inviteShareText": "Join \"{tour}\" on Tour Board: {link}\nOr open the app and enter code {code}",
+  "mapNoPlaces": "No plans have a location yet. Add a place with coordinates to see it here.",
+  "inviteOff": "Joining is turned off",
+  "inviteShareText": "Join \"{tour}\" on Tour Board.\nOpen the app, tap Join and enter code: {code}",
   "@inviteShareText": {
     "placeholders": {
       "tour": {
-        "type": "String"
-      },
-      "link": {
         "type": "String"
       },
       "code": {
@@ -646,7 +581,7 @@
     }
   },
   "inviteMembers": "Invite people",
-  "inviteMembersHint": "Share a link — you'll approve each request",
+  "inviteMembersHint": "Share the join code — you'll approve each request",
   "membersTitle": "Members",
   "membersPendingCount": "{count, plural, =1{1 pending request} other{{count} pending requests}}",
   "@membersPendingCount": {
@@ -722,13 +657,13 @@
       }
     }
   },
-  "inviteSection": "Invite link",
-  "inviteCreate": "Create link",
-  "inviteCreated": "New invite link ready",
-  "inviteRotate": "Get a new link",
-  "inviteRotateHint": "The old link and code stop working immediately.",
-  "inviteTurnOff": "Turn off invites",
-  "inviteExplainer": "Anyone with the link can ask to join. Nobody gets access until a host or admin approves. Links expire after 14 days.",
+  "inviteSection": "Join code",
+  "inviteCreate": "Create code",
+  "inviteCreated": "New join code ready",
+  "inviteRotate": "Get a new code",
+  "inviteRotateHint": "The old code stops working immediately.",
+  "inviteTurnOff": "Turn off joining",
+  "inviteExplainer": "Anyone with the code can ask to join. Nobody gets access until a host or admin approves. Codes expire after 14 days.",
   "permissionsSection": "Permissions",
   "permAdminsManage": "Admins can edit details and close the tour",
   "permMembersPacking": "Members can edit the packing list",
@@ -1060,13 +995,9 @@
     }
   },
   "pushLimitation": "Tour Board works without its own server, so it can't send push notifications to other people. You'll see updates when you open the app.",
-  "settingsLocation": "Location",
-  "locationHelpTitle": "How location sharing works",
-  "locationHelpBody": "It's off unless you start it from a tour's map. Only that tour's members can see it, it stops automatically, and it pauses when the app is in the background. It can use extra battery.",
-  "locationOpenSettings": "Location permission settings",
   "settingsPrivacy": "Privacy & data",
   "privacyTitle": "Privacy and data retention",
-  "privacyBody": "Only approved members of a tour can see its expenses, plans, notes and shared locations. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nLocation is shared only when you turn it on, only the latest position is kept, and it's hidden as soon as the sharing window ends.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired invites, old notifications and expired locations are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group's balances remain correct.",
+  "privacyBody": "Only approved members of a tour can see its expenses, plans and notes. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nTour Board doesn't access your location.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired join codes and old notifications are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group's balances remain correct.",
   "diagnosticsTitle": "Diagnostics",
   "diagListeners": "Active listeners",
   "diagPendingWrites": "Writes waiting for server",
@@ -1091,5 +1022,7 @@
   },
   "deleteAccountTitle": "Delete your account?",
   "deleteAccountBody": "You'll leave all tours and your profile will be deleted. Expenses and payments you were part of stay in those tours so balances remain correct. You'll be asked to confirm with Google.",
-  "placeQueryTooShort": "Type at least 3 characters, then search."
+  "placeQueryTooShort": "Type at least 3 characters, then search.",
+  "inviteCodeHint": "Friends enter this in Tour Board → Join",
+  "mapPlaces": "Places"
 }

@@ -65,13 +65,6 @@ abstract final class InviteCodes {
     }
     return normalised;
   }
-
-  static String link(String base, String code) {
-    final trimmed = base.endsWith('/')
-        ? base.substring(0, base.length - 1)
-        : base;
-    return '$trimmed/$code';
-  }
 }
 
 /// Public preview stored at invites/{code}. Contains only what a prospective

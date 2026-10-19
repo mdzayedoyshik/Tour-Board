@@ -16,7 +16,6 @@ const String appEnvironment = String.fromEnvironment(
 class AppConfig {
   const AppConfig({
     required this.environment,
-    required this.inviteLinkBase,
     required this.mapTileUrl,
     required this.mapTileAttribution,
     required this.mapAttributionUrl,
@@ -35,7 +34,6 @@ class AppConfig {
 
     return AppConfig(
       environment: environment,
-      inviteLinkBase: value('INVITE_LINK_BASE', 'https://tourboard.app/join'),
       mapTileUrl: value(
         'MAP_TILE_URL',
         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -72,7 +70,6 @@ class AppConfig {
   }
 
   final String environment;
-  final String inviteLinkBase;
   final String mapTileUrl;
   final String mapTileAttribution;
   final String mapAttributionUrl;

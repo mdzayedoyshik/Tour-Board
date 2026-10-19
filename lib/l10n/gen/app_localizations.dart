@@ -499,7 +499,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'Create a tour for your group, or join one with a link or code from a friend.'**
+  /// **'Create a tour for your group, or join one with a code from a friend.'**
   String get homeEmptyBody;
 
   /// No description provided for @createTour.
@@ -517,7 +517,7 @@ abstract class AppLocalizations {
   /// No description provided for @joinTour.
   ///
   /// In en, this message translates to:
-  /// **'Join with link or code'**
+  /// **'Join with a code'**
   String get joinTour;
 
   /// No description provided for @joinTourShort.
@@ -649,13 +649,13 @@ abstract class AppLocalizations {
   /// No description provided for @joinIntro.
   ///
   /// In en, this message translates to:
-  /// **'Paste the invite link or enter the code you received. The host will approve your request.'**
+  /// **'Enter the join code you received from the host. They\'ll approve your request.'**
   String get joinIntro;
 
   /// No description provided for @joinCodeLabel.
   ///
   /// In en, this message translates to:
-  /// **'Invite link or code'**
+  /// **'Join code'**
   String get joinCodeLabel;
 
   /// No description provided for @joinPaste.
@@ -673,7 +673,7 @@ abstract class AppLocalizations {
   /// No description provided for @joinInvalidCode.
   ///
   /// In en, this message translates to:
-  /// **'That doesn\'t look like an invite code. Check it and try again.'**
+  /// **'That doesn\'t look like a join code. It has 12 letters and numbers, like K7QM-4XPT-9C2B.'**
   String get joinInvalidCode;
 
   /// No description provided for @joinCodeNotFound.
@@ -1720,185 +1720,23 @@ abstract class AppLocalizations {
   /// **'Map tiles couldn\'t load. Saved places and member status still work.'**
   String get mapTilesUnavailable;
 
-  /// No description provided for @mapLocationsUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Live locations are unavailable right now.'**
-  String get mapLocationsUnavailable;
-
-  /// No description provided for @mapPeople.
-  ///
-  /// In en, this message translates to:
-  /// **'People'**
-  String get mapPeople;
-
   /// No description provided for @mapNoPlaces.
   ///
   /// In en, this message translates to:
-  /// **'No plans have coordinates yet. Add a place to see it on the map.'**
+  /// **'No plans have a location yet. Add a place with coordinates to see it here.'**
   String get mapNoPlaces;
-
-  /// No description provided for @mapDistance.
-  ///
-  /// In en, this message translates to:
-  /// **'About {distance} from you'**
-  String mapDistance(String distance);
-
-  /// No description provided for @distanceMeters.
-  ///
-  /// In en, this message translates to:
-  /// **'{meters} m'**
-  String distanceMeters(int meters);
-
-  /// No description provided for @distanceKm.
-  ///
-  /// In en, this message translates to:
-  /// **'{km} km'**
-  String distanceKm(String km);
-
-  /// No description provided for @shareLive.
-  ///
-  /// In en, this message translates to:
-  /// **'Live'**
-  String get shareLive;
-
-  /// No description provided for @shareStale.
-  ///
-  /// In en, this message translates to:
-  /// **'Stale'**
-  String get shareStale;
-
-  /// No description provided for @sharePaused.
-  ///
-  /// In en, this message translates to:
-  /// **'Paused'**
-  String get sharePaused;
-
-  /// No description provided for @shareNotSharing.
-  ///
-  /// In en, this message translates to:
-  /// **'Not sharing'**
-  String get shareNotSharing;
-
-  /// No description provided for @shareStartTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Share your location'**
-  String get shareStartTitle;
-
-  /// No description provided for @shareStartBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Only current members of this tour can see it. It updates while the app is open and stops automatically.'**
-  String get shareStartBody;
-
-  /// No description provided for @share30Min.
-  ///
-  /// In en, this message translates to:
-  /// **'For 30 minutes'**
-  String get share30Min;
-
-  /// No description provided for @share2Hours.
-  ///
-  /// In en, this message translates to:
-  /// **'For 2 hours (recommended)'**
-  String get share2Hours;
-
-  /// No description provided for @shareUntilTripEnds.
-  ///
-  /// In en, this message translates to:
-  /// **'Until the trip ends'**
-  String get shareUntilTripEnds;
-
-  /// No description provided for @shareActive.
-  ///
-  /// In en, this message translates to:
-  /// **'Sharing your location'**
-  String get shareActive;
-
-  /// No description provided for @shareActivePaused.
-  ///
-  /// In en, this message translates to:
-  /// **'Sharing paused while the app is in the background'**
-  String get shareActivePaused;
-
-  /// No description provided for @shareUntil.
-  ///
-  /// In en, this message translates to:
-  /// **'Until {time}'**
-  String shareUntil(String time);
-
-  /// No description provided for @shareStop.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop'**
-  String get shareStop;
-
-  /// No description provided for @shareLeftover.
-  ///
-  /// In en, this message translates to:
-  /// **'Your last shared location ({time}) is still visible to members.'**
-  String shareLeftover(String time);
-
-  /// No description provided for @shareOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Location sharing is off. Members only see you if you turn it on.'**
-  String get shareOff;
-
-  /// No description provided for @shareStart.
-  ///
-  /// In en, this message translates to:
-  /// **'Share'**
-  String get shareStart;
-
-  /// No description provided for @shareClosedTour.
-  ///
-  /// In en, this message translates to:
-  /// **'Location sharing is unavailable for closed tours.'**
-  String get shareClosedTour;
-
-  /// No description provided for @shareServiceOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Location services are turned off on this device.'**
-  String get shareServiceOff;
-
-  /// No description provided for @sharePermissionDenied.
-  ///
-  /// In en, this message translates to:
-  /// **'Location permission wasn\'t granted, so sharing stopped.'**
-  String get sharePermissionDenied;
-
-  /// No description provided for @sharePermissionForever.
-  ///
-  /// In en, this message translates to:
-  /// **'Location access is blocked for Tour Board. Enable it in system settings to share.'**
-  String get sharePermissionForever;
-
-  /// No description provided for @shareWriteFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t update your location. It\'ll retry with the next update.'**
-  String get shareWriteFailed;
-
-  /// No description provided for @shareOpenSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Open settings'**
-  String get shareOpenSettings;
 
   /// No description provided for @inviteOff.
   ///
   /// In en, this message translates to:
-  /// **'Invites are turned off'**
+  /// **'Joining is turned off'**
   String get inviteOff;
 
   /// No description provided for @inviteShareText.
   ///
   /// In en, this message translates to:
-  /// **'Join \"{tour}\" on Tour Board: {link}\nOr open the app and enter code {code}'**
-  String inviteShareText(String tour, String link, String code);
+  /// **'Join \"{tour}\" on Tour Board.\nOpen the app, tap Join and enter code: {code}'**
+  String inviteShareText(String tour, String code);
 
   /// No description provided for @inviteShareSubject.
   ///
@@ -1915,7 +1753,7 @@ abstract class AppLocalizations {
   /// No description provided for @inviteMembersHint.
   ///
   /// In en, this message translates to:
-  /// **'Share a link — you\'ll approve each request'**
+  /// **'Share the join code — you\'ll approve each request'**
   String get inviteMembersHint;
 
   /// No description provided for @membersTitle.
@@ -2119,43 +1957,43 @@ abstract class AppLocalizations {
   /// No description provided for @inviteSection.
   ///
   /// In en, this message translates to:
-  /// **'Invite link'**
+  /// **'Join code'**
   String get inviteSection;
 
   /// No description provided for @inviteCreate.
   ///
   /// In en, this message translates to:
-  /// **'Create link'**
+  /// **'Create code'**
   String get inviteCreate;
 
   /// No description provided for @inviteCreated.
   ///
   /// In en, this message translates to:
-  /// **'New invite link ready'**
+  /// **'New join code ready'**
   String get inviteCreated;
 
   /// No description provided for @inviteRotate.
   ///
   /// In en, this message translates to:
-  /// **'Get a new link'**
+  /// **'Get a new code'**
   String get inviteRotate;
 
   /// No description provided for @inviteRotateHint.
   ///
   /// In en, this message translates to:
-  /// **'The old link and code stop working immediately.'**
+  /// **'The old code stops working immediately.'**
   String get inviteRotateHint;
 
   /// No description provided for @inviteTurnOff.
   ///
   /// In en, this message translates to:
-  /// **'Turn off invites'**
+  /// **'Turn off joining'**
   String get inviteTurnOff;
 
   /// No description provided for @inviteExplainer.
   ///
   /// In en, this message translates to:
-  /// **'Anyone with the link can ask to join. Nobody gets access until a host or admin approves. Links expire after 14 days.'**
+  /// **'Anyone with the code can ask to join. Nobody gets access until a host or admin approves. Codes expire after 14 days.'**
   String get inviteExplainer;
 
   /// No description provided for @permissionsSection.
@@ -2746,30 +2584,6 @@ abstract class AppLocalizations {
   /// **'Tour Board works without its own server, so it can\'t send push notifications to other people. You\'ll see updates when you open the app.'**
   String get pushLimitation;
 
-  /// No description provided for @settingsLocation.
-  ///
-  /// In en, this message translates to:
-  /// **'Location'**
-  String get settingsLocation;
-
-  /// No description provided for @locationHelpTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'How location sharing works'**
-  String get locationHelpTitle;
-
-  /// No description provided for @locationHelpBody.
-  ///
-  /// In en, this message translates to:
-  /// **'It\'s off unless you start it from a tour\'s map. Only that tour\'s members can see it, it stops automatically, and it pauses when the app is in the background. It can use extra battery.'**
-  String get locationHelpBody;
-
-  /// No description provided for @locationOpenSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Location permission settings'**
-  String get locationOpenSettings;
-
   /// No description provided for @settingsPrivacy.
   ///
   /// In en, this message translates to:
@@ -2785,7 +2599,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyBody.
   ///
   /// In en, this message translates to:
-  /// **'Only approved members of a tour can see its expenses, plans, notes and shared locations. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nLocation is shared only when you turn it on, only the latest position is kept, and it\'s hidden as soon as the sharing window ends.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired invites, old notifications and expired locations are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group\'s balances remain correct.'**
+  /// **'Only approved members of a tour can see its expenses, plans and notes. Your profile (name, email, photo link) is private to you; members see only your name and photo.\n\nTour Board doesn\'t access your location.\n\nClosed tours are kept so members can look back at what they spent. Nothing is deleted automatically. Temporary records such as expired join codes and old notifications are cleaned up when someone opens the app.\n\nIf you delete your account, your profile and notifications are removed and you leave every tour. Expenses you were part of stay in those tours under your name so the group\'s balances remain correct.'**
   String get privacyBody;
 
   /// No description provided for @diagnosticsTitle.
@@ -2895,6 +2709,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Type at least 3 characters, then search.'**
   String get placeQueryTooShort;
+
+  /// No description provided for @inviteCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends enter this in Tour Board → Join'**
+  String get inviteCodeHint;
+
+  /// No description provided for @mapPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Places'**
+  String get mapPlaces;
 }
 
 class _AppLocalizationsDelegate

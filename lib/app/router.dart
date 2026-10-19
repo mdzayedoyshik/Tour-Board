@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,24 +24,10 @@ import '../features/tours/presentation/tour_shell.dart';
 import 'providers.dart';
 import 'routes.dart';
 
-/// Invite code received (deep link) before the user signed in; consumed
-/// after sign-in so the join flow continues.
-class PendingInvite extends Notifier<String?> {
-  @override
-  String? build() => null;
-
-  void set(String? code) => state = code;
-}
-
-final pendingInviteProvider = NotifierProvider<PendingInvite, String?>(
-  PendingInvite.new,
-);
-
 /// Bridges Riverpod auth state to go_router's refresh mechanism.
 class _RouterRefresh extends ChangeNotifier {
   _RouterRefresh(Ref ref) {
     ref.listen(authStateProvider, (_, _) => notifyListeners());
-    ref.listen(pendingInviteProvider, (_, _) => notifyListeners());
   }
 }
 
@@ -61,27 +45,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         return location == Routes.splash ? null : Routes.splash;
       }
       final signedIn = auth.value != null;
-      final pending = ref.read(pendingInviteProvider);
-
       if (!signedIn) {
-        // Remember an invite so it survives the sign-in step.
-        if (location == Routes.join) {
-          final code = state.uri.queryParameters['code'];
-          if (code != null) {
-            Future.microtask(
-              () => ref.read(pendingInviteProvider.notifier).set(code),
-            );
-          }
-        }
         return location == Routes.welcome ? null : Routes.welcome;
       }
       if (location == Routes.welcome || location == Routes.splash) {
-        if (pending != null) {
-          Future.microtask(
-            () => ref.read(pendingInviteProvider.notifier).set(null),
-          );
-          return Routes.joinWithCode(pending);
-        }
         return Routes.home;
       }
       return null;

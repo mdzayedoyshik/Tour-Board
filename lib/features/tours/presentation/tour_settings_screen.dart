@@ -179,9 +179,6 @@ class _BodyState extends ConsumerState<_Body> {
     final tour = widget.tour;
     final p = widget.permissions;
     final code = tour.inviteCode;
-    final link = code == null
-        ? null
-        : InviteCodes.link(ref.watch(appConfigProvider).inviteLinkBase, code);
     final repo = ref.read(tourRepositoryProvider);
 
     return AbsorbPointer(
@@ -255,16 +252,14 @@ class _BodyState extends ConsumerState<_Body> {
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
-                  subtitle: Text(
-                    link!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  subtitle: Text(l10n.inviteCodeHint),
                   trailing: IconButton(
                     tooltip: l10n.commonCopy,
                     icon: const Icon(Icons.copy),
                     onPressed: () async {
-                      await Clipboard.setData(ClipboardData(text: link));
+                      await Clipboard.setData(
+                        ClipboardData(text: InviteCodes.format(code)),
+                      );
                       if (context.mounted) {
                         showAppSnack(context, l10n.commonCopied);
                       }

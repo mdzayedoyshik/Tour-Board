@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      # Gradle reads ORG_GRADLE_PROJECT_* as project properties (App Links host).
-      ORG_GRADLE_PROJECT_inviteLinkHost: ${{ vars.INVITE_LINK_HOST || 'tourboard.app' }}
 
     steps:
       - name: Checkout code

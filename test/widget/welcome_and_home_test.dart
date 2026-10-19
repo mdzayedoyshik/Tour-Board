@@ -101,7 +101,7 @@ void main() {
       await tester.pump();
       expect(find.text('No tours yet'), findsOneWidget);
       expect(find.text('Create tour'), findsOneWidget);
-      expect(find.text('Join with link or code'), findsOneWidget);
+      expect(find.text('Join with a code'), findsOneWidget);
     });
 
     testWidgets('lists tours in sections with status and member count', (
