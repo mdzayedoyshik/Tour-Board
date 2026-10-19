@@ -10,7 +10,6 @@ service here is promised to be free forever.
 |---|---|---|
 | Firebase Authentication (Google provider) | Spark | Pricing page lists 50K MAUs (with Identity Platform) on Spark. |
 | Cloud Firestore (Standard) | Spark | 1 GiB stored, 50K reads/day, 20K writes/day, 20K deletes/day, 10 GiB/month egress. |
-| Firebase Hosting (optional) | Spark | Only to serve `assetlinks.json` / `apple-app-site-association` and an invite fallback page. |
 | OpenStreetMap tiles | Public OSMF tile server | Best effort, no SLA; may block heavy use. Configurable via `MAP_TILE_URL`. |
 | Nominatim geocoding | Public OSMF instance | Optional (`PLACE_SEARCH_PROVIDER=nominatim`); manual entry always works. |
 
@@ -21,7 +20,7 @@ Sources: [Firebase pricing](https://firebase.google.com/pricing),
 ## Deliberately not used
 
 Cloud Functions, Cloud Run, scheduled jobs, Firestore TTL, Firebase Storage,
-Dynamic Links (discontinued), Google Maps / Places SDKs, paid extensions,
+Dynamic Links (discontinued), location APIs, Google Maps / Places SDKs, paid extensions,
 third-party analytics or crash reporting, and any FCM server key in the app.
 The Blaze plan is never required.
 
@@ -59,20 +58,6 @@ writes and 40 × 10 = 400 listener reads per day — far below the limits. The
 main cost is the first open of a large tour (one read per expense); tours are
 bounded to the latest 1000 expenses.
 
-## Location write budget
-
-- One latest-location document per member per tour, overwritten in place.
-- Writes happen only after ≥75 m of movement **and** ≥45 s since the last
-  write (`LocationWritePolicy`), with a 50 m OS distance filter and balanced
-  accuracy. A stationary phone sends almost nothing.
-- Worst case while moving: ~80 writes/hour per sharer. Each write is one read
-  for every member currently viewing the Map tab.
-- Example: 10 members each sharing 2 h/day while moving → ~1,600 writes/day;
-  with 5 people watching the map → ~8,000 reads/day. Both are within Spark,
-  but this is the largest consumer, so sharing defaults to 2 hours.
-- Writes are skipped while Firestore is offline so stale positions are never
-  queued and delivered later.
-
 ## Map tiles and search
 
 - Tiles: the OSM policy requires visible attribution (shown on the map), an
@@ -89,7 +74,7 @@ bounded to the latest 1000 expenses.
 
 There is no TTL or cron on Spark. Disposable records carry expiry timestamps
 and are hidden immediately by the UI; authorised clients delete a bounded
-batch when they open the relevant screen (inbox ≤50, locations ≤20). If
+batch when they open the relevant screen (inbox ≤50). If
 nobody opens the app, cleanup does not run. Closed tours are never deleted
 automatically. Tour deletion is a host-run, bounded client workflow for
 archived tours.

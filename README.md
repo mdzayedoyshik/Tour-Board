@@ -1,7 +1,9 @@
 # Tour Board
 
 Plan a trip together, record every shared expense, see who owes what, and
-optionally share live locations — with a deliberately simple interface.
+map the itinerary — with a deliberately simple interface.
+
+> **Current setup status and remaining steps: [docs/SETUP_GUIDE.md](docs/SETUP_GUIDE.md).**
 
 Flutter + Firebase (Auth, Cloud Firestore) on the **Spark (free) plan** with
 **no custom backend**. All access control lives in `firestore.rules`.
@@ -38,13 +40,14 @@ Keep the project on **Spark**. Do not create a billing account.
      --ios-bundle-id=com.techorbit.tourBoard
    ```
 
-   This overwrites `lib/firebase_options.dart` (currently a placeholder that
-   shows a "Setup needed" screen) and writes
+   This writes `lib/firebase_options.dart` (without it the app shows a
+   "Setup needed" screen),
    `android/app/google-services.json` and `ios/Runner/GoogleService-Info.plist`.
    These hold public client config protected by Security Rules — **commit
    them** so CI can build. Never commit service-account keys.
 
-5. **Android SHA fingerprints** (required for Google Sign-In). Add the SHA-1
+5. **Android SHA fingerprints** (required for Google Sign-In; see
+   `scripts/setup_release_signing.sh` for the upload key). Add the SHA-1
    and SHA-256 of every signing key in *Project settings → Your apps → Android*:
 
    ```bash
@@ -72,29 +75,20 @@ Keep the project on **Spark**. Do not create a billing account.
 
 ## 2. Optional app settings
 
-`env/example.env` lists non-Firebase settings (invite-link base URL, map tile
-URL/attribution, place-search provider, emulator). All have defaults; copy to
+`env/example.env` lists non-Firebase settings (map tile URL/attribution,
+place-search provider, emulator). All have defaults; copy to
 `env/dev.env` / `env/prod.env` to override. These files are git-ignored. CI
 writes them from the `ENV_DEV` / `ENV_PROD` secrets (both optional).
 
 Set `PLACE_SEARCH_CONTACT_EMAIL` if you keep Nominatim search on; set
 `PLACE_SEARCH_PROVIDER=none` for manual place entry only.
 
-## 3. Invite links
+## 3. Joining tours
 
-Links look like `https://<host>/join/<CODE>`; codes can also be typed.
-
-- **Android App Links**: host `/.well-known/assetlinks.json` on the invite
-  domain with the app's signing SHA-256 fingerprints. The host is set by the
-  Gradle property `inviteLinkHost` (default `tourboard.app`; CI uses the
-  `INVITE_LINK_HOST` repository variable). Firebase Hosting on Spark can serve
-  this file plus a small fallback page.
-- **iOS Universal Links**: add the Associated Domains capability
-  (`applinks:<host>`) and host `apple-app-site-association`.
-- **Fallback**: `tourboard://join/<CODE>` always opens the app, and the Join
-  screen accepts a pasted link or code. Without a hosted domain, links open in
-  the browser and the recipient can paste the code. Dynamic Links are not used
-  (discontinued).
+Tours are joined with a 12-character code (e.g. `K7QM-4XPT-9C2B`) that the
+host shares from *More → Invite people*. The recipient opens Tour Board →
+*Join*, types the code and the host approves. No website, domain or deep
+link is needed.
 
 ## 4. Run, test, emulate
 
@@ -133,7 +127,7 @@ track. Required repository secrets:
 | `PLAY_STORE_JSON_KEY` | Play Console service-account JSON (CI only, never in the app) |
 | `ENV_PROD`, `ENV_DEV` | optional contents of `env/prod.env` / `env/dev.env` |
 
-Optional repository variable: `INVITE_LINK_HOST`. Bump `version:` in
+Bump `version:` in
 `pubspec.yaml` for every release; the first upload of a new app must be done
 manually in Play Console. `.github/workflows/ci.yml` runs analyze, tests and
 the rules tests on pull requests.
@@ -143,12 +137,12 @@ the rules tests on pull requests.
 - **No remote push.** Without a trusted server, clients cannot safely send
   FCM messages to other users. Collaboration uses live Firestore listeners
   while the app is open, an in-app inbox, and opt-in device-local reminders.
-- **Foreground-only location sharing.** It pauses in the background and the
-  OS may stop it at any time; it is never a safety guarantee.
+- **No live location sharing** in this version; the map shows itinerary
+  places only.
 - **Client-written aggregates are not trusted.** Balances are recomputed from
   canonical expense and settlement records (bounded to the latest 1000
   expenses / 500 settlements per tour).
-- **Lazy cleanup only.** Expired invites, inbox items and locations are hidden
+- **Lazy cleanup only.** Expired join codes and inbox items are hidden
   immediately by timestamp and removed when someone opens the relevant screen.
 - **Tour size**: 30 active members (60 ever) and 30 participants per expense.
 - Free tiers and provider policies change — see `docs/FREE_TIER_LIMITS.md`.

@@ -21,7 +21,7 @@ and tests before every Play upload.
 | Balances | sign convention, payer not participating, nets sum to zero, partial/full settlements, pending/disputed/cancelled ignored, duplicate settlement counted once, soft-deleted excluded, currencies separate, host as debtor, transfer suggestions settle all debts |
 | Permissions | full matrix incl. closed tours, settings toggles, settlement confirm/dispute/cancel and admin fallback |
 | Invites | generation, parsing (raw/dashed/links/custom scheme), Crockford normalisation, expiry/revocation |
-| Location | live/stale/paused/expired, sharing windows and caps, write throttling, coordinate bounds |
+| Geo | coordinate bounds |
 | Dates | range validation, inclusive day keys, IANA local→UTC (DST), offset labels, effective status by tour zone |
 | Plans / search / reminders | sparse sort keys, ordering, day grouping, reminder selection, Nominatim parsing, no request for short queries |
 
@@ -37,7 +37,7 @@ validation, plan (empty itinerary days, manual place entry when search is
 off, invalid coordinates), design system (text on status pills, dark theme
 token, WCAG AA contrast for primary/secondary text).
 
-### Security Rules (`rules_test`, 47 cases)
+### Security Rules (`rules_test`, 43 cases)
 
 Profiles (owner-only, email/uid immutable), tour creation (host batch,
 no impersonation), read access (unauthenticated, non-member, removed member),
@@ -49,8 +49,7 @@ non-member shares, historical members, forged `createdBy`, edits need
 revisions, cross-user edits, immutable revisions, terminal soft delete,
 closed tours), settlements (party-only creation, no self-confirmation, no
 forged confirmer, single confirmation, dispute reason, admin fallback,
-closed tours), locations (owner-only, bounds, window, member-only reads,
-cleanup), inbox (type whitelist, no free text, no forged approvals,
+closed tours), inbox (type whitelist, no free text, no forged approvals,
 owner-only reads), content ownership, feed actor, leave batch, note
 revisions, packing edits.
 
@@ -58,8 +57,8 @@ revisions, packing edits.
 
 - [ ] Google sign-in and sign-out on a physical Android device; fresh install
       and existing session; cancel the account picker.
-- [ ] Create a tour; share the invite to a messaging app; open the link with
-      the app installed and not installed; paste the code manually.
+- [ ] Create a tour; share the join code to a messaging app; join on a
+      second device by typing the code (also with lowercase/dashes).
 - [ ] Request, approve, reject, cancel and retry joining (attempt limit).
 - [ ] Two devices: expenses, plans and notes update live on both.
 - [ ] Airplane mode: add an expense (shows "Pending sync", not in balances),
@@ -68,9 +67,8 @@ revisions, packing edits.
 - [ ] Host as debtor and creditor; partial settlement; dispute; admin
       fallback after the counterparty leaves.
 - [ ] Close the tour: expenses/plans read-only, settling still works; reopen.
-- [ ] Location: deny permission, grant, revoke while sharing, background the
-      app (shows paused), let the window expire, stop; stale label after 5 min.
-- [ ] Battery and Firestore usage during 30 min of sharing while walking.
+- [ ] Map: places with coordinates show as pins; tiles offline shows the
+      fallback banner; "Open in maps" launches an external app.
 - [ ] Poor network and repeated taps on Save/Approve/Confirm.
 - [ ] Dark/light/system themes, 200 % text size, TalkBack labels.
 - [ ] Local reminders: enable, edit a plan time, delete it, deny OS permission.

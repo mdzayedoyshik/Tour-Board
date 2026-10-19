@@ -2,7 +2,7 @@
 
 `firestore.rules` is the security boundary. The UI's permission helper
 (`lib/features/membership/domain/permissions.dart`) mirrors it for display
-only. Tests: `rules_test/rules.test.mjs` (47 cases, Firestore emulator).
+only. Tests: `rules_test/rules.test.mjs` (43 cases, Firestore emulator).
 
 ```bash
 cd rules_test && npm ci && npm test     # needs Java 17+ and firebase-tools
@@ -27,8 +27,6 @@ firebase deploy --only firestore:rules  # only with explicit intent
 | Delete archived tour | ✓ | ✗ | ✗ |
 | Submit settlement | as payer or payee | same | same |
 | Confirm settlement | counterparty | counterparty, or uninvolved admin if counterparty inactive | counterparty |
-| Read live locations | ✓ | ✓ | ✓ |
-| Write a location | own only | own only | own only |
 
 ## Data access model
 
@@ -61,9 +59,6 @@ firebase deploy --only firestore:rules  # only with explicit intent
   `joinApproved` only from a host/admin after the request is approved); the
   sender must be `request.auth.uid`; recipients must be tour members (or the
   requester). Owner-only reads; owner may only flip `read`.
-- **Locations**: owner-only writes while an active member of an open tour;
-  coordinates bounded; `sharingUntil` in (now, now + 30 days]; any member may
-  delete an expired record; removed members can no longer read.
 
 ## Threat assumptions
 
@@ -71,7 +66,7 @@ firebase deploy --only firestore:rules  # only with explicit intent
 - Tour members are semi-trusted friends: they can create tour-scoped
   notifications of allowed types to fellow members (possible nuisance, not
   data exposure).
-- Invite links may be forwarded; approval is the gate.
+- Join codes may be forwarded; host/admin approval is the gate.
 
 ## Known limitations (client-only invariants)
 

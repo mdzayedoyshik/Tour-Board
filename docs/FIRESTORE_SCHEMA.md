@@ -20,14 +20,13 @@ tours/{tourId}/notes/{id}
 tours/{tourId}/notes/{id}/revisions/{n}
 tours/{tourId}/packingItems/{id}
 tours/{tourId}/activityFeed/{id}
-tours/{tourId}/locations/{uid}               latest location only
 ```
 
 ## Deviations from the brief's suggested layout
 
 | Brief | Implemented | Why |
 |---|---|---|
-| `tours/{t}/inviteTokens/{token}` | `invites/{code}` | A short code is enough to find the tour; `get` is allowed, `list` is not, so 60-bit codes cannot be enumerated. |
+| `tours/{t}/inviteTokens/{token}` | `invites/{code}` | Hosts share the code itself (no links); `get` is allowed, `list` is not, so 60-bit codes cannot be enumerated. |
 | `tours/{t}/inbox/{id}` | `users/{uid}/inbox/{id}` | Single-collection query per user; no collection-group index; owner-only reads. |
 | `tours/{t}/days/{d}/activities/{id}` | `tours/{t}/activities/{id}` + `dayKey` | Avoids empty day documents and per-day queries. |
 | join request auto-ID | `joinRequests/{uid}` | Idempotent; attempt limit cannot be reset. |
@@ -95,8 +94,6 @@ client-generated operation ID (idempotent submission).
 **users/{uid}/inbox/{id}** — `type`, `tourId`, `tourName`, `senderUid`,
 `senderName`, `refId?`, `createdAt`, `expiresAt` (30 days), `read`.
 
-**locations/{uid}** — `uid`, `latitude`, `longitude`, `accuracyMeters?`,
-`updatedAt`, `sharingUntil` (≤30 days), `sourceStatus` (`live|paused`).
 
 ## Queries and indexes
 
@@ -112,7 +109,6 @@ client-generated operation ID (idempotent submission).
 | `packingItems` order by `createdAt`, limit 200 | auto |
 | `activityFeed` order by `createdAt` desc, pages of 30 | auto |
 | `inbox` order by `createdAt` desc, limit 30; cleanup where `expiresAt <` now | auto |
-| `locations` (all), limit 60 | auto |
 
 ## Consistency
 

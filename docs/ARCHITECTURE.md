@@ -16,7 +16,7 @@ lib/
 ```
 
 Features: auth, home, tours, membership, expenses, settlements, itinerary,
-map, location_sharing, notes, packing_list, activity_feed, notifications,
+map, notes, packing_list, activity_feed, notifications,
 settings.
 
 ## State management
@@ -29,8 +29,8 @@ dispose. Derived state (`balancesProvider`, `permissionsProvider`,
 when its inputs change. `ProviderScope(retry: null)` stops failing streams
 (e.g. permission-denied after removal) from retrying in a loop.
 
-The tour workspace builds only the selected tab, so leaving the Map tab
-cancels the locations listener. `trackListener()` counts live listeners for
+The tour workspace builds only the selected tab, so each tab's listeners
+exist only while it is shown. `trackListener()` counts live listeners for
 the diagnostics page.
 
 ## Money
@@ -72,7 +72,6 @@ Firestore offline persistence provides cached reads and queued writes.
   transaction and refuse to overwrite a newer version (the user is told to
   reopen). Plans are last-write-wins; reorders write one item (sparse sort
   keys) or renumber one day. Packing items are independent documents.
-- **Location** writes are dropped (not queued) while offline.
 - Screens show a banner when data comes from cache.
 
 ## Provider abstractions
@@ -84,15 +83,6 @@ Firestore offline persistence provides cached reads and queued writes.
 - External navigation uses `geo:` / Apple Maps / OSM URLs via
   `url_launcher` — no SDK keys.
 
-## Location lifecycle
-
-`LocationSharingController` (per tour): permission requested only on start
-(foreground "while in use"); balanced accuracy, 50 m distance filter, writes
-throttled by `LocationWritePolicy`; stops on expiry, user stop, tour close or
-sign-out; pauses GPS and marks the record `paused` when the app is hidden;
-resumes on return if the window is still open. The UI hides expired and
-paused coordinates by timestamp/status and labels stale ones (> 5 min).
-
 ## Notifications
 
 In-app inbox (`users/{uid}/inbox`) for important events; activity feed for
@@ -100,13 +90,6 @@ everything else, with an "unseen" badge filtered by the user's expense/plan
 preferences. Itinerary reminders are device-local (`flutter_local_notifications`,
 inexact scheduling, ≤30 per tour) and resynced whenever the plan changes.
 No FCM sender exists in the app.
-
-## Deep links
-
-`app_links` receives `https://<host>/join/<code>` and
-`tourboard://join/<code>`; the code is validated with `InviteCodes.parse`.
-If the user is signed out, the router stores the code and resumes the join
-flow after sign-in.
 
 ## Error handling
 

@@ -4,15 +4,15 @@ The full brief is [`IMPLEMENTATION_BRIEF.md`](IMPLEMENTATION_BRIEF.md). This
 page summarises what the app does today.
 
 **Promise:** plan a trip together, record every shared expense, understand
-who owes what, and optionally share live locations — with an extremely
-simple interface. Free-first (Firebase Spark, no backend), secure by default,
-honest about limits.
+who owes what, and map the itinerary — with an extremely simple interface.
+Free-first (Firebase Spark, no backend), secure by default, honest about
+limits.
 
 ## Users and principles
 
 Friends, families, couples and student groups (first target: a Cox's Bazar
 weekend). Simple first, financially correct, rules as the security boundary,
-privacy-respecting location, real-time where useful, graceful offline,
+privacy-respecting, real-time where useful, graceful offline,
 minimal premium UI, international-ready.
 
 ## Features
@@ -23,8 +23,8 @@ minimal premium UI, international-ready.
 - **Tours**: name, dates, currency, time zone, optional budget and
   description; statuses upcoming/active (by date), closed, archived; host
   can reopen, archive and delete archived tours.
-- **Invites and membership**: 12-character codes / links, request → approve
-  or decline, attempt limit, revoke/rotate links, roles host/admin/member,
+- **Invites and membership**: 12-character join codes (no links), request →
+  approve or decline, attempt limit, revoke/rotate codes, roles host/admin/member,
   remove, leave, transfer host, 30-member cap.
 - **Expenses**: amount first, description, category, payer, date, equal /
   exact-amount / shares splits with any subset of members, live preview,
@@ -35,23 +35,22 @@ minimal premium UI, international-ready.
 - **Plan**: day-wise itinerary in the tour's time zone, times, place search
   or manual coordinates, estimated cost, pinned stops, done/skipped,
   reorder, open in external maps.
-- **Map**: OSM map with place pins and member avatars, attribution, people
-  sheet with sharing status, tile-failure fallback.
-- **Location sharing**: off by default; 30 min / 2 h / until trip ends;
-  visible indicator and Stop; foreground only; stale/paused/not sharing.
+- **Map**: OSM map of itinerary places with coordinates, place list,
+  attribution, tile-failure fallback. (Live location sharing is not in this
+  version.)
 - **More**: members, notes (with edit history), packing checklist, activity
   feed, tour settings and permissions.
 - **Notifications**: in-app inbox, unseen-activity badge by preference,
   opt-in device-local plan reminders. No remote push in strict free mode.
 - **Settings**: name, read-only email, theme, language, notification
-  preferences, location help, privacy/retention explanation, sign out,
+  preferences, privacy/retention explanation, sign out,
   account deletion (blocked while hosting), developer diagnostics (long-press
   the version line).
 
 ## Non-goals (MVP)
 
 Payments, banking, public discovery, chat, AI itineraries, receipt OCR, file
-uploads, turn-by-turn navigation, location history, subscriptions, web
+uploads, turn-by-turn navigation, live location sharing, subscriptions, web
 admin, guaranteed push or background tracking.
 
 ## Localization
