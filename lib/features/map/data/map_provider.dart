@@ -80,10 +80,10 @@ class DisabledPlaceSearch extends PlaceSearchProvider {
       throw const PlaceSearchException(PlaceSearchFailure.unavailable);
 }
 
-/// Nominatim (OpenStreetMap) geocoding, following its usage policy:
-/// at most one request per second, an identifying User-Agent, results
-/// cached in memory, no autocomplete-per-keystroke (callers debounce and
-/// enforce [minQueryLength]).
+/// Nominatim (OpenStreetMap) geocoding, following its usage policy
+/// (https://operations.osmfoundation.org/policies/nominatim/): at most one
+/// request per second, an identifying User-Agent, results cached in memory,
+/// and no autocomplete — callers search only on an explicit submit.
 class NominatimPlaceSearch extends PlaceSearchProvider {
   NominatimPlaceSearch({
     required this.baseUrl,

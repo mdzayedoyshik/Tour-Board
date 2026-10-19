@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -98,7 +96,6 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
   bool _saving = false;
   bool _manualPlace = false;
 
-  Timer? _debounce;
   List<PlaceResult> _results = const [];
   String? _searchError;
   bool _searching = false;
@@ -133,25 +130,23 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
 
   @override
   void dispose() {
-    _debounce?.cancel();
     for (final c in [_title, _place, _lat, _lng, _note, _search]) {
       c.dispose();
     }
     super.dispose();
   }
 
-  void _onSearchChanged(String text) {
-    _debounce?.cancel();
+  /// Runs only on explicit submit. The Nominatim usage policy forbids
+  /// autocomplete (search-as-you-type), so typing alone never sends a request.
+  void _submitSearch() {
+    final text = _search.text;
     final provider = ref.read(placeSearchProvider);
-    if (text.trim().length < provider.minQueryLength) {
-      setState(() => _results = const []);
+    if (_searching || text.trim().length < provider.minQueryLength) {
+      setState(() => _searchError = context.l10n.placeQueryTooShort);
       return;
     }
-    // Debounce so typing never sends a request per keystroke.
-    _debounce = Timer(
-      const Duration(milliseconds: 700),
-      () => _runSearch(text),
-    );
+    FocusScope.of(context).unfocus();
+    _runSearch(text);
   }
 
   Future<void> _runSearch(String text) async {
@@ -405,11 +400,16 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
                               child: CircularProgressIndicator(strokeWidth: 2),
                             ),
                           )
-                        : null,
+                        : IconButton(
+                            tooltip: l10n.commonSearch,
+                            icon: const Icon(Icons.arrow_forward),
+                            onPressed: _submitSearch,
+                          ),
                     helperText: l10n.placeSearchAttribution,
                     errorText: _searchError,
                   ),
-                  onChanged: _onSearchChanged,
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: (_) => _submitSearch(),
                 ),
                 for (final r in _results)
                   ListTile(

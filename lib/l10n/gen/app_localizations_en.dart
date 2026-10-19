@@ -1682,4 +1682,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteAccountBody =>
       'You\'ll leave all tours and your profile will be deleted. Expenses and payments you were part of stay in those tours so balances remain correct. You\'ll be asked to confirm with Google.';
+
+  @override
+  String get placeQueryTooShort => 'Type at least 3 characters, then search.';
 }
