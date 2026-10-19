@@ -12,7 +12,20 @@
           "package_name": "com.techorbit.tour_board"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "230585437551-v7qkm3fcvkl2a8orbo4r2uhg955oreik.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.techorbit.tour_board",
+            "certificate_hash": "ef58859392c97020e1ff56366539ac52d40baffc"
+          }
+        },
+        {
+          "client_id": "230585437551-e1kqsij473i33dlcer2svp5dthu1ou72.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAA2Lm6Xx9LZDxQpxrFJagJ3y7T11o233c"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230585437551-e1kqsij473i33dlcer2svp5dthu1ou72.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "230585437551-vjhppcmb9ssrujdd9bsl8lmre85foajk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.techorbit.tourBoard"
+              }
+            }
+          ]
         }
       }
     }
