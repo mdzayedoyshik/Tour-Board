@@ -1,0 +1,957 @@
+rules_version = '2';
+
+// Tour Board — Firestore Security Rules.
+//
+// The client is untrusted. Every write is validated here: shape, types,
+// bounds, immutable fields, membership, role and ownership. UI checks in
+// lib/features/membership/domain/permissions.dart mirror these rules but are
+// never the security boundary. See docs/SECURITY_RULES.md.
+//
+// Conventions
+//   get(...)      state before the current write/batch
+//   getAfter(...) state after the current write/batch (used to require that
+//                 related documents are written atomically in one batch)
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------------
+    // Constants (keep in sync with the Dart code)
+    // ------------------------------------------------------------------
+
+    function maxAmountMinor() { return 999999999999; }
+    function maxParticipants() { return 30; }
+    function maxEverMembers() { return 60; }
+    function maxRevisions() { return 50; }
+    function maxJoinAttempts() { return 3; }
+
+    function supportedCurrencies() {
+      return ['AED', 'AUD', 'BDT', 'BHD', 'BTN', 'CAD', 'CHF', 'CNY', 'EUR',
+              'GBP', 'HKD', 'IDR', 'INR', 'JPY', 'KRW', 'KWD', 'LKR', 'MVR',
+              'MYR', 'NPR', 'NZD', 'OMR', 'PHP', 'PKR', 'QAR', 'SAR', 'SGD',
+              'THB', 'TRY', 'USD', 'VND', 'ZAR'];
+    }
+
+    function expenseCategories() {
+      return ['food', 'transport', 'stay', 'activities', 'shopping', 'other'];
+    }
+
+    function feedTypes() {
+      return ['memberJoined', 'memberRemoved', 'memberLeft', 'roleChanged',
+              'hostTransferred', 'expenseAdded', 'expenseEdited',
+              'expenseDeleted', 'planAdded', 'planEdited',
+              'settlementSubmitted', 'settlementConfirmed',
+              'settlementDisputed', 'settlementCancelled', 'tourClosed',
+              'tourReopened', 'tourArchived', 'tourUpdated'];
+    }
+
+    // ------------------------------------------------------------------
+    // Generic helpers
+    // ------------------------------------------------------------------
+
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function changedKeys() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    function isStr(v, minLen, maxLen) {
+      return v is string && v.size() >= minLen && v.size() <= maxLen;
+    }
+
+    // Optional field: absent, null, or a bounded string.
+    function optStr(d, key, maxLen) {
+      return !(key in d) || d[key] == null || isStr(d[key], 1, maxLen);
+    }
+
+    function isAmount(v) {
+      return v is int && v > 0 && v <= maxAmountMinor();
+    }
+
+    function optAmount(d, key) {
+      return !(key in d) || d[key] == null || isAmount(d[key]);
+    }
+
+    function absentOrNull(d, key) {
+      return !(key in d) || d[key] == null;
+    }
+
+    // ------------------------------------------------------------------
+    // Paths and membership
+    // ------------------------------------------------------------------
+
+    function tourPath(t) {
+      return /databases/$(database)/documents/tours/$(t);
+    }
+    function memberPath(t, u) {
+      return /databases/$(database)/documents/tours/$(t)/members/$(u);
+    }
+    function joinRequestPath(t, u) {
+      return /databases/$(database)/documents/tours/$(t)/joinRequests/$(u);
+    }
+    function invitePath(code) {
+      return /databases/$(database)/documents/invites/$(code);
+    }
+
+    function tourData(t) { return get(tourPath(t)).data; }
+
+    function memberData(t, u) { return get(memberPath(t, u)).data; }
+
+    function isActiveUid(t, u) {
+      return exists(memberPath(t, u)) && memberData(t, u).status == 'active';
+    }
+
+    function isMember(t) {
+      return signedIn() && isActiveUid(t, me());
+    }
+
+    function hasRole(t, roles) {
+      return isMember(t) && memberData(t, me()).role in roles;
+    }
+
+    function isHost(t) { return hasRole(t, ['host']); }
+    function isHostOrAdmin(t) { return hasRole(t, ['host', 'admin']); }
+
+    // Same checks against the post-batch state, for documents created
+    // together with the member record (e.g. at tour creation).
+    function isHostOrAdminAfter(t) {
+      let m = getAfter(memberPath(t, me()));
+      return signedIn() && m != null && m.data.status == 'active'
+          && m.data.role in ['host', 'admin'];
+    }
+
+    function isActiveUidAfter(t, u) {
+      let m = getAfter(memberPath(t, u));
+      return m != null && m.data.status == 'active';
+    }
+
+    function tourOpen(t) {
+      return tourData(t).status in ['upcoming', 'active'];
+    }
+
+    // Host may bulk-delete content of an archived tour (bounded client-side
+    // deletion workflow; see docs/SECURITY_RULES.md).
+    function tourBeingDeleted(t) {
+      return isHost(t) && tourData(t).status == 'archived';
+    }
+
+    // ------------------------------------------------------------------
+    // Split validation without loops: shares is a map with at most
+    // maxParticipants() entries, so the sum is unrolled over 30 slots.
+    // ------------------------------------------------------------------
+
+    function at(l, i) { return l.size() > i ? l[i] : 0; }
+
+    function okAt(l, i) {
+      return l.size() <= i || (l[i] is int && l[i] >= 0
+          && l[i] <= maxAmountMinor());
+    }
+
+    function allSharesValid(l) {
+      return okAt(l, 0) && okAt(l, 1) && okAt(l, 2) && okAt(l, 3)
+          && okAt(l, 4) && okAt(l, 5) && okAt(l, 6) && okAt(l, 7)
+          && okAt(l, 8) && okAt(l, 9) && okAt(l, 10) && okAt(l, 11)
+          && okAt(l, 12) && okAt(l, 13) && okAt(l, 14) && okAt(l, 15)
+          && okAt(l, 16) && okAt(l, 17) && okAt(l, 18) && okAt(l, 19)
+          && okAt(l, 20) && okAt(l, 21) && okAt(l, 22) && okAt(l, 23)
+          && okAt(l, 24) && okAt(l, 25) && okAt(l, 26) && okAt(l, 27)
+          && okAt(l, 28) && okAt(l, 29);
+    }
+
+    function sumShares(l) {
+      return at(l, 0) + at(l, 1) + at(l, 2) + at(l, 3) + at(l, 4)
+          + at(l, 5) + at(l, 6) + at(l, 7) + at(l, 8) + at(l, 9)
+          + at(l, 10) + at(l, 11) + at(l, 12) + at(l, 13) + at(l, 14)
+          + at(l, 15) + at(l, 16) + at(l, 17) + at(l, 18) + at(l, 19)
+          + at(l, 20) + at(l, 21) + at(l, 22) + at(l, 23) + at(l, 24)
+          + at(l, 25) + at(l, 26) + at(l, 27) + at(l, 28) + at(l, 29);
+    }
+
+    function validShares(shares, amount, everMembers) {
+      return shares is map
+          && shares.size() >= 1 && shares.size() <= maxParticipants()
+          && shares.keys().hasOnly(everMembers)
+          && allSharesValid(shares.values())
+          && sumShares(shares.values()) == amount;
+    }
+
+    // ==================================================================
+    // users/{uid}
+    // ==================================================================
+
+    match /users/{uid} {
+      function validProfile(d) {
+        return d.keys().hasOnly(['uid', 'displayName', 'email', 'photoUrl',
+                                 'phoneNumber', 'locale', 'createdAt',
+                                 'updatedAt'])
+            && d.uid == uid
+            && isStr(d.displayName, 1, 60)
+            && d.email == request.auth.token.email
+            && optStr(d, 'photoUrl', 1000)
+            && optStr(d, 'phoneNumber', 20)
+            && isStr(d.locale, 2, 16)
+            && d.updatedAt == request.time;
+      }
+
+      allow read: if signedIn() && me() == uid;
+      allow create: if signedIn() && me() == uid
+          && validProfile(incoming())
+          && incoming().createdAt == request.time;
+      allow update: if signedIn() && me() == uid
+          && validProfile(incoming())
+          && incoming().createdAt == existing().createdAt;
+      allow delete: if signedIn() && me() == uid;
+
+      // Convenience index for Home. Never an authorization source: every
+      // tour read is checked against tours/{t}/members/{uid}.
+      match /tourMemberships/{t} {
+        function validIndex(d) {
+          return d.keys().hasOnly(['tourId', 'joinedAt'])
+              && d.tourId == t && d.joinedAt == request.time;
+        }
+
+        allow read: if signedIn() && me() == uid;
+        allow create: if signedIn() && validIndex(incoming())
+            && isActiveUidAfter(t, uid)
+            && (me() == uid || isHostOrAdminAfter(t));
+        allow update: if false;
+        allow delete: if signedIn()
+            && (me() == uid || isHostOrAdmin(t));
+      }
+
+      // In-app notifications. Records carry no free text — the recipient's
+      // device renders them from `type` — and each type has its own
+      // sender/recipient authorization so arbitrary users cannot be spammed.
+      match /inbox/{n} {
+        function validInboxShape(d) {
+          return d.keys().hasOnly(['type', 'tourId', 'tourName', 'senderUid',
+                                   'senderName', 'refId', 'createdAt',
+                                   'expiresAt', 'read'])
+              && d.senderUid == me() && uid != me()
+              && isStr(d.tourId, 1, 128)
+              && isStr(d.tourName, 1, 80)
+              && isStr(d.senderName, 1, 60)
+              && optStr(d, 'refId', 128)
+              && d.createdAt == request.time
+              && d.expiresAt is timestamp
+              && d.expiresAt <= request.time + duration.value(31, 'd')
+              && d.read == false;
+        }
+
+        function inboxAuthorized(d) {
+          let t = d.tourId;
+          return (d.type == 'joinRequest'
+                  && getAfter(joinRequestPath(t, me())).data.status == 'pending'
+                  && isActiveUid(t, uid)
+                  && memberData(t, uid).role in ['host', 'admin'])
+              || (d.type == 'joinApproved'
+                  && isHostOrAdmin(t)
+                  && getAfter(joinRequestPath(t, uid)).data.status == 'approved')
+              || (d.type == 'joinRejected'
+                  && isHostOrAdmin(t)
+                  && getAfter(joinRequestPath(t, uid)).data.status == 'rejected')
+              || (d.type in ['settlementSubmitted', 'settlementConfirmed',
+                             'settlementDisputed', 'tourClosed',
+                             'tourReopened', 'roleChanged']
+                  && isMember(t) && isActiveUid(t, uid));
+        }
+
+        allow read: if signedIn() && me() == uid;
+        allow create: if signedIn() && validInboxShape(incoming())
+            && inboxAuthorized(incoming());
+        allow update: if signedIn() && me() == uid
+            && changedKeys().hasOnly(['read'])
+            && incoming().read is bool;
+        allow delete: if signedIn() && me() == uid;
+      }
+    }
+
+    // ==================================================================
+    // invites/{code} — public preview for a high-entropy code
+    // ==================================================================
+
+    match /invites/{code} {
+      function validInvite(d) {
+        return d.keys().hasOnly(['tourId', 'tourName', 'hostName', 'startAt',
+                                 'endAt', 'expiresAt', 'revoked', 'createdBy',
+                                 'createdAt'])
+            && code.size() == 12
+            && isStr(d.tourId, 1, 128)
+            && isStr(d.tourName, 1, 80)
+            && isStr(d.hostName, 1, 60)
+            && d.startAt is timestamp && d.endAt is timestamp
+            && d.expiresAt is timestamp
+            && d.expiresAt > request.time
+            && d.expiresAt <= request.time + duration.value(30, 'd')
+            && d.revoked == false
+            && d.createdBy == me()
+            && d.createdAt == request.time;
+      }
+
+      // Single-document reads only: codes cannot be enumerated.
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn() && validInvite(incoming())
+          && isHostOrAdminAfter(incoming().tourId);
+      allow update: if signedIn() && isHostOrAdmin(existing().tourId)
+          && changedKeys().hasOnly(['revoked'])
+          && incoming().revoked == true;
+      allow delete: if signedIn() && isHostOrAdmin(existing().tourId);
+    }
+
+    // ==================================================================
+    // tours/{t}
+    // ==================================================================
+
+    match /tours/{t} {
+      function validSettings(s) {
+        return s is map
+            && s.keys().hasOnly(['adminsCanManageTour',
+                                 'membersCanEditPacking',
+                                 'membersCanRecordForOthers'])
+            && s.adminsCanManageTour is bool
+            && s.membersCanEditPacking is bool
+            && s.membersCanRecordForOthers is bool;
+      }
+
+      function validTour(d) {
+        return d.keys().hasOnly(['name', 'description', 'hostUid', 'status',
+                                 'startAt', 'endAt', 'timeZone',
+                                 'currencyCode', 'budgetMinor', 'inviteCode',
+                                 'allMemberUids', 'settings', 'createdAt',
+                                 'updatedAt', 'schemaVersion'])
+            && isStr(d.name, 1, 80)
+            && optStr(d, 'description', 500)
+            && d.hostUid is string
+            && d.status in ['upcoming', 'active', 'closed', 'archived']
+            && d.startAt is timestamp && d.endAt is timestamp
+            && d.endAt >= d.startAt
+            && d.endAt <= d.startAt + duration.value(366, 'd')
+            && isStr(d.timeZone, 1, 64)
+            && d.currencyCode in supportedCurrencies()
+            && optAmount(d, 'budgetMinor')
+            && optStr(d, 'inviteCode', 12)
+            && d.allMemberUids is list
+            && d.allMemberUids.size() >= 1
+            && d.allMemberUids.size() <= maxEverMembers()
+            && validSettings(d.settings)
+            && d.schemaVersion == 1
+            && d.updatedAt == request.time;
+      }
+
+      function canManageTour() {
+        return isHost(t)
+            || (isHostOrAdmin(t) && existing().settings.adminsCanManageTour);
+      }
+
+      allow read: if isMember(t);
+
+      // The creator becomes host; their member record and membership index
+      // must be written in the same batch.
+      allow create: if signedIn() && validTour(incoming())
+          && incoming().hostUid == me()
+          && incoming().status in ['upcoming', 'active']
+          && incoming().allMemberUids == [me()]
+          && incoming().createdAt == request.time
+          && getAfter(memberPath(t, me())).data.role == 'host'
+          && (absentOrNull(incoming(), 'inviteCode')
+              || exists(invitePath(incoming().inviteCode))
+              || existsAfter(invitePath(incoming().inviteCode)));
+
+      allow update: if signedIn() && validTour(incoming())
+          && incoming().createdAt == existing().createdAt
+          && (
+            // Details and lifecycle. Closed/archived tours are read-only
+            // except for changing the status (reopen/archive).
+            (changedKeys().hasOnly(['name', 'description', 'startAt',
+                                    'endAt', 'timeZone', 'currencyCode',
+                                    'budgetMinor', 'status', 'updatedAt'])
+              && canManageTour()
+              && (existing().status in ['upcoming', 'active']
+                  || changedKeys().hasOnly(['status', 'updatedAt'])))
+            // Invite rotation/revocation.
+            || (changedKeys().hasOnly(['inviteCode', 'updatedAt'])
+              && isHostOrAdmin(t)
+              && (absentOrNull(incoming(), 'inviteCode')
+                  || existsAfter(invitePath(incoming().inviteCode))))
+            // Permission switches: host only.
+            || (changedKeys().hasOnly(['settings', 'updatedAt'])
+              && isHost(t))
+            // Host transfer: target becomes host, old host becomes admin,
+            // all in the same batch.
+            || (changedKeys().hasOnly(['hostUid', 'updatedAt'])
+              && isHost(t)
+              && incoming().hostUid != me()
+              && getAfter(memberPath(t, incoming().hostUid)).data.role == 'host'
+              && getAfter(memberPath(t, incoming().hostUid)).data.status == 'active'
+              && getAfter(memberPath(t, me())).data.role == 'admin')
+            // Approval of a brand-new member appends exactly one uid whose
+            // member record becomes active in the same batch. The list never
+            // shrinks so historical expense references stay valid.
+            || (changedKeys().hasOnly(['allMemberUids', 'updatedAt'])
+              && isHostOrAdmin(t)
+              && incoming().allMemberUids.size() == existing().allMemberUids.size() + 1
+              && incoming().allMemberUids[0:existing().allMemberUids.size()] == existing().allMemberUids
+              && isActiveUidAfter(t, incoming().allMemberUids[existing().allMemberUids.size()]))
+          );
+
+      allow delete: if tourBeingDeleted(t);
+
+      // ----------------------------------------------------------------
+      // members/{uid}
+      // ----------------------------------------------------------------
+      match /members/{uid} {
+        function validMember(d) {
+          return d.keys().hasOnly(['uid', 'displayNameSnapshot',
+                                   'photoUrlSnapshot', 'role', 'status',
+                                   'joinedAt', 'removedAt', 'updatedAt'])
+              && d.uid == uid
+              && isStr(d.displayNameSnapshot, 1, 60)
+              && optStr(d, 'photoUrlSnapshot', 1000)
+              && d.role in ['host', 'admin', 'member']
+              && d.status in ['active', 'removed', 'left']
+              && d.updatedAt == request.time;
+        }
+
+        function requestBeingApproved() {
+          return get(joinRequestPath(t, uid)).data.status == 'pending'
+              && getAfter(joinRequestPath(t, uid)).data.status == 'approved';
+        }
+
+        // A removed member may still read their own record to learn that
+        // access was revoked.
+        allow get: if isMember(t) || (signedIn() && me() == uid);
+        allow list: if isMember(t);
+
+        allow create: if signedIn() && validMember(incoming())
+            && incoming().status == 'active'
+            && incoming().joinedAt == request.time
+            && (
+              // Creator at tour creation.
+              (me() == uid && incoming().role == 'host'
+                && !exists(tourPath(t))
+                && getAfter(tourPath(t)).data.hostUid == me())
+              // Approved join request.
+              || (me() != uid && incoming().role == 'member'
+                && isHostOrAdmin(t)
+                && requestBeingApproved()
+                && uid in getAfter(tourPath(t)).data.allMemberUids)
+            );
+
+        allow update: if signedIn() && validMember(incoming())
+            && incoming().uid == existing().uid
+            && (
+              // Own name/photo snapshot refresh.
+              (me() == uid && isMember(t)
+                && changedKeys().hasOnly(['displayNameSnapshot',
+                                          'photoUrlSnapshot', 'updatedAt']))
+              // Leave (the host must transfer first).
+              || (me() == uid && isMember(t)
+                && existing().role != 'host'
+                && incoming().status == 'left'
+                && incoming().removedAt == request.time
+                && changedKeys().hasOnly(['status', 'removedAt', 'updatedAt']))
+              // Removal: host removes anyone else; admin removes members.
+              || (me() != uid && existing().status == 'active'
+                && existing().role != 'host'
+                && (isHost(t)
+                    || (isHostOrAdmin(t) && existing().role == 'member'))
+                && incoming().status == 'removed'
+                && incoming().removedAt == request.time
+                && changedKeys().hasOnly(['status', 'removedAt', 'updatedAt']))
+              // Role change between admin and member: host only.
+              || (me() != uid && isHost(t) && existing().status == 'active'
+                && existing().role in ['admin', 'member']
+                && incoming().role in ['admin', 'member']
+                && changedKeys().hasOnly(['role', 'updatedAt']))
+              // Host transfer — new host side.
+              || (me() != uid && isHost(t) && existing().status == 'active'
+                && incoming().role == 'host'
+                && getAfter(tourPath(t)).data.hostUid == uid
+                && changedKeys().hasOnly(['role', 'updatedAt']))
+              // Host transfer — old host steps down to admin.
+              || (me() == uid && isHost(t)
+                && incoming().role == 'admin'
+                && getAfter(tourPath(t)).data.hostUid != me()
+                && changedKeys().hasOnly(['role', 'updatedAt']))
+              // Re-admission of a former member via an approved request.
+              || (me() != uid && isHostOrAdmin(t)
+                && existing().status in ['removed', 'left']
+                && incoming().status == 'active'
+                && incoming().role == 'member'
+                && incoming().joinedAt == request.time
+                && absentOrNull(incoming(), 'removedAt')
+                && requestBeingApproved())
+            );
+
+        allow delete: if tourBeingDeleted(t)
+            || (signedIn() && me() == uid && !exists(tourPath(t)));
+      }
+
+      // ----------------------------------------------------------------
+      // joinRequests/{uid} — one document per requester (idempotent)
+      // ----------------------------------------------------------------
+      match /joinRequests/{uid} {
+        function inviteValidFor(code) {
+          let inv = get(invitePath(code)).data;
+          return inv.tourId == t
+              && inv.revoked == false
+              && inv.expiresAt > request.time
+              && tourData(t).inviteCode == code
+              && tourOpen(t);
+        }
+
+        function notActiveMember() {
+          return !exists(memberPath(t, me()))
+              || memberData(t, me()).status != 'active';
+        }
+
+        function validRequest(d) {
+          return d.keys().hasOnly(['uid', 'displayNameSnapshot',
+                                   'photoUrlSnapshot', 'status',
+                                   'attemptCount', 'inviteCode', 'createdAt',
+                                   'updatedAt', 'reviewedBy', 'reviewedAt'])
+              && d.uid == uid
+              && isStr(d.displayNameSnapshot, 1, 60)
+              && optStr(d, 'photoUrlSnapshot', 1000)
+              && d.status in ['pending', 'approved', 'rejected', 'cancelled']
+              && d.attemptCount is int
+              && d.attemptCount >= 1
+              && d.attemptCount <= maxJoinAttempts()
+              && isStr(d.inviteCode, 12, 12)
+              && d.updatedAt == request.time;
+        }
+
+        allow get: if signedIn() && (me() == uid || isHostOrAdmin(t));
+        allow list: if isHostOrAdmin(t);
+
+        allow create: if signedIn() && me() == uid
+            && validRequest(incoming())
+            && incoming().status == 'pending'
+            && incoming().attemptCount == 1
+            && incoming().createdAt == request.time
+            && absentOrNull(incoming(), 'reviewedBy')
+            && notActiveMember()
+            && inviteValidFor(incoming().inviteCode);
+
+        allow update: if signedIn() && validRequest(incoming())
+            && incoming().createdAt == existing().createdAt
+            && (
+              // Requester cancels a pending request.
+              (me() == uid && existing().status == 'pending'
+                && incoming().status == 'cancelled'
+                && changedKeys().hasOnly(['status', 'updatedAt']))
+              // Requester retries (bounded attempts, valid current invite).
+              || (me() == uid
+                && existing().status in ['rejected', 'cancelled', 'approved']
+                && incoming().status == 'pending'
+                && incoming().attemptCount == existing().attemptCount + 1
+                && notActiveMember()
+                && inviteValidFor(incoming().inviteCode)
+                && changedKeys().hasOnly(['status', 'attemptCount',
+                                          'inviteCode', 'displayNameSnapshot',
+                                          'photoUrlSnapshot', 'updatedAt']))
+              // Host/admin review. Approval requires the member record to be
+              // active after the same batch.
+              || (me() != uid && isHostOrAdmin(t)
+                && existing().status == 'pending'
+                && incoming().status in ['approved', 'rejected']
+                && incoming().reviewedBy == me()
+                && incoming().reviewedAt == request.time
+                && changedKeys().hasOnly(['status', 'reviewedBy',
+                                          'reviewedAt', 'updatedAt'])
+                && (incoming().status == 'rejected'
+                    || isActiveUidAfter(t, uid)))
+            );
+
+        // Requesters cannot delete (that would reset the attempt limit).
+        allow delete: if isHostOrAdmin(t) || tourBeingDeleted(t);
+      }
+
+      // ----------------------------------------------------------------
+      // expenses/{id} and revisions
+      // ----------------------------------------------------------------
+      match /expenses/{expenseId} {
+        function validExpense(d) {
+          let tour = tourData(t);
+          return d.keys().hasOnly(['title', 'amountMinor', 'currencyCode',
+                                   'payerUid', 'shares', 'splitMethod',
+                                   'splitWeights', 'category', 'occurredAt',
+                                   'note', 'createdBy', 'createdAt',
+                                   'updatedAt', 'updatedBy', 'revisionCount',
+                                   'deletedAt', 'deletedBy', 'schemaVersion'])
+              && d.keys().hasAll(['title', 'amountMinor', 'currencyCode',
+                                  'payerUid', 'shares', 'splitMethod',
+                                  'category', 'occurredAt', 'createdBy',
+                                  'createdAt', 'updatedAt', 'revisionCount',
+                                  'schemaVersion'])
+              && isStr(d.title, 1, 80)
+              && isAmount(d.amountMinor)
+              && d.currencyCode in supportedCurrencies()
+              && d.payerUid in tour.allMemberUids
+              && validShares(d.shares, d.amountMinor, tour.allMemberUids)
+              && d.splitMethod in ['equal', 'custom', 'shares']
+              && (!('splitWeights' in d) || (d.splitWeights is map
+                  && d.splitWeights.size() <= maxParticipants()))
+              && d.category in expenseCategories()
+              && d.occurredAt is timestamp
+              && optStr(d, 'note', 500)
+              && d.revisionCount is int
+              && d.revisionCount >= 0
+              && d.revisionCount <= maxRevisions()
+              && d.schemaVersion == 1
+              && d.updatedAt == request.time;
+        }
+
+        function notDeleted(d) { return absentOrNull(d, 'deletedAt'); }
+
+        function revisionWritten(d) {
+          return existsAfter(/databases/$(database)/documents/tours/$(t)/expenses/$(expenseId)/revisions/$(string(d.revisionCount)));
+        }
+
+        allow read: if isMember(t);
+
+        allow create: if isMember(t) && tourOpen(t)
+            && validExpense(incoming())
+            && incoming().createdBy == me()
+            && incoming().createdAt == request.time
+            && incoming().revisionCount == 0
+            && notDeleted(incoming())
+            && absentOrNull(incoming(), 'updatedBy')
+            && (incoming().payerUid == me() || isHostOrAdmin(t)
+                || tourData(t).settings.membersCanRecordForOthers);
+
+        // Every edit or soft delete bumps revisionCount and writes the
+        // matching revision document in the same transaction.
+        allow update: if isMember(t) && tourOpen(t)
+            && (existing().createdBy == me() || isHostOrAdmin(t))
+            && notDeleted(existing())
+            && validExpense(incoming())
+            && incoming().createdBy == existing().createdBy
+            && incoming().createdAt == existing().createdAt
+            && incoming().revisionCount == existing().revisionCount + 1
+            && incoming().updatedBy == me()
+            && revisionWritten(incoming())
+            && (
+              // Ordinary edit; payer rule applies as on create.
+              (notDeleted(incoming())
+                && absentOrNull(incoming(), 'deletedBy')
+                && (incoming().payerUid == existing().payerUid
+                    || incoming().payerUid == me() || isHostOrAdmin(t)
+                    || tourData(t).settings.membersCanRecordForOthers))
+              // Soft delete (tombstone). Deletion is terminal.
+              || (incoming().deletedAt == request.time
+                && incoming().deletedBy == me()
+                && changedKeys().hasOnly(['deletedAt', 'deletedBy',
+                                          'revisionCount', 'updatedAt',
+                                          'updatedBy']))
+            );
+
+        allow delete: if tourBeingDeleted(t);
+
+        match /revisions/{revisionId} {
+          function parentPath() {
+            return /databases/$(database)/documents/tours/$(t)/expenses/$(expenseId);
+          }
+
+          allow read: if isMember(t);
+          allow create: if isMember(t)
+              && incoming().keys().hasOnly(['editorUid', 'editedAt',
+                                            'changedFields', 'before',
+                                            'after', 'reason'])
+              && incoming().editorUid == me()
+              && incoming().editedAt == request.time
+              && incoming().changedFields is list
+              && incoming().changedFields.size() >= 1
+              && incoming().changedFields.size() <= 12
+              && incoming().before is map && incoming().before.size() <= 12
+              && incoming().after is map && incoming().after.size() <= 12
+              && optStr(incoming(), 'reason', 200)
+              // Only together with the parent edit that this revision records.
+              && getAfter(parentPath()).data.updatedBy == me()
+              && getAfter(parentPath()).data.revisionCount
+                   == get(parentPath()).data.revisionCount + 1
+              && revisionId == string(getAfter(parentPath()).data.revisionCount);
+          allow update: if false;
+          allow delete: if tourBeingDeleted(t);
+        }
+      }
+
+      // ----------------------------------------------------------------
+      // settlements/{id} — offline payments; the app never moves money
+      // ----------------------------------------------------------------
+      match /settlements/{settlementId} {
+        function counterparty(d) {
+          return d.createdBy == d.fromUid ? d.toUid : d.fromUid;
+        }
+
+        allow read: if isMember(t);
+
+        // Allowed in closed tours too: settling up is the post-trip flow.
+        allow create: if isMember(t)
+            && tourData(t).status in ['upcoming', 'active', 'closed']
+            && incoming().keys().hasOnly(['fromUid', 'toUid', 'amountMinor',
+                                          'currencyCode', 'status',
+                                          'paymentMethod',
+                                          'transactionReference', 'note',
+                                          'createdBy', 'createdAt',
+                                          'updatedAt'])
+            && incoming().fromUid is string && incoming().toUid is string
+            && incoming().fromUid != incoming().toUid
+            && incoming().fromUid in tourData(t).allMemberUids
+            && incoming().toUid in tourData(t).allMemberUids
+            && (me() == incoming().fromUid || me() == incoming().toUid)
+            && incoming().createdBy == me()
+            && incoming().status == 'pending_confirmation'
+            && isAmount(incoming().amountMinor)
+            && incoming().currencyCode in supportedCurrencies()
+            && optStr(incoming(), 'paymentMethod', 120)
+            && optStr(incoming(), 'transactionReference', 120)
+            && optStr(incoming(), 'note', 120)
+            && incoming().createdAt == request.time
+            && incoming().updatedAt == request.time;
+
+        allow update: if isMember(t)
+            && tourData(t).status in ['upcoming', 'active', 'closed']
+            && changedKeys().hasOnly(['status', 'confirmedBy', 'confirmedAt',
+                                      'disputeReason', 'updatedAt'])
+            && incoming().updatedAt == request.time
+            && (
+              // Confirm: the counterparty, or an uninvolved host/admin when
+              // the counterparty is no longer an active member. Confirmed is
+              // terminal, so it cannot be applied twice.
+              (existing().status in ['pending_confirmation', 'disputed']
+                && incoming().status == 'confirmed'
+                && incoming().confirmedBy == me()
+                && incoming().confirmedAt == request.time
+                && (me() == counterparty(existing())
+                    || (isHostOrAdmin(t)
+                        && me() != existing().fromUid
+                        && me() != existing().toUid
+                        && !isActiveUid(t, counterparty(existing())))))
+              // Dispute: counterparty only, with a reason.
+              || (existing().status == 'pending_confirmation'
+                && incoming().status == 'disputed'
+                && me() == counterparty(existing())
+                && isStr(incoming().disputeReason, 1, 120)
+                && changedKeys().hasOnly(['status', 'disputeReason',
+                                          'updatedAt']))
+              // Cancel: creator only, while not yet confirmed.
+              || (existing().status in ['pending_confirmation', 'disputed']
+                && incoming().status == 'cancelled'
+                && me() == existing().createdBy
+                && changedKeys().hasOnly(['status', 'updatedAt']))
+            );
+
+        allow delete: if tourBeingDeleted(t);
+      }
+
+      // ----------------------------------------------------------------
+      // activities/{id} — itinerary items
+      // ----------------------------------------------------------------
+      match /activities/{activityId} {
+        function validCoords(d) {
+          return (absentOrNull(d, 'latitude') && absentOrNull(d, 'longitude'))
+              || (d.latitude is number && d.longitude is number
+                  && d.latitude >= -90 && d.latitude <= 90
+                  && d.longitude >= -180 && d.longitude <= 180);
+        }
+
+        function validTime(d, key) {
+          return absentOrNull(d, key)
+              || (d[key] is string && d[key].matches('^([01][0-9]|2[0-3]):[0-5][0-9]$'));
+        }
+
+        function validActivity(d) {
+          return d.keys().hasOnly(['title', 'dayKey', 'startTime', 'endTime',
+                                   'startAt', 'placeName', 'latitude',
+                                   'longitude', 'note', 'estimatedCostMinor',
+                                   'currencyCode', 'sortOrder', 'status',
+                                   'favorite', 'createdBy', 'updatedBy',
+                                   'createdAt', 'updatedAt'])
+              && isStr(d.title, 1, 80)
+              && d.dayKey is string
+              && d.dayKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+              && validTime(d, 'startTime') && validTime(d, 'endTime')
+              && (absentOrNull(d, 'startAt') || d.startAt is timestamp)
+              && optStr(d, 'placeName', 120)
+              && validCoords(d)
+              && optStr(d, 'note', 500)
+              && optAmount(d, 'estimatedCostMinor')
+              && (absentOrNull(d, 'estimatedCostMinor')
+                  || d.currencyCode in supportedCurrencies())
+              && d.sortOrder is int
+              && d.status in ['planned', 'completed', 'skipped']
+              && d.favorite is bool
+              && d.updatedAt == request.time;
+        }
+
+        allow read: if isMember(t);
+        allow create: if isMember(t) && tourOpen(t)
+            && validActivity(incoming())
+            && incoming().createdBy == me()
+            && incoming().createdAt == request.time;
+        allow update: if isMember(t) && tourOpen(t)
+            && (existing().createdBy == me() || isHostOrAdmin(t))
+            && validActivity(incoming())
+            && incoming().createdBy == existing().createdBy
+            && incoming().createdAt == existing().createdAt
+            && incoming().updatedBy == me();
+        allow delete: if (isMember(t) && tourOpen(t)
+            && (existing().createdBy == me() || isHostOrAdmin(t)))
+            || tourBeingDeleted(t);
+      }
+
+      // ----------------------------------------------------------------
+      // notes/{id} and revisions
+      // ----------------------------------------------------------------
+      match /notes/{noteId} {
+        function validNote(d) {
+          return d.keys().hasOnly(['title', 'body', 'createdBy', 'updatedBy',
+                                   'createdAt', 'updatedAt', 'revisionCount'])
+              && optStr(d, 'title', 80)
+              && isStr(d.body, 1, 2000)
+              && d.revisionCount is int
+              && d.revisionCount >= 0
+              && d.revisionCount <= maxRevisions()
+              && d.updatedAt == request.time;
+        }
+
+        allow read: if isMember(t);
+        allow create: if isMember(t) && tourOpen(t)
+            && validNote(incoming())
+            && incoming().createdBy == me()
+            && incoming().createdAt == request.time
+            && incoming().revisionCount == 0;
+        allow update: if isMember(t) && tourOpen(t)
+            && (existing().createdBy == me() || isHostOrAdmin(t))
+            && validNote(incoming())
+            && incoming().createdBy == existing().createdBy
+            && incoming().createdAt == existing().createdAt
+            && incoming().updatedBy == me()
+            && incoming().revisionCount == existing().revisionCount + 1
+            && existsAfter(/databases/$(database)/documents/tours/$(t)/notes/$(noteId)/revisions/$(string(incoming().revisionCount)));
+        allow delete: if (isMember(t) && tourOpen(t)
+            && (existing().createdBy == me() || isHostOrAdmin(t)))
+            || tourBeingDeleted(t);
+
+        match /revisions/{revisionId} {
+          function parentPath() {
+            return /databases/$(database)/documents/tours/$(t)/notes/$(noteId);
+          }
+
+          allow read: if isMember(t);
+          allow create: if isMember(t)
+              && incoming().keys().hasOnly(['editorUid', 'editedAt',
+                                            'changedFields', 'before',
+                                            'after', 'reason'])
+              && incoming().editorUid == me()
+              && incoming().editedAt == request.time
+              && incoming().changedFields is list
+              && incoming().changedFields.size() >= 1
+              && incoming().changedFields.size() <= 4
+              && incoming().before is map && incoming().after is map
+              && getAfter(parentPath()).data.updatedBy == me()
+              && getAfter(parentPath()).data.revisionCount
+                   == get(parentPath()).data.revisionCount + 1
+              && revisionId == string(getAfter(parentPath()).data.revisionCount);
+          allow update: if false;
+          // Removed with the note, or with the tour.
+          allow delete: if (isMember(t)
+              && !existsAfter(parentPath())) || tourBeingDeleted(t);
+        }
+      }
+
+      // ----------------------------------------------------------------
+      // packingItems/{id}
+      // ----------------------------------------------------------------
+      match /packingItems/{itemId} {
+        function canPack() {
+          return isMember(t) && tourOpen(t)
+              && (isHostOrAdmin(t)
+                  || tourData(t).settings.membersCanEditPacking);
+        }
+
+        function validItem(d) {
+          return d.keys().hasOnly(['label', 'checked', 'assigneeUid',
+                                   'checkedBy', 'createdBy', 'createdAt',
+                                   'updatedAt'])
+              && isStr(d.label, 1, 80)
+              && d.checked is bool
+              && (absentOrNull(d, 'assigneeUid')
+                  || d.assigneeUid in tourData(t).allMemberUids)
+              && (absentOrNull(d, 'checkedBy')
+                  || d.checkedBy in tourData(t).allMemberUids)
+              && d.updatedAt == request.time;
+        }
+
+        allow read: if isMember(t);
+        allow create: if canPack() && validItem(incoming())
+            && incoming().createdBy == me()
+            && incoming().createdAt == request.time;
+        allow update: if canPack() && validItem(incoming())
+            && incoming().createdBy == existing().createdBy
+            && incoming().createdAt == existing().createdAt
+            && (changedKeys().hasOnly(['checked', 'checkedBy', 'assigneeUid',
+                                       'updatedAt'])
+                || existing().createdBy == me() || isHostOrAdmin(t));
+        allow delete: if (canPack()
+            && (existing().createdBy == me() || isHostOrAdmin(t)))
+            || tourBeingDeleted(t);
+      }
+
+      // ----------------------------------------------------------------
+      // activityFeed/{id} — compact, append-only
+      // ----------------------------------------------------------------
+      match /activityFeed/{eventId} {
+        allow read: if isMember(t);
+        // Evaluated against pre-batch state, so a member leaving in the same
+        // batch can still record "memberLeft".
+        allow create: if isMember(t)
+            && incoming().keys().hasOnly(['type', 'actorUid', 'subjectUid',
+                                          'refId', 'label', 'createdAt'])
+            && incoming().type in feedTypes()
+            && incoming().actorUid == me()
+            && optStr(incoming(), 'subjectUid', 128)
+            && optStr(incoming(), 'refId', 128)
+            && optStr(incoming(), 'label', 80)
+            && incoming().createdAt == request.time;
+        allow update: if false;
+        allow delete: if tourBeingDeleted(t);
+      }
+
+      // ----------------------------------------------------------------
+      // locations/{uid} — latest location only, owner-written
+      // ----------------------------------------------------------------
+      match /locations/{uid} {
+        function validLocation(d) {
+          return d.keys().hasOnly(['uid', 'latitude', 'longitude',
+                                   'accuracyMeters', 'updatedAt',
+                                   'sharingUntil', 'sourceStatus'])
+              && d.uid == uid
+              && d.latitude is number && d.longitude is number
+              && d.latitude >= -90 && d.latitude <= 90
+              && d.longitude >= -180 && d.longitude <= 180
+              && (absentOrNull(d, 'accuracyMeters')
+                  || (d.accuracyMeters is number && d.accuracyMeters >= 0))
+              && d.updatedAt == request.time
+              && d.sharingUntil is timestamp
+              && d.sharingUntil > request.time
+              && d.sharingUntil <= request.time + duration.value(30, 'd')
+              && d.sourceStatus in ['live', 'paused'];
+        }
+
+        allow read: if isMember(t);
+        allow create, update: if signedIn() && me() == uid
+            && isMember(t) && tourOpen(t)
+            && validLocation(incoming());
+        // Owner stops sharing; any member may clean up an expired record.
+        allow delete: if (signedIn() && me() == uid)
+            || (isMember(t) && existing().sharingUntil < request.time)
+            || tourBeingDeleted(t);
+      }
+    }
+  }
+}
