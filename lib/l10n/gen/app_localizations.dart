@@ -2056,12 +2056,6 @@ abstract class AppLocalizations {
   /// **'Tour deleted'**
   String get tourDeleted;
 
-  /// No description provided for @tourDeletePartial.
-  ///
-  /// In en, this message translates to:
-  /// **'Part of the tour was deleted. Run delete again to finish.'**
-  String get tourDeletePartial;
-
   /// No description provided for @tourLeave.
   ///
   /// In en, this message translates to:

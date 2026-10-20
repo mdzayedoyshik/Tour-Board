@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../data/backend/backend_client.dart';
 import '../localization/l10n.dart';
 
 /// Broad error categories used to pick a calm, actionable message.
@@ -32,6 +33,17 @@ class AppException implements Exception {
 AppErrorKind classifyError(Object error) {
   if (error is AppException) return error.kind;
   if (error is TimeoutException) return AppErrorKind.network;
+  if (error is BackendException) {
+    return switch (error.status) {
+      0 => AppErrorKind.network,
+      401 || 403 => AppErrorKind.permissionDenied,
+      404 => AppErrorKind.notFound,
+      409 => AppErrorKind.conflict,
+      429 => AppErrorKind.quota,
+      400 => AppErrorKind.invalid,
+      _ => AppErrorKind.unknown,
+    };
+  }
   if (error is FirebaseException) {
     switch (error.code) {
       case 'permission-denied':

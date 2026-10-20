@@ -1164,10 +1164,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tourDeleted => 'Tour deleted';
 
   @override
-  String get tourDeletePartial =>
-      'Part of the tour was deleted. Run delete again to finish.';
-
-  @override
   String get tourLeave => 'Leave tour';
 
   @override

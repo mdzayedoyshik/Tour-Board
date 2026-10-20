@@ -125,16 +125,13 @@ class _BodyState extends ConsumerState<_Body> {
     if (!ok || !mounted) return;
     setState(() => _busy = true);
     try {
-      final complete = await ref
-          .read(tourRepositoryProvider)
-          .deleteArchivedTour(widget.tour, ref.read(currentUidProvider)!);
+      // The server deletes every subcollection recursively.
+      await ref
+          .read(backendClientProvider)
+          .delete('/v1/tours/${widget.tour.id}');
       if (!mounted) return;
-      if (complete) {
-        showAppSnack(context, l10n.tourDeleted);
-        context.go(Routes.home);
-      } else {
-        showAppSnack(context, l10n.tourDeletePartial);
-      }
+      showAppSnack(context, l10n.tourDeleted);
+      context.go(Routes.home);
     } catch (e) {
       if (mounted) showAppSnack(context, errorMessage(context, e), error: true);
     } finally {

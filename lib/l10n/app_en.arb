@@ -674,7 +674,6 @@
   "tourDeleteTitle": "Delete this tour for everyone?",
   "tourDeleteBody": "All expenses, payments, plans and notes are removed for all members. This can't be undone.",
   "tourDeleted": "Tour deleted",
-  "tourDeletePartial": "Part of the tour was deleted. Run delete again to finish.",
   "tourLeave": "Leave tour",
   "tourLeaveTitle": "Leave this tour?",
   "tourLeaveBody": "You'll lose access. Your past expenses and balance stay with the group so it can still be settled.",
