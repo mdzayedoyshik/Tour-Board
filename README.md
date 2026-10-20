@@ -5,8 +5,12 @@ map the itinerary — with a deliberately simple interface.
 
 > **Current setup status and remaining steps: [docs/SETUP_GUIDE.md](docs/SETUP_GUIDE.md).**
 
-Flutter + Firebase (Auth, Cloud Firestore) on the **Spark (free) plan** with
-**no custom backend**. All access control lives in `firestore.rules`.
+Flutter + Firebase (Auth, Cloud Firestore, Cloud Messaging) on the **Spark
+(free) plan**, plus a small Node.js backend on Render
+([Tour-Board-Backend](https://github.com/xX0ZAK0Xx/Tour-Board-Backend)) for
+push notifications, daily data retention and Google place search. Client
+access control lives in `firestore.rules`; the backend verifies every
+request against Firestore.
 
 | | |
 |---|---|
@@ -14,7 +18,8 @@ Flutter + Firebase (Auth, Cloud Firestore) on the **Spark (free) plan** with
 | iOS bundle ID | `com.techorbit.tourBoard` |
 | Flutter | 3.38.1 (stable), Dart 3.10 |
 | State / navigation | Riverpod 3, go_router |
-| Map | flutter_map + OpenStreetMap tiles (configurable) |
+| Map | Google Maps SDK; place search via the backend (Places API New) |
+| Backend | `https://tour-board-backend.onrender.com` (Node.js + TypeScript) |
 
 Docs: [product spec](docs/PRODUCT_SPEC.md) · [architecture](docs/ARCHITECTURE.md)
 · [Firestore schema](docs/FIRESTORE_SCHEMA.md) · [security rules](docs/SECURITY_RULES.md)
@@ -75,13 +80,15 @@ Keep the project on **Spark**. Do not create a billing account.
 
 ## 2. Optional app settings
 
-`env/example.env` lists non-Firebase settings (map tile URL/attribution,
-place-search provider, emulator). All have defaults; copy to
-`env/dev.env` / `env/prod.env` to override. These files are git-ignored. CI
-writes them from the `ENV_DEV` / `ENV_PROD` secrets (both optional).
+`env/example.env` lists the backend URL (`API_BASE_URL`) and emulator
+settings. All have defaults; copy to `env/dev.env` / `env/prod.env` to
+override. These files are git-ignored; CI writes them from the `ENV_DEV` /
+`ENV_PROD` secrets.
 
-Set `PLACE_SEARCH_CONTACT_EMAIL` if you keep Nominatim search on; set
-`PLACE_SEARCH_PROVIDER=none` for manual place entry only.
+The Google Maps **app key** is a build setting, not an env value:
+`android/properties/secrets.properties` (`MAPS_API_KEY=...`) locally,
+`ios/Flutter/Secrets.xcconfig` for iOS, and the `MAPS_API_KEY` secret in CI.
+See `docs/SETUP_GUIDE.md` §2.
 
 ## 3. Joining tours
 
@@ -134,15 +141,16 @@ the rules tests on pull requests.
 
 ## 6. Known limitations (by design)
 
-- **No remote push.** Without a trusted server, clients cannot safely send
-  FCM messages to other users. Collaboration uses live Firestore listeners
-  while the app is open, an in-app inbox, and opt-in device-local reminders.
+- **Push needs the backend.** The app only *reports* events; the backend
+  verifies them and sends inbox items + FCM pushes. Render's free instance
+  sleeps, so the first push after idle can take up to a minute.
 - **No live location sharing** in this version; the map shows itinerary
   places only.
 - **Client-written aggregates are not trusted.** Balances are recomputed from
   canonical expense and settlement records (bounded to the latest 1000
   expenses / 500 settlements per tour).
-- **Lazy cleanup only.** Expired join codes and inbox items are hidden
-  immediately by timestamp and removed when someone opens the relevant screen.
+- **Automatic retention.** A daily job deletes expired join codes, 30-day-old
+  notifications, finished join requests after 7 days and whole tours 30 days
+  after their end date (members are warned a week before).
 - **Tour size**: 30 active members (60 ever) and 30 participants per expense.
 - Free tiers and provider policies change — see `docs/FREE_TIER_LIMITS.md`.

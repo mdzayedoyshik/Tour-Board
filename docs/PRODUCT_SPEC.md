@@ -5,8 +5,8 @@ page summarises what the app does today.
 
 **Promise:** plan a trip together, record every shared expense, understand
 who owes what, and map the itinerary — with an extremely simple interface.
-Free-first (Firebase Spark, no backend), secure by default, honest about
-limits.
+Free-first (Firebase Spark + a small free-tier backend), secure by default,
+honest about limits.
 
 ## Users and principles
 
@@ -35,13 +35,16 @@ minimal premium UI, international-ready.
 - **Plan**: day-wise itinerary in the tour's time zone, times, place search
   or manual coordinates, estimated cost, pinned stops, done/skipped,
   reorder, open in external maps.
-- **Map**: OSM map of itinerary places with coordinates, place list,
-  attribution, tile-failure fallback. (Live location sharing is not in this
-  version.)
+- **Map**: Google Maps with numbered, day-coloured stops, a day filter and a
+  swipeable stop carousel; places are chosen on a full-screen map (search or
+  drop a pin). Directions open Google Maps. (No live location sharing.)
 - **More**: members, notes (with edit history), packing checklist, activity
   feed, tour settings and permissions.
-- **Notifications**: in-app inbox, unseen-activity badge by preference,
-  opt-in device-local plan reminders. No remote push in strict free mode.
+- **Notifications**: push notifications and an in-app inbox for join
+  requests, payments, roles, tour status and (optionally) expense/plan
+  updates; opt-in device-local plan reminders.
+- **Retention**: tours are deleted 30 days after they end (with warnings);
+  old notifications and join requests are cleaned up daily.
 - **Settings**: name, read-only email, theme, language, notification
   preferences, privacy/retention explanation, sign out,
   account deletion (blocked while hosting), developer diagnostics (long-press

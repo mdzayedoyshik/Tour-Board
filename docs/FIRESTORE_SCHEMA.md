@@ -7,7 +7,10 @@ minor units with an ISO 4217 code; no formatted strings are stored.
 ```text
 users/{uid}                                  private profile
 users/{uid}/tourMemberships/{tourId}         Home index (convenience only)
-users/{uid}/inbox/{id}                       in-app notifications
+users/{uid}/inbox/{id}                       in-app notifications (server-written)
+users/{uid}/devices/{deviceId}               FCM tokens (read by the backend)
+serverEvents/{hash}                          backend de-dup records
+serverMeta/mapsUsage-YYYY-MM                 backend Google API counters
 invites/{code}                               public preview for a 12-char code
 tours/{tourId}
 tours/{tourId}/members/{uid}
@@ -34,7 +37,11 @@ tours/{tourId}/activityFeed/{id}
 ## Documents
 
 **users/{uid}** — `uid`, `displayName` (≤60), `email` (= auth token email),
-`photoUrl?`, `phoneNumber?`, `locale`, `createdAt`, `updatedAt`.
+`photoUrl?`, `phoneNumber?`, `locale`, `notificationPrefs?`
+(`{important, expenses, plans}` booleans), `createdAt`, `updatedAt`.
+
+**devices/{deviceId}** — `token`, `platform`, `updatedAt`. One per install;
+removed on sign-out, when FCM reports it invalid, or after 60 days unused.
 
 **tourMemberships/{tourId}** — `tourId`, `joinedAt`.
 
@@ -46,7 +53,7 @@ tours/{tourId}/activityFeed/{id}
 calendar date), `timeZone` (IANA), `currencyCode`, `budgetMinor?`,
 `inviteCode?`, `allMemberUids` (everyone ever approved, append-only, ≤60),
 `settings {adminsCanManageTour, membersCanEditPacking,
-membersCanRecordForOthers}`, `createdAt`, `updatedAt`, `schemaVersion: 1`.
+membersCanRecordForOthers}`, `createdAt`, `updatedAt`, `schemaVersion: 1`, `deletionWarningSentAt?` (set by the backend).
 
 **members/{uid}** — `uid`, `displayNameSnapshot`, `photoUrlSnapshot?`, `role`
 (`host|admin|member`), `status` (`active|removed|left`), `joinedAt`,
@@ -77,7 +84,8 @@ client-generated operation ID (idempotent submission).
 
 **activities/{id}** — `title`, `dayKey` (`YYYY-MM-DD` in the tour zone),
 `startTime?`/`endTime?` (`HH:mm` local), `startAt?` (derived UTC),
-`placeName?`, `latitude?`/`longitude?` (both or neither), `note?`,
+`placeName?`, `address?`, `placeId?` (Google), `latitude?`/`longitude?`
+(both or neither), `note?`,
 `estimatedCostMinor?` + `currencyCode`, `sortOrder` (sparse ints, gap 1024),
 `status` (`planned|completed|skipped`), `favorite`, `createdBy`, `updatedBy`,
 `createdAt`, `updatedAt`.
@@ -92,7 +100,9 @@ client-generated operation ID (idempotent submission).
 `label?` (≤80), `createdAt`. Append-only.
 
 **users/{uid}/inbox/{id}** — `type`, `tourId`, `tourName`, `senderUid`,
-`senderName`, `refId?`, `createdAt`, `expiresAt` (30 days), `read`.
+`senderName`, `refId?`, `createdAt`, `expiresAt` (30 days), `read`. Types
+include expense/plan updates and `tourDeletionSoon`. Written only by the
+backend.
 
 
 ## Queries and indexes
@@ -108,7 +118,9 @@ client-generated operation ID (idempotent submission).
 | `notes` order by `updatedAt` desc, pages of 30 | auto |
 | `packingItems` order by `createdAt`, limit 200 | auto |
 | `activityFeed` order by `createdAt` desc, pages of 30 | auto |
-| `inbox` order by `createdAt` desc, limit 30; cleanup where `expiresAt <` now | auto |
+| `inbox` order by `createdAt` desc, limit 30 | auto |
+| Backend cleanup: collection-group `inbox.expiresAt`, `joinRequests.updatedAt`, `devices.updatedAt` | **field overrides** (collection-group scope) in `firestore.indexes.json` |
+| Backend: `tours` where `endAt <` cutoff | auto |
 
 ## Consistency
 
@@ -121,5 +133,5 @@ client-generated operation ID (idempotent submission).
   `revisionCount` changed (conflict), writes the record with
   `revisionCount + 1` and revision `n` in the same commit.
 - Settlement transitions: transaction; `confirmed` is terminal.
-- Feed events and inbox items are best-effort follow-ups; they never block
+- Feed events and backend events (inbox + push) are best-effort follow-ups; they never block
   the action.

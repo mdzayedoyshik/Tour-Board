@@ -23,7 +23,7 @@ and tests before every Play upload.
 | Invites | generation, parsing (raw/dashed/links/custom scheme), Crockford normalisation, expiry/revocation |
 | Geo | coordinate bounds |
 | Dates | range validation, inclusive day keys, IANA local→UTC (DST), offset labels, effective status by tour zone |
-| Plans / search / reminders | sparse sort keys, ordering, day grouping, reminder selection, Nominatim parsing, no request for short queries |
+| Plans / search / push | sparse sort keys, ordering, day grouping, reminder selection, place search via backend (auth header, session tokens, quota/outage errors), notification tap routing |
 
 ### Widget (`test/widget`)
 
@@ -37,7 +37,7 @@ validation, plan (empty itinerary days, manual place entry when search is
 off, invalid coordinates), design system (text on status pills, dark theme
 token, WCAG AA contrast for primary/secondary text).
 
-### Security Rules (`rules_test`, 43 cases)
+### Security Rules (`rules_test`, 46 cases)
 
 Profiles (owner-only, email/uid immutable), tour creation (host batch,
 no impersonation), read access (unauthenticated, non-member, removed member),
@@ -53,6 +53,14 @@ closed tours), inbox (type whitelist, no free text, no forged approvals,
 owner-only reads), content ownership, feed actor, leave batch, note
 revisions, packing edits.
 
+### Backend (`Tour-Board-Backend`)
+
+`npm test` (13 unit: config, Places proxy mapping/caching/Essentials-only
+fields/caps, push text, auth, validation, cron secret, rate limits) and
+`npm run test:emulator` (11 integration: event verification incl. forged and
+non-member events, delivery idempotency, preferences, invalid-token pruning,
+retention policy, deletion warnings, monthly usage caps).
+
 ## Manual / physical device (before release)
 
 - [ ] Google sign-in and sign-out on a physical Android device; fresh install
@@ -67,8 +75,15 @@ revisions, packing edits.
 - [ ] Host as debtor and creditor; partial settlement; dispute; admin
       fallback after the counterparty leaves.
 - [ ] Close the tour: expenses/plans read-only, settling still works; reopen.
-- [ ] Map: places with coordinates show as pins; tiles offline shows the
-      fallback banner; "Open in maps" launches an external app.
+- [ ] Map: numbered day-coloured pins, day filter, carousel syncs with the
+      map, dark style in dark mode, Directions opens Google Maps.
+- [ ] Place picker: search suggestions, tap/long-press/drag pin, rename,
+      offline and quota messages.
+- [ ] Push: second device receives join request, payment and expense pushes
+      with the app closed; taps open the right screen; toggles in Settings
+      stop expense/plan pushes; sign-out stops pushes on that device.
+- [ ] Ended tour shows its deletion date; run the cleanup workflow manually
+      against a test tour.
 - [ ] Poor network and repeated taps on Save/Approve/Confirm.
 - [ ] Dark/light/system themes, 200 % text size, TalkBack labels.
 - [ ] Local reminders: enable, edit a plan time, delete it, deny OS permission.

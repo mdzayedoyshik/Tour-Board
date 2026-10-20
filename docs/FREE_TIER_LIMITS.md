@@ -1,80 +1,80 @@
 # Free-tier limits and cost safety
 
-**Verified: 2026-10-19** against the official pages linked below. Free tiers,
-quotas and provider policies change; re-check them before each release. No
-service here is promised to be free forever.
+**Verified: 2026-10-20** against the official pages linked below. Free tiers
+and provider policies change; re-check before each release. Nothing here is
+promised to stay free forever.
 
-## Services used
+## Services
 
-| Service | Plan | Notes |
+| Service | Plan | Free allowance used |
 |---|---|---|
-| Firebase Authentication (Google provider) | Spark | Pricing page lists 50K MAUs (with Identity Platform) on Spark. |
-| Cloud Firestore (Standard) | Spark | 1 GiB stored, 50K reads/day, 20K writes/day, 20K deletes/day, 10 GiB/month egress. |
-| OpenStreetMap tiles | Public OSMF tile server | Best effort, no SLA; may block heavy use. Configurable via `MAP_TILE_URL`. |
-| Nominatim geocoding | Public OSMF instance | Optional (`PLACE_SEARCH_PROVIDER=nominatim`); manual entry always works. |
+| Firebase Authentication (Google) | Spark | 50K MAUs |
+| Cloud Firestore (Standard) | Spark | 1 GiB stored, 50K reads/day, 20K writes/day, 20K deletes/day, 10 GiB/month egress |
+| Firebase Cloud Messaging | Spark | No charge |
+| Render web service (backend) | Free | Sleeps after ~15 min idle; cold start up to ~1 min |
+| GitHub Actions (daily cleanup, CI, deploy) | Free tier | A few minutes per day |
+| Google Maps SDK for Android/iOS | Google Maps Platform | Unlimited (no per-load charge) |
+| Places API (New) Autocomplete | Essentials | 10,000 requests/month; **free when the session ends in Place Details** |
+| Place Details (address + location only) | Essentials | 10,000/month |
+| Geocoding (dropped pins) | Essentials | 10,000/month |
 
 Sources: [Firebase pricing](https://firebase.google.com/pricing),
-[OSM tile policy](https://operations.osmfoundation.org/policies/tiles/),
-[Nominatim policy](https://operations.osmfoundation.org/policies/nominatim/).
+[Google Maps Platform pricing](https://developers.google.com/maps/billing-and-pricing/pricing),
+[Place data fields / SKUs](https://developers.google.com/maps/documentation/places/web-service/data-fields),
+[Render free instances](https://render.com/docs/free).
+
+Google Maps Platform requires a billing account even within the free usage.
+Set a budget alert (e.g. $1/month) in Google Cloud Billing.
+
+## How the app stays inside the free tiers
+
+**Google Maps / Places**
+- The map itself uses the mobile SDK (no usage charge).
+- All Places/Geocoding calls go through the backend with the server key; the
+  key never ships in the app.
+- Place Details requests only Essentials fields (`id`, `formattedAddress`,
+  `shortFormattedAddress`, `location`). `displayName` would bill as Pro
+  (5,000/month), so the name comes from the autocomplete suggestion instead.
+- Autocomplete uses session tokens that end with a Place Details call.
+- The backend counts every Google call in Firestore and **stops at 9,000 per
+  SKU per month** (`serverMeta/mapsUsage-YYYY-MM`), returning
+  `quota-exceeded`; the app then asks the user to drop a pin.
+- Per-user limits: 30 place requests/minute, 300/day. Results are cached
+  (suggestions 10 min, places 24 h, reverse geocode on an ~11 m grid).
+- Search waits for 3+ characters and a 450 ms pause in typing.
+
+**Firestore**
+- Listeners are scoped to visible screens and cancelled on dispose; older
+  notes/feed are paginated (30); nothing polls.
+- Each server event costs roughly: 2 reads for the tour + members, 1–2 for
+  the referenced document, 1 write for de-duplication, 1 write per
+  recipient's inbox item, 1 read per recipient profile and device list.
+  A 10-member tour adding 40 expenses/day ≈ 40 × (≈25 reads + ≈11 writes)
+  ≈ 1,000 reads and 440 writes per day.
+- The daily cleanup is bounded to 2,000 documents per run.
+
+**Render**
+- The app sends events in the background and retries once, so a cold start
+  never blocks the user; pushes may arrive up to a minute late after idle.
+- The daily GitHub Action wakes the server before running the cleanup job.
+
+## Retention (server job, daily 03:30 Dhaka)
+
+| Data | Deleted |
+|---|---|
+| Join codes | when expired (14 days) or revoked |
+| Inbox notifications | 30 days after creation |
+| Finished join requests (approved/rejected/cancelled) | 7 days after their last update |
+| Whole tours (all expenses, plans, notes, payments, members, index entries) | 30 days after the tour's end date; members get a push + inbox warning 7 days before, and the app shows the deletion date once the trip ends |
+| Push device tokens | when FCM reports them invalid, or not refreshed for 60 days |
+| Server de-dup records | 30 days |
+
+If the server is down, nothing is lost: the app hides expired items by
+timestamp and the next run catches up.
 
 ## Deliberately not used
 
-Cloud Functions, Cloud Run, scheduled jobs, Firestore TTL, Firebase Storage,
-Dynamic Links (discontinued), location APIs, Google Maps / Places SDKs, paid extensions,
-third-party analytics or crash reporting, and any FCM server key in the app.
-The Blaze plan is never required.
-
-Spark has no trusted server logic, so:
-
-- **Push notifications to other users are not available in strict free mode.**
-  A client cannot securely trigger cross-user FCM messages. The app uses live
-  listeners while open, an in-app inbox (rules-validated, no free text), and
-  device-local reminders. Adding push later needs a trusted sender (e.g. Cloud
-  Functions on Blaze) and is an explicit owner decision.
-- App Check is not enabled. Its attestation providers have their own quotas;
-  it can be added later without changing the data model.
-
-## Expected Firestore usage
-
-Approximate document operations for common actions (N = items returned):
-
-| Action | Reads | Writes |
-|---|---|---|
-| Sign in (first time / later) | 1 | 1 / 0–1 |
-| Open Home | index N + 1 get + 1 count() per tour | 0 |
-| Open a tour (first listen) | 1 tour + members (≤60) + expenses (≤1000) + settlements (≤500) | 0 |
-| Re-render / tab switch | 0 (listeners stay attached; cache) | 0 |
-| Add expense | 0 (+1 per active listener on other devices) | 2 (expense + feed event) |
-| Edit / delete expense | 1 (transaction) | 2–3 (expense, revision, feed) |
-| Approve join request | 3 (transaction) | 4 + 2 best-effort (inbox, feed) |
-| Record + confirm settlement | 1 | 2 + feed/inbox |
-| Mark inbox item read | 0 | 1 |
-
-Listeners are scoped to visible screens and cancelled on dispose. Older
-notes and feed entries are fetched page by page (30). Nothing polls.
-
-A tour with 10 members adding 40 expenses a day uses roughly 40 × 2 = 80
-writes and 40 × 10 = 400 listener reads per day — far below the limits. The
-main cost is the first open of a large tour (one read per expense); tours are
-bounded to the latest 1000 expenses.
-
-## Map tiles and search
-
-- Tiles: the OSM policy requires visible attribution (shown on the map), an
-  identifying User-Agent (`flutter_map (com.techorbit.tour_board)`), honouring
-  cache headers, viewport-only fetching, and **no offline/bulk download**. The
-  public server is best effort and may block heavy use; for growth, switch
-  `MAP_TILE_URL` to a commercial or self-hosted provider (check its pricing).
-- Nominatim: max **1 request/second** (enforced client-side), identifying
-  User-Agent and contact email, results cached, **no autocomplete** — search
-  runs only when the user submits. If search is rate-limited or offline, the
-  form falls back to manual name/coordinates.
-
-## Retention without scheduled jobs
-
-There is no TTL or cron on Spark. Disposable records carry expiry timestamps
-and are hidden immediately by the UI; authorised clients delete a bounded
-batch when they open the relevant screen (inbox ≤50). If
-nobody opens the app, cleanup does not run. Closed tours are never deleted
-automatically. Tour deletion is a host-run, bounded client workflow for
-archived tours.
+Cloud Functions / Blaze, Firebase Storage, Dynamic Links (discontinued),
+live location sharing, Places "Pro"/"Enterprise" fields, Street View,
+Directions/Routes APIs (directions open the Google Maps app via a URL),
+third-party analytics or crash reporting.
