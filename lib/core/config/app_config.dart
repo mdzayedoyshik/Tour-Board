@@ -16,12 +16,7 @@ const String appEnvironment = String.fromEnvironment(
 class AppConfig {
   const AppConfig({
     required this.environment,
-    required this.mapTileUrl,
-    required this.mapTileAttribution,
-    required this.mapAttributionUrl,
-    required this.placeSearchProvider,
-    required this.nominatimUrl,
-    required this.placeSearchContactEmail,
+    required this.apiBaseUrl,
     required this.useFirebaseEmulator,
     required this.firebaseEmulatorHost,
   });
@@ -34,24 +29,10 @@ class AppConfig {
 
     return AppConfig(
       environment: environment,
-      mapTileUrl: value(
-        'MAP_TILE_URL',
-        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      ),
-      mapTileAttribution: value(
-        'MAP_TILE_ATTRIBUTION',
-        '© OpenStreetMap contributors',
-      ),
-      mapAttributionUrl: value(
-        'MAP_ATTRIBUTION_URL',
-        'https://www.openstreetmap.org/copyright',
-      ),
-      placeSearchProvider: value('PLACE_SEARCH_PROVIDER', 'none'),
-      nominatimUrl: value(
-        'NOMINATIM_URL',
-        'https://nominatim.openstreetmap.org',
-      ),
-      placeSearchContactEmail: value('PLACE_SEARCH_CONTACT_EMAIL'),
+      apiBaseUrl: value(
+        'API_BASE_URL',
+        'https://tour-board-backend.onrender.com',
+      ).replaceAll(RegExp(r'/+$'), ''),
       useFirebaseEmulator: value('USE_FIREBASE_EMULATOR') == 'true',
       firebaseEmulatorHost: value('FIREBASE_EMULATOR_HOST', 'localhost'),
     );
@@ -70,14 +51,9 @@ class AppConfig {
   }
 
   final String environment;
-  final String mapTileUrl;
-  final String mapTileAttribution;
-  final String mapAttributionUrl;
 
-  /// 'nominatim' or 'none' (manual place entry only).
-  final String placeSearchProvider;
-  final String nominatimUrl;
-  final String placeSearchContactEmail;
+  /// Tour Board backend (notifications, cleanup, place search).
+  final String apiBaseUrl;
   final bool useFirebaseEmulator;
   final String firebaseEmulatorHost;
 

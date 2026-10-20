@@ -9,6 +9,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/common.dart';
 import '../../../core/widgets/states.dart';
+import '../../settings/data/preferences.dart';
 import '../data/inbox_repository.dart';
 import '../domain/inbox_item.dart';
 
@@ -29,6 +30,12 @@ String describeInbox(AppLocalizations l10n, InboxItem item) =>
       InboxType.tourClosed => l10n.inboxTourClosed(item.senderName),
       InboxType.tourReopened => l10n.inboxTourReopened(item.senderName),
       InboxType.roleChanged => l10n.inboxRoleChanged(item.senderName),
+      InboxType.expenseAdded => l10n.inboxExpenseAdded(item.senderName),
+      InboxType.expenseEdited => l10n.inboxExpenseEdited(item.senderName),
+      InboxType.expenseDeleted => l10n.inboxExpenseDeleted(item.senderName),
+      InboxType.planAdded => l10n.inboxPlanAdded(item.senderName),
+      InboxType.planEdited => l10n.inboxPlanEdited(item.senderName),
+      InboxType.tourDeletionSoon => l10n.inboxTourDeletionSoon,
       null => l10n.feedUnknown,
     };
 
@@ -39,6 +46,11 @@ String inboxTarget(InboxItem item) => switch (item.type) {
   InboxType.settlementSubmitted ||
   InboxType.settlementConfirmed ||
   InboxType.settlementDisputed => Routes.balances(item.tourId),
+  InboxType.expenseAdded || InboxType.expenseEdited || InboxType.expenseDeleted
+      when item.refId != null =>
+    Routes.expense(item.tourId, item.refId!),
+  InboxType.planAdded ||
+  InboxType.planEdited => Routes.tour(item.tourId, tab: 1),
   _ => Routes.tour(item.tourId),
 };
 
@@ -85,7 +97,10 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
         value: inbox,
         onRetry: () => ref.invalidate(inboxProvider),
         data: (snap) {
-          final items = snap.items.where((i) => !i.isExpired(now)).toList();
+          final prefs = ref.watch(preferencesProvider);
+          final items = snap.items
+              .where((i) => !i.isExpired(now) && inboxVisible(i, prefs))
+              .toList();
           return Column(
             children: [
               InlineBanner(

@@ -3,13 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/errors/app_error.dart';
+import '../../../data/backend/backend_client.dart';
 import '../../../data/firebase/firestore_helpers.dart';
 import '../../../data/firebase/firestore_paths.dart';
 import '../../../data/firebase/firestore_streams.dart';
 import '../../activity_feed/data/feed_repository.dart';
 import '../../activity_feed/domain/feed_event.dart';
-import '../../notifications/data/inbox_repository.dart';
-import '../../notifications/domain/inbox_item.dart';
 import '../domain/settlement.dart';
 
 class SettlementDraft {
@@ -34,11 +33,11 @@ class SettlementDraft {
 
 /// Offline payments between members. The app never moves money.
 class SettlementRepository {
-  SettlementRepository(this._db, this._feed, this._inbox);
+  SettlementRepository(this._db, this._feed, this._events);
 
   final FirebaseFirestore _db;
   final FeedRepository _feed;
-  final InboxRepository _inbox;
+  final EventReporter _events;
 
   static const queryLimit = 500;
   static const _timeout = Duration(seconds: 20);
@@ -87,24 +86,18 @@ class SettlementRepository {
     );
     if (outcome == WriteOutcome.synced) {
       final counterparty = uid == draft.fromUid ? draft.toUid : draft.fromUid;
-      await Future.wait([
-        _feed.record(
-          tourId,
-          type: FeedEventType.settlementSubmitted,
-          actorUid: uid,
-          subjectUid: counterparty,
-          refId: operationId,
-        ),
-        _inbox.notify(
-          recipientUids: [counterparty],
-          type: InboxType.settlementSubmitted,
-          tourId: tourId,
-          tourName: tourName,
-          senderUid: uid,
-          senderName: senderName,
-          refId: operationId,
-        ),
-      ]);
+      _events.report(
+        ServerEvent.settlementSubmitted,
+        tourId: tourId,
+        refId: operationId,
+      );
+      await _feed.record(
+        tourId,
+        type: FeedEventType.settlementSubmitted,
+        actorUid: uid,
+        subjectUid: counterparty,
+        refId: operationId,
+      );
     }
     return outcome;
   }
@@ -131,23 +124,17 @@ class SettlementRepository {
         SettlementStatus.disputed,
       },
     );
-    await Future.wait([
-      _feed.record(
-        tourId,
-        type: FeedEventType.settlementConfirmed,
-        actorUid: uid,
-        refId: settlement.id,
-      ),
-      _inbox.notify(
-        recipientUids: [settlement.createdBy],
-        type: InboxType.settlementConfirmed,
-        tourId: tourId,
-        tourName: tourName,
-        senderUid: uid,
-        senderName: senderName,
-        refId: settlement.id,
-      ),
-    ]);
+    _events.report(
+      ServerEvent.settlementConfirmed,
+      tourId: tourId,
+      refId: settlement.id,
+    );
+    await _feed.record(
+      tourId,
+      type: FeedEventType.settlementConfirmed,
+      actorUid: uid,
+      refId: settlement.id,
+    );
   }
 
   Future<void> dispute({
@@ -167,23 +154,17 @@ class SettlementRepository {
       },
       allowedFrom: const {SettlementStatus.pendingConfirmation},
     );
-    await Future.wait([
-      _feed.record(
-        tourId,
-        type: FeedEventType.settlementDisputed,
-        actorUid: uid,
-        refId: settlement.id,
-      ),
-      _inbox.notify(
-        recipientUids: [settlement.createdBy],
-        type: InboxType.settlementDisputed,
-        tourId: tourId,
-        tourName: tourName,
-        senderUid: uid,
-        senderName: senderName,
-        refId: settlement.id,
-      ),
-    ]);
+    _events.report(
+      ServerEvent.settlementDisputed,
+      tourId: tourId,
+      refId: settlement.id,
+    );
+    await _feed.record(
+      tourId,
+      type: FeedEventType.settlementDisputed,
+      actorUid: uid,
+      refId: settlement.id,
+    );
   }
 
   Future<void> cancel({
@@ -236,7 +217,7 @@ final settlementRepositoryProvider = Provider<SettlementRepository>(
   (ref) => SettlementRepository(
     ref.watch(firestoreProvider),
     ref.watch(feedRepositoryProvider),
-    ref.watch(inboxRepositoryProvider),
+    ref.watch(eventReporterProvider),
   ),
 );
 

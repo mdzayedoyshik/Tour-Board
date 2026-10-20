@@ -52,8 +52,8 @@ class DiagnosticsScreen extends ConsumerWidget {
               ),
             ),
             ListTile(
-              title: Text(l10n.diagPlaceSearch),
-              trailing: Text(config.placeSearchProvider),
+              title: Text(l10n.diagBackend),
+              subtitle: Text(config.apiBaseUrl),
             ),
           ],
         ),

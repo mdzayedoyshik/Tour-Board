@@ -10,10 +10,10 @@ import '../domain/inbox_item.dart';
 
 /// In-app notifications at users/{uid}/inbox.
 ///
-/// There is no trusted server in strict free mode, so these records are
-/// written by the acting member's client and validated by Security Rules
-/// (type-specific sender/recipient checks, no free text). Remote push is not
-/// sent; recipients see items while the app is open.
+/// Items are written only by the Tour Board backend, after it verifies the
+/// event against Firestore (see EventReporter); the same event is also
+/// delivered as a push notification. The owner can read, mark read and
+/// delete their items.
 class InboxRepository {
   InboxRepository(this._db);
 
@@ -21,45 +21,6 @@ class InboxRepository {
 
   CollectionReference<Map<String, dynamic>> _col(String uid) =>
       _db.collection(FirestorePaths.inbox(uid));
-
-  /// Best-effort notification to each recipient (sender excluded).
-  Future<void> notify({
-    required Iterable<String> recipientUids,
-    required InboxType type,
-    required String tourId,
-    required String tourName,
-    required String senderUid,
-    required String senderName,
-    String? refId,
-  }) async {
-    final recipients = recipientUids.toSet()..remove(senderUid);
-    if (recipients.isEmpty) return;
-    final expiresAt = DateTime.now().toUtc().add(InboxItem.lifetime);
-    // One write per recipient rather than a batch: rules check sender and
-    // recipient membership with get() calls, and a batch shares a single
-    // access budget across all its writes.
-    await Future.wait([
-      for (final uid in recipients)
-        _col(uid)
-            .doc()
-            .set({
-              'type': type.name,
-              'tourId': tourId,
-              'tourName': _bound(tourName, 80),
-              'senderUid': senderUid,
-              'senderName': _bound(senderName, 60),
-              'refId': ?refId,
-              'createdAt': FieldValue.serverTimestamp(),
-              'expiresAt': Timestamp.fromDate(expiresAt),
-              'read': false,
-            })
-            .timeout(const Duration(seconds: 10))
-            // Notifications never block the action that triggered them.
-            .catchError(
-              (Object e) => debugPrint('Inbox notification not delivered: $e'),
-            ),
-    ]);
-  }
 
   Stream<Snapshot<InboxItem>> watchRecent(String uid) => watchQuery(
     _col(uid).orderBy('createdAt', descending: true),
@@ -114,11 +75,6 @@ class InboxRepository {
       deleted += snap.docs.length;
     }
   }
-
-  static String _bound(String value, int max) {
-    final v = value.trim().isEmpty ? '—' : value.trim();
-    return v.length > max ? v.substring(0, max) : v;
-  }
 }
 
 final inboxRepositoryProvider = Provider<InboxRepository>(
@@ -137,8 +93,20 @@ final inboxProvider = StreamProvider.autoDispose<Snapshot<InboxItem>>((ref) {
 
 /// Unread, unexpired items in the first page — the Home badge count.
 final unreadInboxCountProvider = Provider.autoDispose<int>((ref) {
-  if (!ref.watch(preferencesProvider).notifyImportant) return 0;
+  final prefs = ref.watch(preferencesProvider);
   final now = ref.watch(clockProvider)();
   final items = ref.watch(inboxProvider).value?.items ?? const [];
-  return items.where((i) => !i.read && !i.isExpired(now)).length;
+  return items
+      .where((i) => !i.read && !i.isExpired(now) && inboxVisible(i, prefs))
+      .length;
 });
+
+/// Hides categories the user switched off in Settings.
+bool inboxVisible(InboxItem item, AppPreferences prefs) => switch (item.type) {
+  InboxType.expenseAdded ||
+  InboxType.expenseEdited ||
+  InboxType.expenseDeleted => prefs.notifyExpenses,
+  InboxType.planAdded || InboxType.planEdited => prefs.notifyPlans,
+  InboxType.tourDeletionSoon => true,
+  _ => prefs.notifyImportant,
+};
