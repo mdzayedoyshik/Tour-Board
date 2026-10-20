@@ -18,13 +18,12 @@ class StatusPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final fg = color ?? theme.colorScheme.onSurfaceVariant;
+    final dark = theme.brightness == Brightness.dark;
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: AppSpacing.xxs,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: fg.withValues(alpha: 0.1),
+        // Tonal fill tuned per brightness so the label stays readable.
+        color: fg.withValues(alpha: dark ? 0.18 : 0.12),
         borderRadius: BorderRadius.circular(AppRadii.pill),
       ),
       child: Row(
@@ -38,7 +37,8 @@ class StatusPill extends StatelessWidget {
             label,
             style: theme.textTheme.labelSmall?.copyWith(
               color: fg,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.2,
             ),
           ),
         ],
@@ -70,8 +70,8 @@ class SectionHeader extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
@@ -246,13 +246,68 @@ class SurfaceCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   @override
-  Widget build(BuildContext context) => Card(
-    clipBehavior: Clip.antiAlias,
-    child: InkWell(
-      onTap: onTap,
-      child: Padding(padding: padding, child: child),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        boxShadow: Elevations.of(context).card,
+      ),
+      child: Material(
+        color: dark ? theme.colorScheme.surfaceContainerLow : Colors.white,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadii.lg),
+          side: BorderSide(
+            color: dark
+                ? theme.colorScheme.outlineVariant
+                : theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
+          ),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(padding: padding, child: child),
+        ),
+      ),
+    );
+  }
+}
+
+/// A rounded square with a tinted background holding an icon (category,
+/// place, settings rows).
+class IconBadge extends StatelessWidget {
+  const IconBadge({
+    required this.icon,
+    required this.color,
+    this.size = 44,
+    this.semanticLabel,
+    super.key,
+  });
+
+  final IconData icon;
+  final Color color;
+  final double size;
+  final String? semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: dark ? 0.22 : 0.13),
+        borderRadius: BorderRadius.circular(size * 0.32),
+      ),
+      child: Icon(
+        icon,
+        size: size * 0.5,
+        color: dark ? Color.lerp(color, Colors.white, 0.35) : color,
+        semanticLabel: semanticLabel,
+      ),
+    );
+  }
 }
 
 /// Small section label inside forms and detail pages.

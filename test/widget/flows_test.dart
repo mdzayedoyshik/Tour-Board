@@ -6,7 +6,6 @@ import 'package:tour_board/core/widgets/common.dart';
 import 'package:tour_board/features/itinerary/data/plan_repository.dart';
 import 'package:tour_board/features/itinerary/presentation/plan_form_screen.dart';
 import 'package:tour_board/features/itinerary/presentation/plan_tab.dart';
-import 'package:tour_board/features/map/data/map_provider.dart';
 import 'package:tour_board/features/membership/data/membership_repository.dart';
 import 'package:tour_board/features/membership/domain/invite_code.dart';
 import 'package:tour_board/features/membership/domain/member.dart';
@@ -113,38 +112,37 @@ void main() {
         overrides: common,
       );
       await tester.pumpAndSettle();
-      expect(find.text('Nothing planned yet'), findsOneWidget);
-      expect(find.textContaining('Day 1'), findsOneWidget);
-      expect(find.textContaining('Day 4'), findsOneWidget);
-      expect(find.text('Add plan'), findsOneWidget);
+      // Day selector shows every trip day; the selected day is empty.
+      expect(find.text('Day 1'), findsOneWidget);
+      expect(find.text('Day 4'), findsOneWidget);
+      expect(find.text('A free day so far'), findsOneWidget);
+      expect(find.text('Add stop'), findsOneWidget);
     });
 
-    testWidgets('manual place entry works when search is unavailable', (
+    testWidgets('places are chosen on the map, never typed as coordinates', (
       tester,
     ) async {
       useTallView(tester);
       await pumpApp(
         tester,
         const PlanFormScreen(tourId: 't1'),
-        overrides: [
-          ...common,
-          placeSearchProvider.overrideWithValue(DisabledPlaceSearch()),
-        ],
+        overrides: common,
       );
       await tester.pumpAndSettle();
-      expect(find.textContaining('Place search is turned off'), findsOneWidget);
-      expect(find.text('Latitude'), findsOneWidget);
+      expect(find.text('Choose a place'), findsOneWidget);
+      expect(find.text('Latitude'), findsNothing);
+      expect(find.textContaining('OpenStreetMap'), findsNothing);
+      // Save enables once a title is entered (place is optional).
+      FilledButton save() => tester.widget<FilledButton>(
+        find.ancestor(
+          of: find.text('Save'),
+          matching: find.byType(FilledButton),
+        ),
+      );
+      expect(save().onPressed, isNull);
       await tester.enterText(find.byType(TextFormField).first, 'Beach walk');
-      await tester.enterText(
-        find.widgetWithText(TextFormField, 'Latitude'),
-        '200',
-      );
-      await tester.enterText(
-        find.widgetWithText(TextFormField, 'Longitude'),
-        '92',
-      );
       await tester.pump();
-      expect(find.textContaining('Enter both latitude'), findsOneWidget);
+      expect(save().onPressed, isNotNull);
     });
   });
 

@@ -25,6 +25,8 @@ class PlanItem {
     this.endTime,
     this.startAt,
     this.placeName,
+    this.address,
+    this.placeId,
     this.latitude,
     this.longitude,
     this.note,
@@ -47,6 +49,8 @@ class PlanItem {
     endTime: readStringOrNull(data['endTime']),
     startAt: readDateOrNull(data['startAt']),
     placeName: readStringOrNull(data['placeName']),
+    address: readStringOrNull(data['address']),
+    placeId: readStringOrNull(data['placeId']),
     latitude: readDoubleOrNull(data['latitude']),
     longitude: readDoubleOrNull(data['longitude']),
     note: readStringOrNull(data['note']),
@@ -76,6 +80,12 @@ class PlanItem {
   final String? endTime;
   final DateTime? startAt;
   final String? placeName;
+
+  /// Formatted address from Google (display only).
+  final String? address;
+
+  /// Google place ID, used to open the exact place in Google Maps.
+  final String? placeId;
   final double? latitude;
   final double? longitude;
   final String? note;

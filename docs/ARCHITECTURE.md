@@ -74,22 +74,42 @@ Firestore offline persistence provides cached reads and queued writes.
   keys) or renumber one day. Packing items are independent documents.
 - Screens show a banner when data comes from cache.
 
-## Provider abstractions
+## Backend
 
-- `MapTileSource` (URL template, attribution, User-Agent) from config;
-  default OSM tiles via `flutter_map`.
-- `PlaceSearchProvider`: `NominatimPlaceSearch` (1 req/s throttle, in-memory
-  cache, submit-only) or `DisabledPlaceSearch`; manual entry always exists.
-- External navigation uses `geo:` / Apple Maps / OSM URLs via
-  `url_launcher` — no SDK keys.
+`lib/data/backend/backend_client.dart` talks to
+`https://tour-board-backend.onrender.com` with the user's Firebase ID token.
+
+- `EventReporter` fire-and-forgets `POST /v1/events` after a write the
+  server can see (never for offline-queued writes), retrying once on
+  cold-start/network errors. The server re-checks the event against
+  Firestore, de-duplicates it, writes inbox items and sends FCM pushes,
+  honouring `users/{uid}.notificationPrefs`.
+- `DELETE /v1/tours/:id` deletes an archived tour recursively (host only).
+- Place search: `PlaceService` → `/v1/places/autocomplete|details|reverse`.
+- A daily GitHub Action calls `/internal/jobs/cleanup` (retention policy in
+  `docs/FREE_TIER_LIMITS.md`).
+
+## Maps
+
+Google Maps SDK (`google_maps_flutter`) with a light style that hides
+business POIs and a dark style for dark mode. `PlacePickerScreen` is a
+full-screen map: floating search with suggestions, tap/long-press/drag to
+place a pin (reverse-geocoded name), satellite toggle and a confirm card —
+coordinates are never typed. `MapTab` shows numbered, day-coloured pins
+(`MarkerPainter` draws them at device resolution), a day filter and a
+swipeable stop carousel. Directions open Google/Apple Maps by URL.
 
 ## Notifications
 
-In-app inbox (`users/{uid}/inbox`) for important events; activity feed for
-everything else, with an "unseen" badge filtered by the user's expense/plan
-preferences. Itinerary reminders are device-local (`flutter_local_notifications`,
-inexact scheduling, ≤30 per tour) and resynced whenever the plan changes.
-No FCM sender exists in the app.
+- **Push (FCM)**: `PushService` requests permission, stores the token at
+  `users/{uid}/devices/{deviceId}`, shows foreground messages via a local
+  notification on the `tour_updates` channel and routes taps
+  (`routeForMessage`). Sign-out removes the device.
+- **Inbox** (`users/{uid}/inbox`): written by the backend only; the app
+  hides categories the user turned off.
+- **Activity feed** with an "unseen" badge filtered by preferences.
+- **Reminders**: device-local (`flutter_local_notifications`, inexact, ≤30
+  per tour), resynced when the plan changes.
 
 ## Error handling
 

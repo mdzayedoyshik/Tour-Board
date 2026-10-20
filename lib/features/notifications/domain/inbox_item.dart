@@ -1,8 +1,7 @@
 import '../../../data/firebase/firestore_helpers.dart';
 
-/// Types of in-app notifications. Stored without free text: the recipient's
-/// device renders the message from [type] plus snapshots, so a sender cannot
-/// inject arbitrary content. Keep in sync with `inboxTypes()` in rules.
+/// Types of in-app notifications, written by the backend. Stored without
+/// free text: the device renders the message from [type] plus snapshots.
 enum InboxType {
   joinRequest,
   joinApproved,
@@ -13,6 +12,12 @@ enum InboxType {
   tourClosed,
   tourReopened,
   roleChanged,
+  expenseAdded,
+  expenseEdited,
+  expenseDeleted,
+  planAdded,
+  planEdited,
+  tourDeletionSoon,
 }
 
 InboxType? inboxTypeFromName(String? name) {
@@ -52,8 +57,8 @@ class InboxItem {
 
   static const pageSize = 30;
 
-  /// Inbox records are ephemeral; expired ones are hidden and lazily deleted
-  /// by the owner's client (see docs/FREE_TIER_LIMITS.md).
+  /// Inbox records expire after 30 days; the backend's daily job deletes
+  /// them and the UI hides expired ones regardless.
   static const lifetime = Duration(days: 30);
 
   final String id;

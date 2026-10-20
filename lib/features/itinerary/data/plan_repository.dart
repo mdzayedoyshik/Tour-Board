@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/utils/dates.dart';
+import '../../../data/backend/backend_client.dart';
 import '../../../data/firebase/firestore_helpers.dart';
 import '../../../data/firebase/firestore_paths.dart';
 import '../../../data/firebase/firestore_streams.dart';
@@ -17,6 +18,8 @@ class PlanDraft {
     this.startTime,
     this.endTime,
     this.placeName,
+    this.address,
+    this.placeId,
     this.latitude,
     this.longitude,
     this.note,
@@ -31,6 +34,8 @@ class PlanDraft {
   final String? startTime;
   final String? endTime;
   final String? placeName;
+  final String? address;
+  final String? placeId;
   final double? latitude;
   final double? longitude;
   final String? note;
@@ -48,6 +53,8 @@ class PlanDraft {
       'endTime': ?endTime,
       if (startAt != null) 'startAt': Timestamp.fromDate(startAt),
       'placeName': ?blankToNull(placeName),
+      'address': ?blankToNull(address),
+      'placeId': ?blankToNull(placeId),
       if (latitude != null && longitude != null) ...{
         'latitude': latitude,
         'longitude': longitude,
@@ -64,10 +71,11 @@ class PlanDraft {
 }
 
 class PlanRepository {
-  PlanRepository(this._db, this._feed);
+  PlanRepository(this._db, this._feed, this._events);
 
   final FirebaseFirestore _db;
   final FeedRepository _feed;
+  final EventReporter _events;
 
   CollectionReference<Map<String, dynamic>> _col(String tourId) =>
       _db.collection(FirestorePaths.activities(tourId));
@@ -108,7 +116,12 @@ class PlanRepository {
           label: draft.title,
         ),
       );
-    return commitQueued(batch.commit());
+    return _reportWhenSynced(
+      commitQueued(batch.commit()),
+      ServerEvent.planAdded,
+      tourId,
+      ref.id,
+    );
   }
 
   /// Optional fields cleared in the form are deleted. Plans use
@@ -126,6 +139,8 @@ class PlanRepository {
       'endTime',
       'startAt',
       'placeName',
+      'address',
+      'placeId',
       'latitude',
       'longitude',
       'note',
@@ -150,7 +165,27 @@ class PlanRepository {
           label: draft.title,
         ),
       );
-    return commitQueued(batch.commit());
+    return _reportWhenSynced(
+      commitQueued(batch.commit()),
+      ServerEvent.planEdited,
+      tourId,
+      item.id,
+    );
+  }
+
+  /// Notifies other members only once the server has the write; a queued
+  /// offline write does not exist on the server yet.
+  Future<WriteOutcome> _reportWhenSynced(
+    Future<WriteOutcome> write,
+    ServerEvent event,
+    String tourId,
+    String refId,
+  ) async {
+    final outcome = await write;
+    if (outcome == WriteOutcome.synced) {
+      _events.report(event, tourId: tourId, refId: refId);
+    }
+    return outcome;
   }
 
   /// Status toggles are tiny updates without a feed event.
@@ -222,6 +257,7 @@ final planRepositoryProvider = Provider<PlanRepository>(
   (ref) => PlanRepository(
     ref.watch(firestoreProvider),
     ref.watch(feedRepositoryProvider),
+    ref.watch(eventReporterProvider),
   ),
 );
 

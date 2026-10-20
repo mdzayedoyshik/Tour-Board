@@ -2,7 +2,7 @@
 
 `firestore.rules` is the security boundary. The UI's permission helper
 (`lib/features/membership/domain/permissions.dart`) mirrors it for display
-only. Tests: `rules_test/rules.test.mjs` (43 cases, Firestore emulator).
+only. Tests: `rules_test/rules.test.mjs` (46 cases, Firestore emulator).
 
 ```bash
 cd rules_test && npm ci && npm test     # needs Java 17+ and firebase-tools
@@ -55,10 +55,17 @@ firebase deploy --only firestore:rules  # only with explicit intent
   `pending_confirmation`; amounts/parties immutable; confirm/dispute by the
   counterparty; cancel by the creator; `confirmed` is terminal so it cannot
   apply twice. Allowed in closed tours (post-trip settling).
-- **Inbox**: no free text. Each type has its own authorisation (e.g.
-  `joinApproved` only from a host/admin after the request is approved); the
-  sender must be `request.auth.uid`; recipients must be tour members (or the
-  requester). Owner-only reads; owner may only flip `read`.
+- **Inbox**: clients cannot create items at all; the backend writes them
+  (Admin SDK) after verifying the event against Firestore. Owner-only reads;
+  the owner may only flip `read` or delete.
+- **Devices** (`users/{uid}/devices`): owner-only FCM tokens with a strict
+  shape; read by the backend.
+- **Profile `notificationPrefs`**: booleans `important`/`expenses`/`plans`.
+- **`serverEvents`, `serverMeta`**: no client access.
+- **Backend**: every `/v1` call requires a valid Firebase ID token (revoked
+  tokens rejected); events are accepted only if Firestore shows the caller
+  really performed them; recipients are chosen by the server; place search
+  and events are rate-limited per user; the cleanup endpoint needs a secret.
 
 ## Threat assumptions
 

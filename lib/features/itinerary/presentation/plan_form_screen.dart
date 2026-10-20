@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
 
 import '../../../app/providers.dart';
 import '../../../core/errors/app_error.dart';
@@ -9,14 +10,14 @@ import '../../../core/money/currency.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/dates.dart';
 import '../../../core/utils/formatters.dart';
-import '../../../core/utils/geo.dart';
 import '../../../core/widgets/amount_field.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/common.dart';
 import '../../../core/widgets/pickers.dart';
 import '../../../core/widgets/states.dart';
 import '../../../data/firebase/firestore_streams.dart';
-import '../../map/data/map_provider.dart';
+import '../../map/data/place_service.dart';
+import '../../map/presentation/place_picker_screen.dart';
 import '../../tours/data/tour_repository.dart';
 import '../../tours/domain/tour.dart';
 import '../data/plan_repository.dart';
@@ -81,24 +82,16 @@ class _PlanForm extends ConsumerStatefulWidget {
 class _PlanFormState extends ConsumerState<_PlanForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _title;
-  late final TextEditingController _place;
-  late final TextEditingController _lat;
-  late final TextEditingController _lng;
   late final TextEditingController _note;
-  late final TextEditingController _search;
   late String _dayKey;
   String? _start;
   String? _end;
+  PickedPlace? _place;
   int? _cost;
   late String _costCurrency;
   late bool _favorite;
   late PlanStatus _status;
   bool _saving = false;
-  bool _manualPlace = false;
-
-  List<PlaceResult> _results = const [];
-  String? _searchError;
-  bool _searching = false;
 
   @override
   void initState() {
@@ -106,19 +99,23 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
     final e = widget.existing;
     final days = dayKeysBetween(widget.tour.startAt, widget.tour.endAt);
     _title = TextEditingController(text: e?.title);
-    _place = TextEditingController(text: e?.placeName);
-    _lat = TextEditingController(text: e?.latitude?.toString());
-    _lng = TextEditingController(text: e?.longitude?.toString());
     _note = TextEditingController(text: e?.note);
-    _search = TextEditingController();
     _dayKey = e?.dayKey ?? widget.initialDay ?? _defaultDay(days);
     _start = e?.startTime;
     _end = e?.endTime;
+    if (e != null && e.hasCoordinates) {
+      _place = PickedPlace(
+        name: e.placeName ?? e.title,
+        address: e.address,
+        latitude: e.latitude!,
+        longitude: e.longitude!,
+        placeId: e.placeId,
+      );
+    }
     _cost = e?.estimatedCostMinor;
     _costCurrency = e?.currencyCode ?? widget.tour.currencyCode;
     _favorite = e?.favorite ?? false;
     _status = e?.status ?? PlanStatus.planned;
-    _manualPlace = e?.hasCoordinates ?? false;
   }
 
   String _defaultDay(List<String> days) {
@@ -130,64 +127,26 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
 
   @override
   void dispose() {
-    for (final c in [_title, _place, _lat, _lng, _note, _search]) {
-      c.dispose();
-    }
+    _title.dispose();
+    _note.dispose();
     super.dispose();
   }
 
-  /// Runs only on explicit submit. The Nominatim usage policy forbids
-  /// autocomplete (search-as-you-type), so typing alone never sends a request.
-  void _submitSearch() {
-    final text = _search.text;
-    final provider = ref.read(placeSearchProvider);
-    if (_searching || text.trim().length < provider.minQueryLength) {
-      setState(() => _searchError = context.l10n.placeQueryTooShort);
-      return;
-    }
-    FocusScope.of(context).unfocus();
-    _runSearch(text);
+  /// Centre the picker near the tour's other stops.
+  LatLng? get _nearby {
+    final withCoords = widget.items.where((i) => i.hasCoordinates).toList();
+    if (withCoords.isEmpty) return null;
+    final sameDay = withCoords.where((i) => i.dayKey == _dayKey);
+    final ref = sameDay.isNotEmpty ? sameDay.last : withCoords.last;
+    return LatLng(ref.latitude!, ref.longitude!);
   }
 
-  Future<void> _runSearch(String text) async {
-    final l10n = context.l10n;
-    final language = Localizations.localeOf(context).languageCode;
+  Future<void> _choosePlace() async {
+    final picked = await pickPlace(context, initial: _place, near: _nearby);
+    if (picked == null) return;
     setState(() {
-      _searching = true;
-      _searchError = null;
-    });
-    try {
-      final results = await ref
-          .read(placeSearchProvider)
-          .search(text, language: language);
-      if (!mounted) return;
-      setState(() {
-        _results = results;
-        _searchError = results.isEmpty ? l10n.placeNoResults : null;
-      });
-    } on PlaceSearchException catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _results = const [];
-        _searchError = switch (e.reason) {
-          PlaceSearchFailure.rateLimited => l10n.placeRateLimited,
-          PlaceSearchFailure.network => l10n.placeOffline,
-          PlaceSearchFailure.unavailable => l10n.placeUnavailable,
-        };
-      });
-    } finally {
-      if (mounted) setState(() => _searching = false);
-    }
-  }
-
-  void _choose(PlaceResult r) {
-    setState(() {
-      _place.text = r.name;
-      _lat.text = r.latitude.toStringAsFixed(6);
-      _lng.text = r.longitude.toStringAsFixed(6);
-      _results = const [];
-      _search.clear();
-      if (_title.text.trim().isEmpty) _title.text = r.name;
+      _place = picked;
+      if (_title.text.trim().isEmpty) _title.text = picked.name;
     });
   }
 
@@ -210,31 +169,26 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
     });
   }
 
-  ({double? lat, double? lng, bool valid}) _coords() {
-    final latText = _lat.text.trim();
-    final lngText = _lng.text.trim();
-    if (latText.isEmpty && lngText.isEmpty) {
-      return (lat: null, lng: null, valid: true);
-    }
-    final lat = double.tryParse(latText.replaceAll(',', '.'));
-    final lng = double.tryParse(lngText.replaceAll(',', '.'));
-    return (lat: lat, lng: lng, valid: isValidCoordinate(lat, lng));
-  }
-
   Future<void> _save() async {
     if (_saving || !_formKey.currentState!.validate()) return;
-    final coords = _coords();
-    if (!coords.valid) return;
     final uid = ref.read(currentUidProvider)!;
     final l10n = context.l10n;
+    final place = _place;
     final draft = PlanDraft(
       title: _title.text,
       dayKey: _dayKey,
       startTime: _start,
       endTime: _end,
-      placeName: _place.text,
-      latitude: coords.lat,
-      longitude: coords.lng,
+      // Keep a legacy name-only place (no coordinates) unless replaced.
+      placeName:
+          place?.name ??
+          (widget.existing?.hasCoordinates == false
+              ? widget.existing?.placeName
+              : null),
+      address: place?.address,
+      placeId: place?.placeId,
+      latitude: place?.latitude,
+      longitude: place?.longitude,
       note: _note.text,
       estimatedCostMinor: _cost,
       currencyCode: _cost == null ? null : _costCurrency,
@@ -288,18 +242,15 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final search = ref.watch(placeSearchProvider);
     final days = {
       ...dayKeysBetween(widget.tour.startAt, widget.tour.endAt),
       _dayKey,
     }.toList()..sort();
-    final coords = _coords();
     final endBeforeStart =
         _start != null &&
         _end != null &&
         parseTimeOfDay(_end)! < parseTimeOfDay(_start)!;
-    final valid =
-        _title.text.trim().isNotEmpty && coords.valid && !endBeforeStart;
+    final valid = _title.text.trim().isNotEmpty && !endBeforeStart;
 
     return Scaffold(
       appBar: AppBar(
@@ -314,6 +265,14 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
           child: ListView(
             padding: const EdgeInsets.all(AppSpacing.page),
             children: [
+              _PlaceField(
+                place: _place,
+                onTap: _choosePlace,
+                onClear: () {
+                  setState(() => _place = null);
+                },
+              ),
+              const SizedBox(height: AppSpacing.lg),
               TextFormField(
                 controller: _title,
                 maxLength: PlanItem.maxTitleLength,
@@ -328,14 +287,22 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
               const SizedBox(height: AppSpacing.sm),
               PickerField(
                 label: l10n.planDay,
-                value: formatDayKey(context, _dayKey),
+                value: () {
+                  final n = tripDayNumber(widget.tour, _dayKey);
+                  final date = formatDayKey(context, _dayKey);
+                  return n == null ? date : l10n.planDayLabel(n, date);
+                }(),
                 icon: Icons.today_outlined,
                 onTap: () async {
                   final d = await pickFromList<String>(
                     context,
                     title: l10n.planDay,
                     items: days,
-                    label: (k) => formatDayKey(context, k),
+                    label: (k) {
+                      final n = tripDayNumber(widget.tour, k);
+                      final date = formatDayKey(context, k);
+                      return n == null ? date : l10n.planDayLabel(n, date);
+                    },
                     selected: _dayKey,
                   );
                   if (d != null) setState(() => _dayKey = d);
@@ -379,134 +346,18 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
                     child: Text(l10n.planClearTimes),
                   ),
                 ),
-              Text(
-                l10n.planTimeZoneNote(
-                  widget.tour.timeZone.replaceAll('_', ' '),
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.xs),
+                child: Text(
+                  l10n.planTimeZoneNote(
+                    widget.tour.timeZone.replaceAll('_', ' '),
+                  ),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
-                style: theme.textTheme.bodySmall,
               ),
-              FormSectionLabel(l10n.planPlace),
-              if (search.isAvailable && !_manualPlace) ...[
-                TextField(
-                  controller: _search,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
-                    hintText: l10n.placeSearchHint,
-                    suffixIcon: _searching
-                        ? const Padding(
-                            padding: EdgeInsets.all(14),
-                            child: SizedBox.square(
-                              dimension: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                          )
-                        : IconButton(
-                            tooltip: l10n.commonSearch,
-                            icon: const Icon(Icons.arrow_forward),
-                            onPressed: _submitSearch,
-                          ),
-                    helperText: l10n.placeSearchAttribution,
-                    errorText: _searchError,
-                  ),
-                  textInputAction: TextInputAction.search,
-                  onSubmitted: (_) => _submitSearch(),
-                ),
-                for (final r in _results)
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(Icons.place_outlined),
-                    title: Text(r.name),
-                    subtitle: r.detail == null
-                        ? null
-                        : Text(
-                            r.detail!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                    onTap: () => _choose(r),
-                  ),
-                const SizedBox(height: AppSpacing.sm),
-              ] else if (!search.isAvailable)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                  child: Text(
-                    l10n.placeManualOnly,
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ),
-              TextFormField(
-                controller: _place,
-                maxLength: PlanItem.maxPlaceLength,
-                decoration: InputDecoration(labelText: l10n.planPlaceName),
-              ),
-              if (_manualPlace ||
-                  !search.isAvailable ||
-                  coords.lat != null) ...[
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _lat,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          signed: true,
-                          decimal: true,
-                        ),
-                        decoration: InputDecoration(
-                          labelText: l10n.planLatitude,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.md),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _lng,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          signed: true,
-                          decimal: true,
-                        ),
-                        decoration: InputDecoration(
-                          labelText: l10n.planLongitude,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                if (!coords.valid)
-                  Padding(
-                    padding: const EdgeInsets.only(top: AppSpacing.xs),
-                    child: Text(
-                      l10n.planInvalidCoordinates,
-                      style: TextStyle(color: theme.colorScheme.error),
-                    ),
-                  ),
-              ],
-              if (search.isAvailable)
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () =>
-                        setState(() => _manualPlace = !_manualPlace),
-                    child: Text(
-                      _manualPlace
-                          ? l10n.placeUseSearch
-                          : l10n.placeEnterManually,
-                    ),
-                  ),
-                ),
-              if (coords.lat != null)
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: TextButton(
-                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () => setState(() {
-                      _lat.clear();
-                      _lng.clear();
-                    }),
-                    child: Text(l10n.planRemoveCoordinates),
-                  ),
-                ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.lg),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -549,11 +400,16 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
               ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
+                secondary: Icon(
+                  _favorite ? Icons.star_rounded : Icons.star_outline_rounded,
+                  color: _favorite ? theme.colorScheme.secondary : null,
+                ),
                 title: Text(l10n.planFavorite),
                 value: _favorite,
                 onChanged: (v) => setState(() => _favorite = v),
               ),
-              if (widget.existing != null)
+              if (widget.existing != null) ...[
+                const SizedBox(height: AppSpacing.sm),
                 Wrap(
                   spacing: AppSpacing.sm,
                   children: [
@@ -565,7 +421,8 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
                       ),
                   ],
                 ),
-              const SizedBox(height: AppSpacing.lg),
+              ],
+              const SizedBox(height: AppSpacing.xl),
               PrimaryButton(
                 label: l10n.commonSave,
                 loading: _saving,
@@ -573,6 +430,81 @@ class _PlanFormState extends ConsumerState<_PlanForm> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Tappable card that opens the map picker; shows the chosen place.
+class _PlaceField extends StatelessWidget {
+  const _PlaceField({
+    required this.place,
+    required this.onTap,
+    required this.onClear,
+  });
+
+  final PickedPlace? place;
+  final VoidCallback onTap;
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final p = place;
+    return Semantics(
+      button: true,
+      label: p == null ? l10n.planChoosePlace : '${l10n.planPlace}: ${p.name}',
+      child: SurfaceCard(
+        onTap: onTap,
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Row(
+          children: [
+            IconBadge(
+              icon: p == null ? Icons.add_location_alt_outlined : Icons.place,
+              color: scheme.primary,
+              size: 52,
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    p?.name ?? l10n.planChoosePlace,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    p == null
+                        ? l10n.planChoosePlaceHint
+                        : (p.address?.isNotEmpty ?? false)
+                        ? p.address!
+                        : l10n.planChangePlace,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (p != null)
+              IconButton(
+                tooltip: l10n.planRemovePlace,
+                icon: const Icon(Icons.close),
+                onPressed: onClear,
+              )
+            else
+              Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
+          ],
         ),
       ),
     );

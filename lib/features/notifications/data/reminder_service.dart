@@ -6,7 +6,9 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../../../app/providers.dart';
 import '../../../core/utils/dates.dart';
+import '../../../app/routes.dart';
 import '../../itinerary/domain/plan_item.dart';
+import 'push_service.dart';
 
 /// Device-local itinerary reminders (opt-in, off by default).
 ///
@@ -35,8 +37,9 @@ class ReminderService {
     if (_initialised) return;
     TimeZones.ensureInitialised();
     await _plugin.initialize(
+      onDidReceiveNotificationResponse: PushService.handleLocalTap,
       settings: const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        android: AndroidInitializationSettings('ic_notification'),
         iOS: DarwinInitializationSettings(
           requestAlertPermission: false,
           requestBadgePermission: false,
@@ -103,7 +106,7 @@ class ReminderService {
           androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
           title: '${entry.item.title} · $tourName',
           body: bodyFor(entry.item),
-          payload: tourId,
+          payload: Routes.tour(tourId, tab: 1),
         );
         ids.add('$id');
       }

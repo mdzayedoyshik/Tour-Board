@@ -12,6 +12,7 @@ import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/common.dart';
 import '../../auth/data/auth_repository.dart';
 import '../../auth/domain/user_profile.dart';
+import '../../notifications/data/push_service.dart';
 import '../../notifications/data/reminder_service.dart';
 import '../data/account_deletion.dart';
 import '../data/preferences.dart';
@@ -179,6 +180,7 @@ class SettingsScreen extends ConsumerWidget {
                       );
                       if (!ok) return;
                       await ref.read(reminderServiceProvider).cancelAll();
+                      await ref.read(pushServiceProvider).stop();
                       await ref.read(authRepositoryProvider).signOut();
                     },
                   ),

@@ -15,6 +15,7 @@ import '../../membership/data/membership_repository.dart';
 import '../../notifications/presentation/reminder_sync.dart';
 import '../data/tour_repository.dart';
 import 'more_tab.dart';
+import 'tour_status_ui.dart';
 
 /// Tour workspace with four destinations. Only the selected tab is built,
 /// so leaving the Map tab cancels its location listener.
@@ -126,6 +127,7 @@ class _TourShellState extends ConsumerState<TourShell> {
         ),
         body: Column(
           children: [
+            TourDeletionBanner(tour: tour),
             if (!tour.isOpen)
               InlineBanner(
                 icon: Icons.lock_outline,

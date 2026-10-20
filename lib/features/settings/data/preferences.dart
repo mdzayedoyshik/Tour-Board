@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
+import '../../notifications/data/push_service.dart';
 
 /// Small device-local settings kept in shared_preferences.
 class AppPreferences {
@@ -9,8 +10,8 @@ class AppPreferences {
     this.themeMode = ThemeMode.system,
     this.localeCode,
     this.notifyImportant = true,
-    this.notifyExpenses = false,
-    this.notifyPlans = false,
+    this.notifyExpenses = true,
+    this.notifyPlans = true,
     this.localReminders = false,
     this.reminderLeadMinutes = 30,
     this.showDiagnostics = false,
@@ -78,8 +79,8 @@ class PreferencesNotifier extends Notifier<AppPreferences> {
       ),
       localeCode: prefs.getString(_locale),
       notifyImportant: prefs.getBool(_important) ?? true,
-      notifyExpenses: prefs.getBool(_expenses) ?? false,
-      notifyPlans: prefs.getBool(_plans) ?? false,
+      notifyExpenses: prefs.getBool(_expenses) ?? true,
+      notifyPlans: prefs.getBool(_plans) ?? true,
       localReminders: prefs.getBool(_reminders) ?? false,
       reminderLeadMinutes: prefs.getInt(_lead) ?? 30,
       showDiagnostics: prefs.getBool(_diagnostics) ?? false,
@@ -102,13 +103,23 @@ class PreferencesNotifier extends Notifier<AppPreferences> {
   }
 
   Future<void> setNotifyImportant(bool value) =>
-      _setBool(_important, value, state.copyWith(notifyImportant: value));
+      _setNotify(_important, value, state.copyWith(notifyImportant: value));
 
   Future<void> setNotifyExpenses(bool value) =>
-      _setBool(_expenses, value, state.copyWith(notifyExpenses: value));
+      _setNotify(_expenses, value, state.copyWith(notifyExpenses: value));
 
   Future<void> setNotifyPlans(bool value) =>
-      _setBool(_plans, value, state.copyWith(notifyPlans: value));
+      _setNotify(_plans, value, state.copyWith(notifyPlans: value));
+
+  /// Notification switches also go to the profile so the server can
+  /// respect them for push notifications.
+  Future<void> _setNotify(String key, bool value, AppPreferences next) async {
+    await _setBool(key, value, next);
+    final uid = ref.read(currentUidProvider);
+    if (uid != null) {
+      await ref.read(pushServiceProvider).syncPreferences(uid, next);
+    }
+  }
 
   Future<void> setLocalReminders(bool value) =>
       _setBool(_reminders, value, state.copyWith(localReminders: value));

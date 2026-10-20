@@ -3,12 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/errors/app_error.dart';
+import '../../../data/backend/backend_client.dart';
 import '../../../data/firebase/firestore_paths.dart';
 import '../../../data/firebase/firestore_streams.dart';
 import '../../activity_feed/data/feed_repository.dart';
 import '../../activity_feed/domain/feed_event.dart';
-import '../../notifications/data/inbox_repository.dart';
-import '../../notifications/domain/inbox_item.dart';
 import '../../tours/data/tour_repository.dart';
 import '../../tours/domain/tour.dart';
 import '../domain/invite_code.dart';
@@ -21,11 +20,11 @@ import '../domain/permissions.dart';
 /// awaited batches (which fail offline) so the UI never reports an approval
 /// that has not actually happened.
 class MembershipRepository {
-  MembershipRepository(this._db, this._feed, this._inbox);
+  MembershipRepository(this._db, this._feed, this._events);
 
   final FirebaseFirestore _db;
   final FeedRepository _feed;
-  final InboxRepository _inbox;
+  final EventReporter _events;
 
   static const _timeout = Duration(seconds: 20);
 
@@ -108,14 +107,7 @@ class MembershipRepository {
         })
         .timeout(_timeout);
 
-    await _inbox.notify(
-      recipientUids: [invite.hostUid],
-      type: InboxType.joinRequest,
-      tourId: invite.tourId,
-      tourName: invite.tourName,
-      senderUid: uid,
-      senderName: displayName,
-    );
+    _events.report(ServerEvent.joinRequest, tourId: invite.tourId);
   }
 
   Future<void> cancelRequest(String tourId, String uid) => _request(tourId, uid)
@@ -198,23 +190,18 @@ class MembershipRepository {
         .timeout(_timeout);
 
     if (!approved) return;
-    await Future.wait([
-      _feed.record(
-        tour.id,
-        type: FeedEventType.memberJoined,
-        actorUid: reviewerUid,
-        subjectUid: request.uid,
-        label: request.displayName,
-      ),
-      _inbox.notify(
-        recipientUids: [request.uid],
-        type: InboxType.joinApproved,
-        tourId: tour.id,
-        tourName: tour.name,
-        senderUid: reviewerUid,
-        senderName: reviewerName,
-      ),
-    ]);
+    _events.report(
+      ServerEvent.joinApproved,
+      tourId: tour.id,
+      subjectUid: request.uid,
+    );
+    await _feed.record(
+      tour.id,
+      type: FeedEventType.memberJoined,
+      actorUid: reviewerUid,
+      subjectUid: request.uid,
+      label: request.displayName,
+    );
   }
 
   Future<void> reject({
@@ -238,13 +225,10 @@ class MembershipRepository {
         })
         .timeout(_timeout);
     if (!rejected) return;
-    await _inbox.notify(
-      recipientUids: [request.uid],
-      type: InboxType.joinRejected,
+    _events.report(
+      ServerEvent.joinRejected,
       tourId: tour.id,
-      tourName: tour.name,
-      senderUid: reviewerUid,
-      senderName: reviewerName,
+      subjectUid: request.uid,
     );
   }
 
@@ -314,13 +298,10 @@ class MembershipRepository {
         ),
       );
     await batch.commit().timeout(_timeout);
-    await _inbox.notify(
-      recipientUids: [member.uid],
-      type: InboxType.roleChanged,
+    _events.report(
+      ServerEvent.roleChanged,
       tourId: tour.id,
-      tourName: tour.name,
-      senderUid: actorUid,
-      senderName: actorName,
+      subjectUid: member.uid,
     );
   }
 
@@ -370,7 +351,7 @@ final membershipRepositoryProvider = Provider<MembershipRepository>(
   (ref) => MembershipRepository(
     ref.watch(firestoreProvider),
     ref.watch(feedRepositoryProvider),
-    ref.watch(inboxRepositoryProvider),
+    ref.watch(eventReporterProvider),
   ),
 );
 

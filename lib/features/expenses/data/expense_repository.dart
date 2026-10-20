@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/errors/app_error.dart';
+import '../../../data/backend/backend_client.dart';
 import '../../../data/firebase/firestore_paths.dart';
 import '../../../data/firebase/firestore_streams.dart';
 import '../../activity_feed/data/feed_repository.dart';
@@ -12,10 +13,11 @@ import '../domain/balances.dart';
 import '../domain/expense.dart';
 
 class ExpenseRepository {
-  ExpenseRepository(this._db, this._feed);
+  ExpenseRepository(this._db, this._feed, this._events);
 
   final FirebaseFirestore _db;
   final FeedRepository _feed;
+  final EventReporter _events;
 
   /// One bounded listener feeds both the list and balance calculation. A
   /// tour beyond this size shows a notice (see [Snapshot.hasMore]).
@@ -57,7 +59,7 @@ class ExpenseRepository {
     required String id,
     required ExpenseDraft draft,
     required String uid,
-  }) {
+  }) async {
     final batch = _db.batch()
       ..set(_col(tourId).doc(id), {
         ..._fields(draft),
@@ -76,7 +78,11 @@ class ExpenseRepository {
           label: draft.title,
         ),
       );
-    return commitQueued(batch.commit());
+    final outcome = await commitQueued(batch.commit());
+    if (outcome == WriteOutcome.synced) {
+      _events.report(ServerEvent.expenseAdded, tourId: tourId, refId: id);
+    }
+    return outcome;
   }
 
   /// Edits run in a transaction (online only). If someone else changed the
@@ -132,6 +138,11 @@ class ExpenseRepository {
         })
         .timeout(const Duration(seconds: 20));
     if (changed) {
+      _events.report(
+        ServerEvent.expenseEdited,
+        tourId: tourId,
+        refId: expenseId,
+      );
       await _feed.record(
         tourId,
         type: FeedEventType.expenseEdited,
@@ -176,6 +187,11 @@ class ExpenseRepository {
           });
         })
         .timeout(const Duration(seconds: 20));
+    _events.report(
+      ServerEvent.expenseDeleted,
+      tourId: tourId,
+      refId: expense.id,
+    );
     await _feed.record(
       tourId,
       type: FeedEventType.expenseDeleted,
@@ -213,6 +229,7 @@ final expenseRepositoryProvider = Provider<ExpenseRepository>(
   (ref) => ExpenseRepository(
     ref.watch(firestoreProvider),
     ref.watch(feedRepositoryProvider),
+    ref.watch(eventReporterProvider),
   ),
 );
 

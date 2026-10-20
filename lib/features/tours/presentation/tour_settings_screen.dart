@@ -17,8 +17,7 @@ import '../../auth/data/auth_repository.dart';
 import '../../membership/data/membership_repository.dart';
 import '../../membership/domain/invite_code.dart';
 import '../../membership/domain/permissions.dart';
-import '../../notifications/data/inbox_repository.dart';
-import '../../notifications/domain/inbox_item.dart';
+import '../../../data/backend/backend_client.dart';
 import '../data/tour_repository.dart';
 import '../domain/tour.dart';
 import 'more_tab.dart';
@@ -103,19 +102,13 @@ class _BodyState extends ConsumerState<_Body> {
           .read(tourRepositoryProvider)
           .setStatus(widget.tour, status, uid);
       if (status == TourStatus.archived) return;
-      await ref
-          .read(inboxRepositoryProvider)
-          .notify(
-            recipientUids: ref
-                .read(activeMembersProvider(widget.tour.id))
-                .map((m) => m.uid),
-            type: status == TourStatus.closed
-                ? InboxType.tourClosed
-                : InboxType.tourReopened,
+      ref
+          .read(eventReporterProvider)
+          .report(
+            status == TourStatus.closed
+                ? ServerEvent.tourClosed
+                : ServerEvent.tourReopened,
             tourId: widget.tour.id,
-            tourName: widget.tour.name,
-            senderUid: uid,
-            senderName: ref.read(profileProvider).value?.displayName ?? '—',
           );
     }, l10n.tourStatusChanged);
   }
@@ -132,16 +125,13 @@ class _BodyState extends ConsumerState<_Body> {
     if (!ok || !mounted) return;
     setState(() => _busy = true);
     try {
-      final complete = await ref
-          .read(tourRepositoryProvider)
-          .deleteArchivedTour(widget.tour, ref.read(currentUidProvider)!);
+      // The server deletes every subcollection recursively.
+      await ref
+          .read(backendClientProvider)
+          .delete('/v1/tours/${widget.tour.id}');
       if (!mounted) return;
-      if (complete) {
-        showAppSnack(context, l10n.tourDeleted);
-        context.go(Routes.home);
-      } else {
-        showAppSnack(context, l10n.tourDeletePartial);
-      }
+      showAppSnack(context, l10n.tourDeleted);
+      context.go(Routes.home);
     } catch (e) {
       if (mounted) showAppSnack(context, errorMessage(context, e), error: true);
     } finally {

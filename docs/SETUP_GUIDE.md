@@ -1,135 +1,102 @@
-# Setup guide — status and remaining steps
+# Setup guide
 
-Firebase project: **tour-board-20bd4** · Android app
-`1:230585437551:android:85946ccdd7d999284bac9a` (`com.techorbit.tour_board`)
-· iOS app `1:230585437551:ios:0c9f6bc5bf0abd534bac9a` (`com.techorbit.tourBoard`).
+Firebase project **tour-board-20bd4** · Android `com.techorbit.tour_board`
+(app `1:230585437551:android:85946ccdd7d999284bac9a`) · iOS
+`com.techorbit.tourBoard` · Backend: `https://tour-board-backend.onrender.com`
+([Tour-Board-Backend](https://github.com/xX0ZAK0Xx/Tour-Board-Backend)).
 
-| Step | Status |
+## Status
+
+| Item | Status |
 |---|---|
-| 1. Firebase project, Firestore (Standard, default DB), Google sign-in | ✅ done |
-| 2. `flutterfire configure` (`firebase_options.dart`, `google-services.json`, Gradle plugin) | ✅ done and committed |
-| 3a. Debug-key SHA-1/SHA-256 registered; `google-services.json` refreshed with OAuth clients | ✅ done |
-| 3b. Upload-key SHA-1/SHA-256 | ⏳ run `scripts/setup_release_signing.sh` (§3) |
-| 3c. Play App Signing SHA-1/SHA-256 | ⏳ after the first Play upload (§6) |
-| 4. iOS Google Sign-In (`GIDClientID` + URL scheme in `Info.plist`) | ✅ done |
-| 5. Firestore rules + indexes deployed | ✅ done (redeploy after rule changes) |
-| 6. GitHub secrets | ⏳ §3 sets the signing ones; add `PLAY_STORE_JSON_KEY` (§5) |
-| 7. First Play Console upload | ⏳ manual, §6 |
-| 8. Invite domain / App Links | ➖ not needed: invites use join codes only |
-| 9. Physical-device checks | ⏳ `docs/TEST_PLAN.md` |
+| Firebase project, Firestore, Google sign-in, `flutterfire configure` | ✅ |
+| SHA-1/SHA-256 for debug, upload and Play App Signing keys | ✅ |
+| Upload keystore + GitHub signing secrets, `PLAY_STORE_JSON_KEY` | ✅ |
+| Firestore rules + indexes (incl. collection-group overrides for cleanup) | deploy with each release (§6) |
+| Render backend + its env vars | ⏳ §1 |
+| Google Maps app key (`MAPS_API_KEY`) | ⏳ §2 |
+| iOS push (APNs) | ⏳ §4, only when shipping iOS |
 
----
+## 1. Backend on Render
 
-## 1. Run it now (debug)
+Follow the backend repo's README. In short:
 
-```bash
-flutter run          # on a connected Android phone or emulator
+1. Firebase Console → Project settings → **Service accounts → Generate new
+   private key** (JSON; keep it private).
+2. Google Cloud → APIs & Services → **Credentials → Create API key** for the
+   server: restrict to **Places API (New)** and **Geocoding API**; enable
+   both APIs. This key lives only on Render.
+3. `openssl rand -hex 32` → cron secret.
+4. Render → New → Blueprint (repo `Tour-Board-Backend`, uses `render.yaml`).
+   Environment: `FIREBASE_SERVICE_ACCOUNT` (paste JSON),
+   `GOOGLE_MAPS_SERVER_KEY`, `CRON_SECRET`.
+5. Backend repo → Settings → Secrets → Actions → `CRON_SECRET` (same value).
+   The *Daily cleanup* workflow runs 03:30 Dhaka; run it once by hand from the
+   Actions tab to check.
+6. Check `https://tour-board-backend.onrender.com/health` returns `{"ok":true}`.
+
+## 2. Google Maps app key
+
+Google Maps needs a **billing account** linked to the Google Cloud project,
+even on the free tier. The mobile Maps SDK has no usage charge; place search
+goes through the backend, which caps usage below the free monthly allowance
+(see `docs/FREE_TIER_LIMITS.md`). Add a budget alert (Billing → Budgets, e.g.
+$1) as a safety net.
+
+1. Enable **Maps SDK for Android** (and **Maps SDK for iOS**).
+2. Create an API key, restricted to:
+   - Android apps: package `com.techorbit.tour_board` with SHA-1s of the
+     debug, upload and Play App Signing keys;
+   - API restriction: Maps SDK for Android/iOS only.
+   (For iOS create a second key restricted to bundle `com.techorbit.tourBoard`.)
+3. Provide it to builds:
+   - local Android: `android/properties/secrets.properties` →
+     `MAPS_API_KEY=...` (git-ignored);
+   - local iOS: copy `ios/Flutter/Secrets.xcconfig.example` to
+     `Secrets.xcconfig` and set `MAPS_API_KEY`;
+   - CI: `gh secret set MAPS_API_KEY` in the app repo.
+
+Without a key the app works, but the map area stays blank.
+
+## 3. Env files
+
+`env/dev.env` / `env/prod.env` (git-ignored, optional; defaults built in):
+
+```
+API_BASE_URL=https://tour-board-backend.onrender.com
+USE_FIREBASE_EMULATOR=false
+FIREBASE_EMULATOR_HOST=10.0.2.2
 ```
 
-Google sign-in works in debug builds because the debug key's fingerprints
-are registered. If it says "isn't set up", check that Google is enabled under
-*Authentication → Sign-in method*.
+CI writes them from the `ENV_DEV` / `ENV_PROD` secrets:
+`gh secret set ENV_PROD < env/prod.env` (same for dev).
 
-## 2. Env files
+## 4. Push notifications
 
-`env/dev.env` and `env/prod.env` exist locally (git-ignored); every key has a
-default, so they are optional.
+- **Android**: works out of the box (FCM is part of Firebase; no extra key).
+  Users are asked for notification permission on first sign-in.
+- **iOS** (when you ship iOS): Apple Developer → Keys → create an **APNs
+  key**; Firebase Console → Project settings → Cloud Messaging → upload it.
+  In Xcode enable *Push Notifications* and *Background Modes → Remote
+  notifications* for the Runner target.
 
-| Key | Value | How to get it |
-|---|---|---|
-| `MAP_TILE_URL` | `https://tile.openstreetmap.org/{z}/{x}/{y}.png` | Default OSM tiles; light use only. For heavy use, sign up with a tile provider and paste its URL template. |
-| `MAP_TILE_ATTRIBUTION` / `MAP_ATTRIBUTION_URL` | OSM attribution | Use the attribution your tile provider requires. |
-| `PLACE_SEARCH_PROVIDER` | `nominatim` or `none` | `none` = manual place name/coordinates only. |
-| `NOMINATIM_URL` | `https://nominatim.openstreetmap.org` | Or a self-hosted instance. |
-| `PLACE_SEARCH_CONTACT_EMAIL` | blank | Optional: an email OSM can contact about this app's traffic. |
-| `USE_FIREBASE_EMULATOR` / `FIREBASE_EMULATOR_HOST` | `false` / `10.0.2.2` | Local emulators only; ignored in prod. |
+## 5. Releasing
 
-No secrets belong in these files. CI recreates them from the optional
-`ENV_DEV` / `ENV_PROD` secrets (the script in §3 can upload them).
+Bump `version:` in `pubspec.yaml` (the number after `+` must always
+increase) and push to `main`. `deploy.yml` analyzes, tests, builds the signed
+APK/AAB, creates a GitHub release and uploads to the Play **internal** track.
 
-## 3. Upload key, fingerprints and GitHub secrets (steps 3b and 6)
-
-Run in your own terminal (in Claude Code: `! bash scripts/setup_release_signing.sh`):
+## 6. Firestore rules and indexes
 
 ```bash
-bash scripts/setup_release_signing.sh
+cd rules_test && npm ci && npm test && cd ..
+firebase deploy --only firestore:rules,firestore:indexes --project tour-board-20bd4
 ```
 
-It:
+Deploy before (or together with) an app release that depends on the change.
+Collection-group indexes can take a few minutes to build.
 
-1. creates `android/properties/upload.jks` (PKCS12, RSA 2048, 10 000 days)
-   and `android/properties/key.properties` — both git-ignored;
-2. prints the upload key's SHA-1 and SHA-256;
-3. optionally registers them with Firebase and refreshes
-   `android/app/google-services.json` (commit that file afterwards);
-4. optionally sets the GitHub secrets `KEYSTORE_BASE64`,
-   `KEY_STORE_PASSWORD`, `KEY_PASSWORD`, `KEY_ALIAS`, `ENV_PROD`, `ENV_DEV`
-   with `gh secret set`.
+## 7. Joining tours
 
-**Back up `upload.jks` and its password** (password manager / offline
-drive). Losing them blocks updates until Google approves a key reset.
-
-Local release builds now sign with the upload key:
-
-```bash
-flutter build appbundle --release --dart-define=ENV=prod
-# -> build/app/outputs/bundle/release/app-release.aab
-```
-
-## 4. Before the first upload
-
-- Bump `version:` in `pubspec.yaml` for every upload (`1.0.0+1`, `1.0.0+2` …).
-- Play Console needs a privacy policy URL; the in-app text under
-  *Settings → Privacy and data retention* is a starting point.
-
-## 5. Play Console service account (`PLAY_STORE_JSON_KEY`)
-
-1. Google Cloud Console → the project linked to Play (or any project) →
-   *IAM & Admin → Service accounts → Create*. No roles needed.
-2. *Keys → Add key → JSON* — downloads a JSON file. **This is a secret.**
-3. Play Console → *Users and permissions → Invite new users* → the service
-   account email → app permission for Tour Board with *Release to testing
-   tracks* (and *Release apps to production* if wanted).
-4. Store it: `gh secret set PLAY_STORE_JSON_KEY < path/to/key.json`, then
-   delete the downloaded file.
-
-Until this secret exists, the deploy workflow builds and tests but skips the
-upload (with a notice), and until the signing secrets exist it also skips the
-GitHub release.
-
-## 6. First Play upload (step 7) and Play App Signing (step 3c)
-
-The API cannot create a new app, so the first release is manual:
-
-1. Play Console → *Create app* (name, language, free).
-2. *Testing → Internal testing → Create release* → upload
-   `app-release.aab` from §3 → accept **Play App Signing**.
-3. Fill in the store listing, content rating, data safety (Google account
-   name/email/photo; no location; no ads) and target audience.
-4. *Setup → App signing* → copy the **App signing key** SHA-1 and SHA-256
-   and register them so sign-in works for Play-installed builds:
-
-   ```bash
-   firebase apps:android:sha:create 1:230585437551:android:85946ccdd7d999284bac9a <SHA1> --project tour-board-20bd4
-   firebase apps:android:sha:create 1:230585437551:android:85946ccdd7d999284bac9a <SHA256> --project tour-board-20bd4
-   firebase apps:sdkconfig ANDROID 1:230585437551:android:85946ccdd7d999284bac9a --project tour-board-20bd4 > android/app/google-services.json
-   ```
-
-   Commit the updated file.
-
-After that, every push to `main` builds, creates a GitHub release and
-uploads to the internal track automatically.
-
-## 7. Redeploying rules
-
-```bash
-cd rules_test && npm test && cd ..
-firebase deploy --only firestore:rules,firestore:indexes
-```
-
-## 8. Joining tours
-
-Hosts share the 12-character **join code** (More → Invite people, or Tour
-settings → Join code). Friends open Tour Board → *Join* and type it; the host
-approves. No website or domain is required. Links/App Links can be added
-later if you get a domain.
+Hosts share the 12-character join code (More → Invite people); friends open
+Tour Board → *Join* and type it; the host approves.

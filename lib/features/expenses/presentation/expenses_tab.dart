@@ -308,6 +308,8 @@ class _Overview extends StatelessWidget {
     final otherCurrencies = spent.keys.where((c) => c != tour.currencyCode);
     final budget = tour.budgetMinor;
     final currencies = {tour.currencyCode, ...?b?.currencies}.toList();
+    const onHero = Colors.white;
+    final heroMuted = Colors.white.withValues(alpha: 0.82);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -316,7 +318,13 @@ class _Overview extends StatelessWidget {
         AppSpacing.page,
         0,
       ),
-      child: SurfaceCard(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: TourPalette.gradientFor(tour.id),
+          borderRadius: BorderRadius.circular(AppRadii.xl),
+          boxShadow: Elevations.of(context).floating,
+        ),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -327,30 +335,33 @@ class _Overview extends StatelessWidget {
                     '${formatTripRange(context, tour.startAt, tour.endAt)}'
                     '  ·  ${l10n.memberCount(memberCount)}',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                      color: heroMuted,
                     ),
                   ),
                 ),
-                TourStatusPill(tour: tour),
+                _HeroPill(tour: tour),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               l10n.expenseTotalSpent,
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+              style: theme.textTheme.labelLarge?.copyWith(color: heroMuted),
             ),
-            Text(
-              formatMoney(mainSpent, tour.currencyCode, locale: locale),
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontFeatures: const [FontFeature.tabularFigures()],
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                formatMoney(mainSpent, tour.currencyCode, locale: locale),
+                style: theme.textTheme.displaySmall?.copyWith(
+                  color: onHero,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
               ),
             ),
             for (final c in otherCurrencies)
               Text(
                 '+ ${formatMoney(spent[c]!, c, locale: locale)}',
-                style: theme.textTheme.bodyMedium,
+                style: theme.textTheme.titleSmall?.copyWith(color: onHero),
               ),
             if (budget != null && budget > 0) ...[
               const SizedBox(height: AppSpacing.md),
@@ -362,11 +373,12 @@ class _Overview extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppRadii.pill),
                   child: LinearProgressIndicator(
-                    minHeight: 6,
+                    minHeight: 8,
                     value: (mainSpent / budget).clamp(0, 1).toDouble(),
+                    backgroundColor: Colors.white.withValues(alpha: 0.25),
                     color: mainSpent > budget
-                        ? StatusColors.of(context).warning
-                        : null,
+                        ? const Color(0xFFFFD166)
+                        : Colors.white,
                   ),
                 ),
               ),
@@ -376,40 +388,128 @@ class _Overview extends StatelessWidget {
                   formatMoney(mainSpent, tour.currencyCode, locale: locale),
                   formatMoney(budget, tour.currencyCode, locale: locale),
                 ),
-                style: theme.textTheme.bodySmall,
+                style: theme.textTheme.bodySmall?.copyWith(color: heroMuted),
               ),
             ],
-            const Divider(height: AppSpacing.xl),
-            Text(
-              l10n.expenseYourBalance,
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.xs),
+            const SizedBox(height: AppSpacing.lg),
             if (b == null)
-              const LinearProgressIndicator()
+              LinearProgressIndicator(
+                backgroundColor: Colors.white.withValues(alpha: 0.25),
+                color: Colors.white,
+              )
             else
-              for (final c in currencies)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-                  child: BalanceLine(
-                    net: uid == null ? 0 : b.netFor(uid!, c),
-                    currencyCode: c,
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  for (final c in currencies)
+                    _HeroBalance(
+                      net: uid == null ? 0 : b.netFor(uid!, c),
+                      currencyCode: c,
+                    ),
+                ],
+              ),
+            const SizedBox(height: AppSpacing.md),
+            Material(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppRadii.md),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(AppRadii.md),
+                onTap: () => context.push(Routes.balances(tour.id)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.md,
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.swap_horiz, color: AppColors.navy),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: Text(
+                          l10n.balancesOpen,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: AppColors.navy,
+                          ),
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right, color: AppColors.navy),
+                    ],
                   ),
                 ),
-            const SizedBox(height: AppSpacing.sm),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: TextButton.icon(
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                onPressed: () => context.push(Routes.balances(tour.id)),
-                icon: const Icon(Icons.swap_horiz),
-                label: Text(l10n.balancesOpen),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Status label on the gradient hero (white text on translucent white).
+class _HeroPill extends StatelessWidget {
+  const _HeroPill({required this.tour});
+
+  final Tour tour;
+
+  @override
+  Widget build(BuildContext context) => Theme(
+    data: Theme.of(context).copyWith(
+      extensions: [
+        Theme.of(context).extension<StatusColors>()!.copyWith(
+          success: Colors.white,
+          warning: Colors.white,
+          muted: Colors.white,
+        ),
+        Elevations.of(context),
+      ],
+      colorScheme: Theme.of(
+        context,
+      ).colorScheme.copyWith(secondary: Colors.white),
+    ),
+    child: TourStatusPill(tour: tour),
+  );
+}
+
+/// "You should receive / You owe / settled" on the hero card.
+class _HeroBalance extends StatelessWidget {
+  const _HeroBalance({required this.net, required this.currencyCode});
+
+  final int net;
+  final String currencyCode;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final amount = formatMoney(
+      net.abs(),
+      currencyCode,
+      locale: context.localeTag,
+    );
+    final (text, icon) = net > 0
+        ? (l10n.balanceYouReceive(amount), Icons.south_west)
+        : net < 0
+        ? (l10n.balanceYouOwe(amount), Icons.north_east)
+        : (l10n.balanceYouSettled, Icons.check);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(AppRadii.pill),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: Colors.white),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: Theme.of(
+              context,
+            ).textTheme.labelLarge?.copyWith(color: Colors.white),
+          ),
+        ],
       ),
     );
   }

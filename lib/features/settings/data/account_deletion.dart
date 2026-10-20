@@ -7,6 +7,7 @@ import '../../auth/data/auth_repository.dart';
 import '../../membership/data/membership_repository.dart';
 import '../../membership/domain/member.dart';
 import '../../notifications/data/inbox_repository.dart';
+import '../../notifications/data/push_service.dart';
 import '../../notifications/data/reminder_service.dart';
 
 /// Tours that block deletion because the user is their only host.
@@ -84,6 +85,7 @@ class AccountDeletionService {
       }
       await entry.reference.delete();
     }
+    await _ref.read(pushServiceProvider).stop();
     await _ref.read(inboxRepositoryProvider).deleteAll(uid);
     await _ref.read(reminderServiceProvider).cancelAll();
     await _db.doc(FirestorePaths.user(uid)).delete();
