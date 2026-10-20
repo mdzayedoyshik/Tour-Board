@@ -256,7 +256,6 @@ class SurfaceCard extends StatelessWidget {
       ),
       child: Material(
         color: dark ? theme.colorScheme.surfaceContainerLow : Colors.white,
-        borderRadius: BorderRadius.circular(AppRadii.lg),
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadii.lg),
