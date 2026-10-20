@@ -60,3 +60,4 @@ firestore-debug.log
 ui-debug.log
 .firebase/
 /rules_test/node_modules/
+ios/Flutter/Secrets.xcconfig

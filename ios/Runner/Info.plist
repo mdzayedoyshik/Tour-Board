@@ -41,6 +41,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>GMSApiKey</key>
+	<string>$(MAPS_API_KEY)</string>
 	<!-- Google Sign-In (iOS OAuth client of Firebase project tour-board-20bd4). -->
 	<key>GIDClientID</key>
 	<string>230585437551-vjhppcmb9ssrujdd9bsl8lmre85foajk.apps.googleusercontent.com</string>

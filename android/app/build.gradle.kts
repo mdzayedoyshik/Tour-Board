@@ -18,6 +18,16 @@ if (keystorePropertiesFile.exists()) {
     keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
 }
 
+// Google Maps SDK key: MAPS_API_KEY env var (CI) or
+// android/properties/secrets.properties (local, git-ignored). The key is
+// restricted in Google Cloud to this app's package + signing certificates.
+val secretProperties = Properties().apply {
+    val f = rootProject.file("properties/secrets.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+val mapsApiKey: String =
+    System.getenv("MAPS_API_KEY") ?: secretProperties.getProperty("MAPS_API_KEY") ?: ""
+
 android {
     namespace = "com.techorbit.tour_board"
     compileSdk = flutter.compileSdkVersion
@@ -38,6 +48,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey
     }
 
     signingConfigs {

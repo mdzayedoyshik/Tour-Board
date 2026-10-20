@@ -771,8 +771,9 @@ service cloud.firestore {
 
         function validActivity(d) {
           return d.keys().hasOnly(['title', 'dayKey', 'startTime', 'endTime',
-                                   'startAt', 'placeName', 'latitude',
-                                   'longitude', 'note', 'estimatedCostMinor',
+                                   'startAt', 'placeName', 'address',
+                                   'placeId', 'latitude', 'longitude',
+                                   'note', 'estimatedCostMinor',
                                    'currencyCode', 'sortOrder', 'status',
                                    'favorite', 'createdBy', 'updatedBy',
                                    'createdAt', 'updatedAt'])
@@ -782,6 +783,8 @@ service cloud.firestore {
               && validTime(d, 'startTime') && validTime(d, 'endTime')
               && (absentOrNull(d, 'startAt') || d.startAt is timestamp)
               && optStr(d, 'placeName', 120)
+              && optStr(d, 'address', 300)
+              && optStr(d, 'placeId', 300)
               && validCoords(d)
               && optStr(d, 'note', 500)
               && optAmount(d, 'estimatedCostMinor')
