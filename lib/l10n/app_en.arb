@@ -94,7 +94,7 @@
   "statusClosed": "Closed",
   "statusArchived": "Archived",
   "statusEnded": "Ended",
-  "homeTitle": "Your tours",
+  "homeTitle": "Tour Board",
   "inboxTitle": "Inbox",
   "settingsTitle": "Settings",
   "homeEmptyTitle": "No tours yet",
@@ -1083,5 +1083,50 @@
   "planChoosePlace": "Choose a place",
   "planChoosePlaceHint": "Search or pick on the map (optional)",
   "planChangePlace": "Tap to change",
-  "planRemovePlace": "Remove place"
+  "planRemovePlace": "Remove place",
+  "homeGreeting": "Hi, {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGreetingNoName": "Hi there",
+  "homeSubtitle": "Where are you heading next?",
+  "tourStartsIn": "{days, plural, =0{Starts today} =1{Starts tomorrow} other{Starts in {days} days}}",
+  "@tourStartsIn": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "tourDayOf": "Day {day} of {total}",
+  "@tourDayOf": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "tourDeletionNotice": "This trip has ended. It will be deleted for everyone on {date}. Settle up and save anything you need before then.",
+  "@tourDeletionNotice": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "tourDeletionShort": "Will be deleted on {date}",
+  "@tourDeletionShort": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

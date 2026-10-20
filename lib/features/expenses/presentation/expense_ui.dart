@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/money/money.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/common.dart';
 import '../../membership/domain/member.dart';
 import '../domain/expense.dart';
 
@@ -36,29 +37,29 @@ String memberName(
   return members[uid]?.displayName ?? context.l10n.commonUnknownMember;
 }
 
+/// Distinct, accessible hue per category (tinted backgrounds via IconBadge).
+Color categoryColor(ExpenseCategory c) => switch (c) {
+  ExpenseCategory.food => const Color(0xFFEA580C),
+  ExpenseCategory.transport => const Color(0xFF2563EB),
+  ExpenseCategory.stay => const Color(0xFF7C3AED),
+  ExpenseCategory.activities => const Color(0xFFDB2777),
+  ExpenseCategory.shopping => const Color(0xFF0D9488),
+  ExpenseCategory.other => const Color(0xFF64748B),
+};
+
 class CategoryIcon extends StatelessWidget {
-  const CategoryIcon(this.category, {super.key});
+  const CategoryIcon(this.category, {this.size = 44, super.key});
 
   final ExpenseCategory category;
+  final double size;
 
   @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-      ),
-      child: Icon(
-        categoryIcon(category),
-        size: AppSizes.iconMd,
-        color: scheme.onSurface,
-        semanticLabel: categoryLabel(context.l10n, category),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => IconBadge(
+    icon: categoryIcon(category),
+    color: categoryColor(category),
+    size: size,
+    semanticLabel: categoryLabel(context.l10n, category),
+  );
 }
 
 /// Plain-language balance: "You should receive …", "You owe …".

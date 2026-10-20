@@ -227,7 +227,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusEnded => 'Ended';
 
   @override
-  String get homeTitle => 'Your tours';
+  String get homeTitle => 'Tour Board';
 
   @override
   String get inboxTitle => 'Inbox';
@@ -1629,4 +1629,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planRemovePlace => 'Remove place';
+
+  @override
+  String homeGreeting(String name) {
+    return 'Hi, $name';
+  }
+
+  @override
+  String get homeGreetingNoName => 'Hi there';
+
+  @override
+  String get homeSubtitle => 'Where are you heading next?';
+
+  @override
+  String tourStartsIn(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Starts in $days days',
+      one: 'Starts tomorrow',
+      zero: 'Starts today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tourDayOf(int day, int total) {
+    return 'Day $day of $total';
+  }
+
+  @override
+  String tourDeletionNotice(String date) {
+    return 'This trip has ended. It will be deleted for everyone on $date. Settle up and save anything you need before then.';
+  }
+
+  @override
+  String tourDeletionShort(String date) {
+    return 'Will be deleted on $date';
+  }
 }

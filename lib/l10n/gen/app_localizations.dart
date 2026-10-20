@@ -475,7 +475,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your tours'**
+  /// **'Tour Board'**
   String get homeTitle;
 
   /// No description provided for @inboxTitle.
@@ -2781,6 +2781,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove place'**
   String get planRemovePlace;
+
+  /// No description provided for @homeGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, {name}'**
+  String homeGreeting(String name);
+
+  /// No description provided for @homeGreetingNoName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi there'**
+  String get homeGreetingNoName;
+
+  /// No description provided for @homeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where are you heading next?'**
+  String get homeSubtitle;
+
+  /// No description provided for @tourStartsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =0{Starts today} =1{Starts tomorrow} other{Starts in {days} days}}'**
+  String tourStartsIn(int days);
+
+  /// No description provided for @tourDayOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day} of {total}'**
+  String tourDayOf(int day, int total);
+
+  /// No description provided for @tourDeletionNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'This trip has ended. It will be deleted for everyone on {date}. Settle up and save anything you need before then.'**
+  String tourDeletionNotice(String date);
+
+  /// No description provided for @tourDeletionShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Will be deleted on {date}'**
+  String tourDeletionShort(String date);
 }
 
 class _AppLocalizationsDelegate
