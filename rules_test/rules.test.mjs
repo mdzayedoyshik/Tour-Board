@@ -672,44 +672,79 @@ describe('settlements', () => {
   });
 });
 
-describe('inbox', () => {
+describe('inbox (server-written)', () => {
   beforeEach(() => seedTour());
 
-  const notify = (from, to, type, overrides = {}) =>
-    setDoc(doc(db(from), `users/${to}/inbox/n1`), {
-      type,
-      tourId: T,
-      tourName: 'Trip',
-      senderUid: from,
-      senderName: from,
-      createdAt: serverTimestamp(),
-      expiresAt: ts(30 * DAY),
-      read: false,
-      ...overrides,
-    });
-
-  test('members notify fellow members with allowed types only', async () => {
-    await assertSucceeds(notify('bob', 'admin', 'settlementSubmitted'));
-    await assertFails(notify('bob', 'stranger', 'settlementSubmitted'));
-    await assertFails(notify('stranger', 'admin', 'settlementSubmitted'));
-    await assertFails(notify('bob', 'admin', 'freeText'));
-    await assertFails(notify('bob', 'admin', 'settlementSubmitted', { message: 'hi' }));
-    await assertFails(notify('bob', 'admin', 'settlementSubmitted', { senderUid: 'host' }));
+  const item = (overrides = {}) => ({
+    type: 'settlementSubmitted',
+    tourId: T,
+    tourName: 'Trip',
+    senderUid: 'bob',
+    senderName: 'Bob',
+    createdAt: serverTimestamp(),
+    expiresAt: ts(30 * DAY),
+    read: false,
+    ...overrides,
   });
 
-  test('cannot forge join approval notifications', async () => {
-    await assertFails(notify('alice', 'carol', 'joinApproved'));
-    await assertFails(notify('host', 'carol', 'joinApproved'));
+  test('no client can create inbox items, not even for themselves', async () => {
+    await assertFails(setDoc(doc(db('bob'), 'users/admin/inbox/n1'), item()));
+    await assertFails(setDoc(doc(db('admin'), 'users/admin/inbox/n1'), item()));
+    await assertFails(setDoc(doc(db('stranger'), 'users/admin/inbox/n1'), item()));
   });
 
-  test('only the recipient reads their inbox', async () => {
-    await assertSucceeds(notify('bob', 'admin', 'settlementSubmitted'));
+  test('only the recipient reads and marks items read', async () => {
+    await seed((f) => setDoc(doc(f, 'users/admin/inbox/n1'), item()));
     await assertSucceeds(getDoc(doc(db('admin'), 'users/admin/inbox/n1')));
     await assertFails(getDoc(doc(db('bob'), 'users/admin/inbox/n1')));
     await assertSucceeds(updateDoc(doc(db('admin'), 'users/admin/inbox/n1'), { read: true }));
-    await assertFails(
-      updateDoc(doc(db('admin'), 'users/admin/inbox/n1'), { type: 'joinApproved' }),
+    await assertFails(updateDoc(doc(db('admin'), 'users/admin/inbox/n1'), { type: 'joinApproved' }));
+    await assertSucceeds(deleteDoc(doc(db('admin'), 'users/admin/inbox/n1')));
+  });
+});
+
+describe('push devices and preferences', () => {
+  const device = (overrides = {}) => ({
+    token: 'fcm-token',
+    platform: 'android',
+    updatedAt: serverTimestamp(),
+    ...overrides,
+  });
+
+  test('users manage only their own device tokens', async () => {
+    await assertSucceeds(setDoc(doc(db('alice'), 'users/alice/devices/d1'), device()));
+    await assertFails(setDoc(doc(db('bob'), 'users/alice/devices/d2'), device()));
+    await assertFails(getDoc(doc(db('bob'), 'users/alice/devices/d1')));
+    await assertFails(setDoc(doc(db('alice'), 'users/alice/devices/d3'), device({ extra: 1 })));
+  });
+
+  test('notification preferences are validated on the profile', async () => {
+    const profile = {
+      uid: 'alice',
+      displayName: 'Alice',
+      email: 'alice@example.com',
+      locale: 'en',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+    await assertSucceeds(setDoc(doc(db('alice'), 'users/alice'), profile));
+    await assertSucceeds(
+      updateDoc(doc(db('alice'), 'users/alice'), {
+        notificationPrefs: { important: true, expenses: false, plans: true },
+        updatedAt: serverTimestamp(),
+      }),
     );
+    await assertFails(
+      updateDoc(doc(db('alice'), 'users/alice'), {
+        notificationPrefs: { important: 'yes' },
+        updatedAt: serverTimestamp(),
+      }),
+    );
+  });
+
+  test('server bookkeeping is not readable by clients', async () => {
+    await assertFails(getDoc(doc(db('alice'), 'serverMeta/mapsUsage-2026-10')));
+    await assertFails(getDoc(doc(db('alice'), 'serverEvents/x')));
   });
 });
 
@@ -742,6 +777,21 @@ describe('content ownership', () => {
       setDoc(
         doc(db('alice'), `tours/${T}/activities/a3`),
         activity('alice', { latitude: 200, longitude: 0 }),
+      ),
+    );
+  });
+
+  test('plan items accept Google place fields', async () => {
+    await assertSucceeds(
+      setDoc(
+        doc(db('alice'), `tours/${T}/activities/g1`),
+        activity('alice', {
+          placeName: 'Inani Beach',
+          address: 'Inani, Ukhia, Bangladesh',
+          placeId: 'ChIJabc',
+          latitude: 21.2,
+          longitude: 92.05,
+        }),
       ),
     );
   });

@@ -189,14 +189,24 @@ service cloud.firestore {
       function validProfile(d) {
         return d.keys().hasOnly(['uid', 'displayName', 'email', 'photoUrl',
                                  'phoneNumber', 'locale', 'createdAt',
-                                 'updatedAt'])
+                                 'updatedAt', 'notificationPrefs'])
             && d.uid == uid
             && isStr(d.displayName, 1, 60)
             && d.email == request.auth.token.email
             && optStr(d, 'photoUrl', 1000)
             && optStr(d, 'phoneNumber', 20)
             && isStr(d.locale, 2, 16)
+            && (!('notificationPrefs' in d) || validPrefs(d.notificationPrefs))
             && d.updatedAt == request.time;
+      }
+
+      // Read by the backend to decide which pushes to send.
+      function validPrefs(p) {
+        return p is map
+            && p.keys().hasOnly(['important', 'expenses', 'plans'])
+            && p.get('important', true) is bool
+            && p.get('expenses', true) is bool
+            && p.get('plans', true) is bool;
       }
 
       allow read: if signedIn() && me() == uid;
@@ -225,51 +235,35 @@ service cloud.firestore {
             && (me() == uid || isHostOrAdmin(t));
       }
 
-      // In-app notifications. Records carry no free text — the recipient's
-      // device renders them from `type` — and each type has its own
-      // sender/recipient authorization so arbitrary users cannot be spammed.
+      // In-app notifications. Written only by the backend (Admin SDK,
+      // after verifying the event); the owner reads, marks read, deletes.
       match /inbox/{n} {
-        function validInboxShape(d) {
-          return d.keys().hasOnly(['type', 'tourId', 'tourName', 'senderUid',
-                                   'senderName', 'refId', 'createdAt',
-                                   'expiresAt', 'read'])
-              && d.senderUid == me() && uid != me()
-              && isStr(d.tourId, 1, 128)
-              && isStr(d.tourName, 1, 80)
-              && isStr(d.senderName, 1, 60)
-              && optStr(d, 'refId', 128)
-              && d.createdAt == request.time
-              && d.expiresAt is timestamp
-              && d.expiresAt <= request.time + duration.value(31, 'd')
-              && d.read == false;
-        }
-
-        function inboxAuthorized(d) {
-          let t = d.tourId;
-          return (d.type == 'joinRequest'
-                  && getAfter(joinRequestPath(t, me())).data.status == 'pending'
-                  && isActiveUid(t, uid)
-                  && memberData(t, uid).role in ['host', 'admin'])
-              || (d.type == 'joinApproved'
-                  && isHostOrAdmin(t)
-                  && getAfter(joinRequestPath(t, uid)).data.status == 'approved')
-              || (d.type == 'joinRejected'
-                  && isHostOrAdmin(t)
-                  && getAfter(joinRequestPath(t, uid)).data.status == 'rejected')
-              || (d.type in ['settlementSubmitted', 'settlementConfirmed',
-                             'settlementDisputed', 'tourClosed',
-                             'tourReopened', 'roleChanged']
-                  && isMember(t) && isActiveUid(t, uid));
-        }
-
         allow read: if signedIn() && me() == uid;
-        allow create: if signedIn() && validInboxShape(incoming())
-            && inboxAuthorized(incoming());
+        allow create: if false;
         allow update: if signedIn() && me() == uid
             && changedKeys().hasOnly(['read'])
             && incoming().read is bool;
         allow delete: if signedIn() && me() == uid;
       }
+
+      // Push registration tokens for this user's devices. Read by the
+      // backend only; owner-only from clients.
+      match /devices/{deviceId} {
+        allow read, delete: if signedIn() && me() == uid;
+        allow create, update: if signedIn() && me() == uid
+            && incoming().keys().hasOnly(['token', 'platform', 'updatedAt'])
+            && isStr(incoming().token, 1, 4096)
+            && isStr(incoming().platform, 1, 20)
+            && incoming().updatedAt == request.time;
+      }
+    }
+
+    // Server-only bookkeeping (dedup records, usage counters).
+    match /serverEvents/{id} {
+      allow read, write: if false;
+    }
+    match /serverMeta/{id} {
+      allow read, write: if false;
     }
 
     // ==================================================================
@@ -326,7 +320,8 @@ service cloud.firestore {
                                  'startAt', 'endAt', 'timeZone',
                                  'currencyCode', 'budgetMinor', 'inviteCode',
                                  'allMemberUids', 'settings', 'createdAt',
-                                 'updatedAt', 'schemaVersion'])
+                                 'updatedAt', 'schemaVersion',
+                                 'deletionWarningSentAt'])
             && isStr(d.name, 1, 80)
             && optStr(d, 'description', 500)
             && d.hostUid is string
