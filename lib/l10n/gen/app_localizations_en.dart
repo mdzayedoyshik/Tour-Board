@@ -809,10 +809,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planStatusSkipped => 'Skipped';
 
   @override
-  String get planAdd => 'Add plan';
+  String get planAdd => 'Add stop';
 
   @override
-  String get planAddToDay => 'Add to this day';
+  String get planAddToDay => 'Add a stop';
 
   @override
   String planTimesInZone(String zone, String offset) {
@@ -832,9 +832,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get planDayEmpty => 'Free day';
-
-  @override
   String planEstimated(String amount) {
     return '≈ $amount';
   }
@@ -844,12 +841,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planUnfavorite => 'Unpin';
-
-  @override
-  String get planHasLocation => 'Has location';
-
-  @override
-  String get planOpenInMaps => 'Open in maps';
 
   @override
   String get planOpenMapsFailed => 'Couldn\'t open a maps app.';
@@ -875,7 +866,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planEditTitle => 'Edit plan';
 
   @override
-  String get planTitleLabel => 'What';
+  String get planTitleLabel => 'Title';
 
   @override
   String get planTitleHint => 'e.g. Sunset at Inani Beach';
@@ -907,51 +898,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planPlace => 'Place';
 
   @override
-  String get placeSearchHint => 'Search for a place';
+  String get placeSearchHint => 'Search places';
 
   @override
-  String get placeSearchAttribution => 'Search by OpenStreetMap Nominatim';
-
-  @override
-  String get placeNoResults => 'No places found. You can enter it manually.';
-
-  @override
-  String get placeRateLimited =>
-      'Search is busy. Wait a moment or enter the place manually.';
+  String get placeNoResults =>
+      'No places found. Try another name, or tap the map to drop a pin.';
 
   @override
   String get placeOffline =>
-      'Search needs a connection. You can enter the place manually.';
+      'You\'re offline. Tap the map to drop a pin instead.';
 
   @override
   String get placeUnavailable =>
-      'Search isn\'t available right now. Enter the place manually.';
-
-  @override
-  String get placeManualOnly =>
-      'Place search is turned off. Enter a name and, if you know them, coordinates.';
-
-  @override
-  String get placeEnterManually => 'Enter manually';
-
-  @override
-  String get placeUseSearch => 'Search instead';
+      'Search isn\'t available right now. Tap the map to drop a pin.';
 
   @override
   String get planPlaceName => 'Place name (optional)';
-
-  @override
-  String get planLatitude => 'Latitude';
-
-  @override
-  String get planLongitude => 'Longitude';
-
-  @override
-  String get planInvalidCoordinates =>
-      'Enter both latitude (−90 to 90) and longitude (−180 to 180), or leave both empty.';
-
-  @override
-  String get planRemoveCoordinates => 'Remove coordinates';
 
   @override
   String get planEstimatedCost => 'Estimated cost (optional)';
@@ -960,12 +922,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planSaved => 'Plan saved';
 
   @override
-  String get mapTilesUnavailable =>
-      'Map tiles couldn\'t load. Saved places and member status still work.';
-
-  @override
   String get mapNoPlaces =>
-      'No plans have a location yet. Add a place with coordinates to see it here.';
+      'Stops with a place appear here. Add a place to a plan to see it on the map.';
 
   @override
   String get inviteOff => 'Joining is turned off';
@@ -1431,7 +1389,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inboxExplainer =>
-      'Updates appear here while you use the app. Tour Board doesn\'t send push notifications.';
+      'Join requests, payments, expenses and plan changes from your tours.';
 
   @override
   String get inboxEmpty => 'You\'re all caught up';
@@ -1475,7 +1433,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prefImportantHint =>
-      'Join requests, payments and tour status in your inbox';
+      'Join requests, payments, role changes and tour status';
 
   @override
   String get prefExpenses => 'Expense updates';
@@ -1504,7 +1462,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pushLimitation =>
-      'Tour Board works without its own server, so it can\'t send push notifications to other people. You\'ll see updates when you open the app.';
+      'Push notifications can take up to a minute to arrive after quiet periods. Reminders are scheduled on this device only.';
 
   @override
   String get settingsPrivacy => 'Privacy & data';
@@ -1533,9 +1491,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagEmulator => 'Using emulator';
-
-  @override
-  String get diagPlaceSearch => 'Place search';
 
   @override
   String get diagYes => 'Yes';
@@ -1571,11 +1526,107 @@ class AppLocalizationsEn extends AppLocalizations {
       'You\'ll leave all tours and your profile will be deleted. Expenses and payments you were part of stay in those tours so balances remain correct. You\'ll be asked to confirm with Google.';
 
   @override
-  String get placeQueryTooShort => 'Type at least 3 characters, then search.';
-
-  @override
   String get inviteCodeHint => 'Friends enter this in Tour Board → Join';
 
   @override
   String get mapPlaces => 'Places';
+
+  @override
+  String get placeQuota =>
+      'Search is busy right now. Tap the map to drop a pin instead.';
+
+  @override
+  String get placeDroppedPin => 'Dropped pin';
+
+  @override
+  String get placeRename => 'Rename place';
+
+  @override
+  String get placeTapHint => 'Search, or tap the map to drop a pin';
+
+  @override
+  String get placeUseThis => 'Use this place';
+
+  @override
+  String get mapLayers => 'Map type';
+
+  @override
+  String get diagBackend => 'Backend';
+
+  @override
+  String inboxExpenseAdded(String name) {
+    return '$name added an expense';
+  }
+
+  @override
+  String inboxExpenseEdited(String name) {
+    return '$name edited an expense';
+  }
+
+  @override
+  String inboxExpenseDeleted(String name) {
+    return '$name deleted an expense';
+  }
+
+  @override
+  String inboxPlanAdded(String name) {
+    return '$name added to the plan';
+  }
+
+  @override
+  String inboxPlanEdited(String name) {
+    return '$name updated the plan';
+  }
+
+  @override
+  String get inboxTourDeletionSoon =>
+      'This tour will be deleted soon. Settle up and save anything you need.';
+
+  @override
+  String get mapAllDays => 'All days';
+
+  @override
+  String get mapShowAll => 'Show all stops';
+
+  @override
+  String planDayShort(int number) {
+    return 'Day $number';
+  }
+
+  @override
+  String planStops(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count stops',
+      one: '1 stop',
+      zero: 'No stops',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get planDayEmptyTitle => 'A free day so far';
+
+  @override
+  String get planDayEmptyBody =>
+      'Add places to visit, meals or activities for this day.';
+
+  @override
+  String get planAnyTime => 'Any time';
+
+  @override
+  String get planDirections => 'Directions';
+
+  @override
+  String get planChoosePlace => 'Choose a place';
+
+  @override
+  String get planChoosePlaceHint => 'Search or pick on the map (optional)';
+
+  @override
+  String get planChangePlace => 'Tap to change';
+
+  @override
+  String get planRemovePlace => 'Remove place';
 }

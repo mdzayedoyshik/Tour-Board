@@ -1447,13 +1447,13 @@ abstract class AppLocalizations {
   /// No description provided for @planAdd.
   ///
   /// In en, this message translates to:
-  /// **'Add plan'**
+  /// **'Add stop'**
   String get planAdd;
 
   /// No description provided for @planAddToDay.
   ///
   /// In en, this message translates to:
-  /// **'Add to this day'**
+  /// **'Add a stop'**
   String get planAddToDay;
 
   /// No description provided for @planTimesInZone.
@@ -1480,12 +1480,6 @@ abstract class AppLocalizations {
   /// **'Day {number} · {date}'**
   String planDayLabel(int number, String date);
 
-  /// No description provided for @planDayEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Free day'**
-  String get planDayEmpty;
-
   /// No description provided for @planEstimated.
   ///
   /// In en, this message translates to:
@@ -1503,18 +1497,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unpin'**
   String get planUnfavorite;
-
-  /// No description provided for @planHasLocation.
-  ///
-  /// In en, this message translates to:
-  /// **'Has location'**
-  String get planHasLocation;
-
-  /// No description provided for @planOpenInMaps.
-  ///
-  /// In en, this message translates to:
-  /// **'Open in maps'**
-  String get planOpenInMaps;
 
   /// No description provided for @planOpenMapsFailed.
   ///
@@ -1561,7 +1543,7 @@ abstract class AppLocalizations {
   /// No description provided for @planTitleLabel.
   ///
   /// In en, this message translates to:
-  /// **'What'**
+  /// **'Title'**
   String get planTitleLabel;
 
   /// No description provided for @planTitleHint.
@@ -1621,86 +1603,32 @@ abstract class AppLocalizations {
   /// No description provided for @placeSearchHint.
   ///
   /// In en, this message translates to:
-  /// **'Search for a place'**
+  /// **'Search places'**
   String get placeSearchHint;
-
-  /// No description provided for @placeSearchAttribution.
-  ///
-  /// In en, this message translates to:
-  /// **'Search by OpenStreetMap Nominatim'**
-  String get placeSearchAttribution;
 
   /// No description provided for @placeNoResults.
   ///
   /// In en, this message translates to:
-  /// **'No places found. You can enter it manually.'**
+  /// **'No places found. Try another name, or tap the map to drop a pin.'**
   String get placeNoResults;
-
-  /// No description provided for @placeRateLimited.
-  ///
-  /// In en, this message translates to:
-  /// **'Search is busy. Wait a moment or enter the place manually.'**
-  String get placeRateLimited;
 
   /// No description provided for @placeOffline.
   ///
   /// In en, this message translates to:
-  /// **'Search needs a connection. You can enter the place manually.'**
+  /// **'You\'re offline. Tap the map to drop a pin instead.'**
   String get placeOffline;
 
   /// No description provided for @placeUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Search isn\'t available right now. Enter the place manually.'**
+  /// **'Search isn\'t available right now. Tap the map to drop a pin.'**
   String get placeUnavailable;
-
-  /// No description provided for @placeManualOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Place search is turned off. Enter a name and, if you know them, coordinates.'**
-  String get placeManualOnly;
-
-  /// No description provided for @placeEnterManually.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter manually'**
-  String get placeEnterManually;
-
-  /// No description provided for @placeUseSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Search instead'**
-  String get placeUseSearch;
 
   /// No description provided for @planPlaceName.
   ///
   /// In en, this message translates to:
   /// **'Place name (optional)'**
   String get planPlaceName;
-
-  /// No description provided for @planLatitude.
-  ///
-  /// In en, this message translates to:
-  /// **'Latitude'**
-  String get planLatitude;
-
-  /// No description provided for @planLongitude.
-  ///
-  /// In en, this message translates to:
-  /// **'Longitude'**
-  String get planLongitude;
-
-  /// No description provided for @planInvalidCoordinates.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter both latitude (−90 to 90) and longitude (−180 to 180), or leave both empty.'**
-  String get planInvalidCoordinates;
-
-  /// No description provided for @planRemoveCoordinates.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove coordinates'**
-  String get planRemoveCoordinates;
 
   /// No description provided for @planEstimatedCost.
   ///
@@ -1714,16 +1642,10 @@ abstract class AppLocalizations {
   /// **'Plan saved'**
   String get planSaved;
 
-  /// No description provided for @mapTilesUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Map tiles couldn\'t load. Saved places and member status still work.'**
-  String get mapTilesUnavailable;
-
   /// No description provided for @mapNoPlaces.
   ///
   /// In en, this message translates to:
-  /// **'No plans have a location yet. Add a place with coordinates to see it here.'**
+  /// **'Stops with a place appear here. Add a place to a plan to see it on the map.'**
   String get mapNoPlaces;
 
   /// No description provided for @inviteOff.
@@ -2449,7 +2371,7 @@ abstract class AppLocalizations {
   /// No description provided for @inboxExplainer.
   ///
   /// In en, this message translates to:
-  /// **'Updates appear here while you use the app. Tour Board doesn\'t send push notifications.'**
+  /// **'Join requests, payments, expenses and plan changes from your tours.'**
   String get inboxExplainer;
 
   /// No description provided for @inboxEmpty.
@@ -2533,7 +2455,7 @@ abstract class AppLocalizations {
   /// No description provided for @prefImportantHint.
   ///
   /// In en, this message translates to:
-  /// **'Join requests, payments and tour status in your inbox'**
+  /// **'Join requests, payments, role changes and tour status'**
   String get prefImportantHint;
 
   /// No description provided for @prefExpenses.
@@ -2581,7 +2503,7 @@ abstract class AppLocalizations {
   /// No description provided for @pushLimitation.
   ///
   /// In en, this message translates to:
-  /// **'Tour Board works without its own server, so it can\'t send push notifications to other people. You\'ll see updates when you open the app.'**
+  /// **'Push notifications can take up to a minute to arrive after quiet periods. Reminders are scheduled on this device only.'**
   String get pushLimitation;
 
   /// No description provided for @settingsPrivacy.
@@ -2637,12 +2559,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Using emulator'**
   String get diagEmulator;
-
-  /// No description provided for @diagPlaceSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Place search'**
-  String get diagPlaceSearch;
 
   /// No description provided for @diagYes.
   ///
@@ -2704,12 +2620,6 @@ abstract class AppLocalizations {
   /// **'You\'ll leave all tours and your profile will be deleted. Expenses and payments you were part of stay in those tours so balances remain correct. You\'ll be asked to confirm with Google.'**
   String get deleteAccountBody;
 
-  /// No description provided for @placeQueryTooShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Type at least 3 characters, then search.'**
-  String get placeQueryTooShort;
-
   /// No description provided for @inviteCodeHint.
   ///
   /// In en, this message translates to:
@@ -2721,6 +2631,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Places'**
   String get mapPlaces;
+
+  /// No description provided for @placeQuota.
+  ///
+  /// In en, this message translates to:
+  /// **'Search is busy right now. Tap the map to drop a pin instead.'**
+  String get placeQuota;
+
+  /// No description provided for @placeDroppedPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Dropped pin'**
+  String get placeDroppedPin;
+
+  /// No description provided for @placeRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename place'**
+  String get placeRename;
+
+  /// No description provided for @placeTapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search, or tap the map to drop a pin'**
+  String get placeTapHint;
+
+  /// No description provided for @placeUseThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this place'**
+  String get placeUseThis;
+
+  /// No description provided for @mapLayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Map type'**
+  String get mapLayers;
+
+  /// No description provided for @diagBackend.
+  ///
+  /// In en, this message translates to:
+  /// **'Backend'**
+  String get diagBackend;
+
+  /// No description provided for @inboxExpenseAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} added an expense'**
+  String inboxExpenseAdded(String name);
+
+  /// No description provided for @inboxExpenseEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} edited an expense'**
+  String inboxExpenseEdited(String name);
+
+  /// No description provided for @inboxExpenseDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} deleted an expense'**
+  String inboxExpenseDeleted(String name);
+
+  /// No description provided for @inboxPlanAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} added to the plan'**
+  String inboxPlanAdded(String name);
+
+  /// No description provided for @inboxPlanEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} updated the plan'**
+  String inboxPlanEdited(String name);
+
+  /// No description provided for @inboxTourDeletionSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'This tour will be deleted soon. Settle up and save anything you need.'**
+  String get inboxTourDeletionSoon;
+
+  /// No description provided for @mapAllDays.
+  ///
+  /// In en, this message translates to:
+  /// **'All days'**
+  String get mapAllDays;
+
+  /// No description provided for @mapShowAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all stops'**
+  String get mapShowAll;
+
+  /// No description provided for @planDayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {number}'**
+  String planDayShort(int number);
+
+  /// No description provided for @planStops.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No stops} =1{1 stop} other{{count} stops}}'**
+  String planStops(int count);
+
+  /// No description provided for @planDayEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A free day so far'**
+  String get planDayEmptyTitle;
+
+  /// No description provided for @planDayEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add places to visit, meals or activities for this day.'**
+  String get planDayEmptyBody;
+
+  /// No description provided for @planAnyTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Any time'**
+  String get planAnyTime;
+
+  /// No description provided for @planDirections.
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get planDirections;
+
+  /// No description provided for @planChoosePlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a place'**
+  String get planChoosePlace;
+
+  /// No description provided for @planChoosePlaceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search or pick on the map (optional)'**
+  String get planChoosePlaceHint;
+
+  /// No description provided for @planChangePlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to change'**
+  String get planChangePlace;
+
+  /// No description provided for @planRemovePlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove place'**
+  String get planRemovePlace;
 }
 
 class _AppLocalizationsDelegate
