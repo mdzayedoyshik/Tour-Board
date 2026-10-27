@@ -55,7 +55,6 @@ class _PlacePickerScreenState extends ConsumerState<PlacePickerScreen> {
   void initState() {
     super.initState();
     _place = widget.initial;
-    _focus.addListener(() => setState(() {}));
   }
 
   @override
@@ -82,7 +81,7 @@ class _PlacePickerScreenState extends ConsumerState<PlacePickerScreen> {
       return;
     }
     _debounce = Timer(
-      const Duration(milliseconds: 450),
+      const Duration(milliseconds: 500),
       () => _runSearch(text),
     );
   }
@@ -203,8 +202,9 @@ class _PlacePickerScreenState extends ConsumerState<PlacePickerScreen> {
     final shadows = Elevations.of(context).floating;
     final place = _place;
     final topInset = MediaQuery.paddingOf(context).top;
-    final showSuggestions =
-        _focus.hasFocus && (_suggestions.isNotEmpty || _searchError != null);
+    // Not tied to focus: submitting or closing the keyboard unfocuses the
+    // field, and results arriving after that must still show.
+    final showSuggestions = _suggestions.isNotEmpty || _searchError != null;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -277,6 +277,7 @@ class _PlacePickerScreenState extends ConsumerState<PlacePickerScreen> {
                           ),
                           onChanged: _onQueryChanged,
                           onSubmitted: (t) {
+                            _debounce?.cancel();
                             if (_suggestions.isNotEmpty) {
                               _choose(_suggestions.first);
                             } else {
