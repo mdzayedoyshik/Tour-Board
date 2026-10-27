@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/avatar.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/app_logo.dart';
 import '../../../core/widgets/buttons.dart';
@@ -172,7 +173,8 @@ class _Greeting extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
-    final name = ref.watch(profileProvider).value?.displayName ?? '';
+    final profile = ref.watch(profileProvider).value;
+    final name = profile?.displayName ?? '';
     final first = name.trim().split(RegExp(r'\s+')).first;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -181,20 +183,36 @@ class _Greeting extends ConsumerWidget {
         AppSpacing.page,
         0,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            first.isEmpty ? l10n.homeGreetingNoName : l10n.homeGreeting(first),
-            style: theme.textTheme.headlineMedium,
-          ),
-          const SizedBox(height: AppSpacing.xxs),
-          Text(
-            l10n.homeSubtitle,
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  first.isEmpty
+                      ? l10n.homeGreetingNoName
+                      : l10n.homeGreeting(first),
+                  style: theme.textTheme.headlineMedium,
+                ),
+                const SizedBox(height: AppSpacing.xxs),
+                Text(
+                  l10n.homeSubtitle,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
           ),
+          if (name.isNotEmpty) ...[
+            const SizedBox(width: AppSpacing.md),
+            MemberAvatar(
+              name: name,
+              photoUrl: profile?.photoUrl,
+              size: AppSizes.avatarLg,
+            ),
+          ],
         ],
       ),
     );
