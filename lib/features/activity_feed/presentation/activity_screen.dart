@@ -150,7 +150,11 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
                 }
                 final e = all[i];
                 return ListTile(
-                  leading: Icon(feedIcon(e.type)),
+                  leading: _ActorAvatar(
+                    members: members,
+                    uid: e.actorUid,
+                    icon: feedIcon(e.type),
+                  ),
                   title: Text(describeFeedEvent(context, e, members, uid)),
                   subtitle: Text(formatRelative(context, e.createdAt, now)),
                 );
@@ -158,6 +162,45 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+/// The actor's photo with the event type as a small badge.
+class _ActorAvatar extends StatelessWidget {
+  const _ActorAvatar({
+    required this.members,
+    required this.uid,
+    required this.icon,
+  });
+
+  final Map<String, Member> members;
+  final String uid;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return SizedBox.square(
+      dimension: AppSizes.avatarMd + 4,
+      child: Stack(
+        children: [
+          MemberUidAvatar(members: members, uid: uid, size: AppSizes.avatarMd),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: scheme.primaryContainer,
+                shape: BoxShape.circle,
+                border: Border.all(color: scheme.surface, width: 2),
+              ),
+              child: Icon(icon, size: 12, color: scheme.onPrimaryContainer),
+            ),
+          ),
+        ],
       ),
     );
   }
