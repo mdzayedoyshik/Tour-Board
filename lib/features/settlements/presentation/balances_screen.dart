@@ -134,9 +134,10 @@ class BalancesScreen extends ConsumerWidget {
       ),
       for (final memberUid in uids)
         ListTile(
-          leading: MemberAvatar(
-            name: members[memberUid]?.displayName ?? '?',
-            photoUrl: members[memberUid]?.photoUrl,
+          leading: MemberUidAvatar(
+            members: members,
+            uid: memberUid,
+            size: AppSizes.avatarMd,
           ),
           title: Text(memberName(context, members, memberUid, viewerUid: uid)),
           subtitle: BalanceLine(
@@ -152,6 +153,28 @@ class BalancesScreen extends ConsumerWidget {
               : StatusPill(label: context.l10n.memberFormer),
         ),
     ];
+  }
+}
+
+/// Payer's and recipient's photos, overlapped, for "A → B" rows.
+class _PairAvatars extends StatelessWidget {
+  const _PairAvatars({
+    required this.members,
+    required this.fromUid,
+    required this.toUid,
+  });
+
+  final Map<String, Member> members;
+  final String fromUid;
+  final String toUid;
+
+  @override
+  Widget build(BuildContext context) {
+    ({String name, String? photoUrl}) person(String uid) => (
+      name: members[uid]?.displayName ?? '?',
+      photoUrl: members[uid]?.photoUrl,
+    );
+    return AvatarStack(people: [person(fromUid), person(toUid)]);
   }
 }
 
@@ -180,7 +203,11 @@ class _TransferTile extends StatelessWidget {
     );
     final involved = uid == transfer.fromUid || uid == transfer.toUid;
     return ListTile(
-      leading: const Icon(Icons.arrow_forward),
+      leading: _PairAvatars(
+        members: members,
+        fromUid: transfer.fromUid,
+        toUid: transfer.toUid,
+      ),
       title: Text(l10n.transferLine(from, to)),
       subtitle: Text(amount),
       trailing: involved
@@ -310,6 +337,12 @@ class _SettlementTileState extends ConsumerState<_SettlementTile> {
           children: [
             Row(
               children: [
+                _PairAvatars(
+                  members: members,
+                  fromUid: s.fromUid,
+                  toUid: s.toUid,
+                ),
+                const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(
                     l10n.transferLine(name(s.fromUid), name(s.toUid)),
