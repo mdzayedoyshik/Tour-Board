@@ -12,6 +12,7 @@ Future<T?> pickFromList<T>(
   required List<T> items,
   required String Function(T) label,
   T? selected,
+  Widget Function(T)? leading,
 }) {
   return showModalBottomSheet<T>(
     context: context,
@@ -21,6 +22,7 @@ Future<T?> pickFromList<T>(
       items: items,
       label: label,
       selected: selected,
+      leading: leading,
     ),
   );
 }
@@ -31,12 +33,14 @@ class _SearchList<T> extends StatefulWidget {
     required this.items,
     required this.label,
     this.selected,
+    this.leading,
   });
 
   final String title;
   final List<T> items;
   final String Function(T) label;
   final T? selected;
+  final Widget Function(T)? leading;
 
   @override
   State<_SearchList<T>> createState() => _SearchListState<T>();
@@ -86,6 +90,7 @@ class _SearchListState<T> extends State<_SearchList<T>> {
                 final item = filtered[index];
                 final isSelected = item == widget.selected;
                 return ListTile(
+                  leading: widget.leading?.call(item),
                   title: Text(widget.label(item)),
                   trailing: isSelected ? const Icon(Icons.check) : null,
                   selected: isSelected,
@@ -128,6 +133,7 @@ class PickerField extends StatelessWidget {
     required this.onTap,
     this.icon,
     this.errorText,
+    this.leading,
     super.key,
   });
 
@@ -136,6 +142,9 @@ class PickerField extends StatelessWidget {
   final VoidCallback onTap;
   final IconData? icon;
   final String? errorText;
+
+  /// Shown before the value, e.g. the chosen member's photo.
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +159,16 @@ class PickerField extends StatelessWidget {
           decoration: InputDecoration(
             labelText: label,
             errorText: errorText,
+            prefixIcon: leading == null
+                ? null
+                : Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: AppSpacing.md,
+                      end: AppSpacing.sm,
+                    ),
+                    child: leading,
+                  ),
+            prefixIconConstraints: const BoxConstraints(),
             suffixIcon: Icon(icon ?? Icons.expand_more),
           ),
           isEmpty: value == null,
