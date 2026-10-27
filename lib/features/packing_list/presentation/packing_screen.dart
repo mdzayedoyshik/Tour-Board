@@ -149,20 +149,29 @@ class _PackingScreenState extends ConsumerState<PackingScreen> {
                           subtitle:
                               item.assigneeUid == null && !item.hasPendingWrites
                               ? null
-                              : Text(
-                                  [
-                                    if (item.assigneeUid != null)
-                                      l10n.packingAssignedTo(
-                                        memberName(
-                                          context,
-                                          members,
-                                          item.assigneeUid!,
-                                          viewerUid: uid,
+                              : Builder(
+                                  builder: (context) {
+                                    final text = [
+                                      if (item.assigneeUid != null)
+                                        l10n.packingAssignedTo(
+                                          memberName(
+                                            context,
+                                            members,
+                                            item.assigneeUid!,
+                                            viewerUid: uid,
+                                          ),
                                         ),
-                                      ),
-                                    if (item.hasPendingWrites)
-                                      l10n.statePendingSync,
-                                  ].join(' · '),
+                                      if (item.hasPendingWrites)
+                                        l10n.statePendingSync,
+                                    ].join(' · ');
+                                    return item.assigneeUid == null
+                                        ? Text(text)
+                                        : MemberCaption(
+                                            members: members,
+                                            uid: item.assigneeUid!,
+                                            text: text,
+                                          );
+                                  },
                                 ),
                           secondary: canEdit
                               ? PopupMenuButton<String>(
@@ -180,6 +189,17 @@ class _PackingScreenState extends ConsumerState<PackingScreen> {
                                         label: (u) => u.isEmpty
                                             ? l10n.commonNone
                                             : memberName(context, members, u),
+                                        leading: (u) => u.isEmpty
+                                            ? const SizedBox.square(
+                                                dimension: AppSizes.avatarSm,
+                                                child: Icon(
+                                                  Icons.person_off_outlined,
+                                                ),
+                                              )
+                                            : MemberUidAvatar(
+                                                members: members,
+                                                uid: u,
+                                              ),
                                       );
                                       if (!mounted || picked == null) return;
                                       await _guard(

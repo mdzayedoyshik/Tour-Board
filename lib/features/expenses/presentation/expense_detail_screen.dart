@@ -11,7 +11,6 @@ import '../../../core/money/money.dart';
 import '../../../core/money/split.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/formatters.dart';
-import '../../../core/widgets/avatar.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/common.dart';
 import '../../../core/widgets/states.dart';
@@ -188,9 +187,12 @@ class _BodyState extends ConsumerState<_Body> {
             style: theme.textTheme.headlineMedium,
           ),
           const SizedBox(height: AppSpacing.xs),
-          Text(
-            '${l10n.expensePaidBy(name(e.payerUid))} · '
-            '${formatDateTime(context, e.occurredAt)}',
+          MemberCaption(
+            members: widget.members,
+            uid: e.payerUid,
+            text:
+                '${l10n.expensePaidBy(name(e.payerUid))} · '
+                '${formatDateTime(context, e.occurredAt)}',
             style: theme.textTheme.bodyMedium?.copyWith(color: muted),
           ),
           Text(
@@ -216,11 +218,7 @@ class _BodyState extends ConsumerState<_Body> {
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
               child: Row(
                 children: [
-                  MemberAvatar(
-                    name: widget.members[uid]?.displayName ?? '?',
-                    photoUrl: widget.members[uid]?.photoUrl,
-                    size: AppSizes.avatarSm,
-                  ),
+                  MemberUidAvatar(members: widget.members, uid: uid),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
@@ -249,8 +247,10 @@ class _BodyState extends ConsumerState<_Body> {
             Text(e.note!),
           ],
           const SizedBox(height: AppSpacing.lg),
-          Text(
-            l10n.expenseCreatedBy(
+          MemberCaption(
+            members: widget.members,
+            uid: e.createdBy,
+            text: l10n.expenseCreatedBy(
               name(e.createdBy),
               formatDateTime(context, e.createdAt),
             ),
@@ -329,6 +329,11 @@ class _RevisionsSheet extends ConsumerWidget {
                     const Divider(height: AppSpacing.xl),
                 itemBuilder: (context, i) => RevisionTile(
                   revision: list[i],
+                  editorAvatar: MemberUidAvatar(
+                    members: members,
+                    uid: list[i].editorUid,
+                    size: AppSizes.avatarXs,
+                  ),
                   editorName: memberName(
                     context,
                     members,
@@ -385,11 +390,13 @@ class RevisionTile extends StatelessWidget {
     required this.revision,
     required this.editorName,
     required this.describe,
+    this.editorAvatar,
     super.key,
   });
 
   final Revision revision;
   final String editorName;
+  final Widget? editorAvatar;
   final String Function(String field, Object? value) describe;
 
   @override
@@ -399,12 +406,22 @@ class RevisionTile extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.revisionBy(
-            editorName,
-            formatDateTime(context, revision.editedAt),
-          ),
-          style: theme.textTheme.labelLarge,
+        Row(
+          children: [
+            if (editorAvatar != null) ...[
+              editorAvatar!,
+              const SizedBox(width: AppSpacing.xs),
+            ],
+            Expanded(
+              child: Text(
+                l10n.revisionBy(
+                  editorName,
+                  formatDateTime(context, revision.editedAt),
+                ),
+                style: theme.textTheme.labelLarge,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: AppSpacing.xs),
         for (final f in revision.changedFields)

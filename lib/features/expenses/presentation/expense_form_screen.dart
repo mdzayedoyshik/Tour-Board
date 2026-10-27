@@ -413,6 +413,11 @@ class _ExpenseFormState extends ConsumerState<_ExpenseForm> {
                     child: PickerField(
                       label: l10n.expensePayer,
                       value: payerName,
+                      leading: MemberUidAvatar(
+                        members: byUid,
+                        uid: _payer,
+                        size: AppSizes.avatarXs,
+                      ),
                       icon: _canPickPayer() ? null : Icons.person_outline,
                       onTap: () async {
                         if (!_canPickPayer()) {
@@ -426,6 +431,11 @@ class _ExpenseFormState extends ConsumerState<_ExpenseForm> {
                           label: (m) => m.uid == widget.uid
                               ? '${m.displayName} (${l10n.commonYou})'
                               : m.displayName,
+                          leading: (m) => MemberAvatar(
+                            name: m.displayName,
+                            photoUrl: m.photoUrl,
+                            size: AppSizes.avatarSm,
+                          ),
                           selected: byUid[_payer],
                         );
                         if (m != null) setState(() => _payer = m.uid);

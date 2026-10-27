@@ -7,6 +7,7 @@ import '../../../app/routes.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/money/money.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/avatar.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/common.dart';
@@ -106,6 +107,11 @@ class _ExpensesTabState extends ConsumerState<ExpensesTab> {
                     children: [
                       for (final m in members)
                         FilterChip(
+                          avatar: MemberAvatar(
+                            name: m.displayName,
+                            photoUrl: m.photoUrl,
+                            size: 24,
+                          ),
                           label: Text(m.displayName),
                           selected: _memberUid == m.uid,
                           onSelected: (on) =>
@@ -556,15 +562,18 @@ class _ExpenseTile extends StatelessWidget {
             ? const TextStyle(decoration: TextDecoration.lineThrough)
             : null,
       ),
-      subtitle: Text(
-        [
-          l10n.expensePaidBy(payer),
-          formatShortDate(context, expense.occurredAt),
-          ...markers,
-        ].join(' · '),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: muted),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: AppSpacing.xxs),
+        child: MemberCaption(
+          members: members,
+          uid: expense.payerUid,
+          text: [
+            l10n.expensePaidBy(payer),
+            formatShortDate(context, expense.occurredAt),
+            ...markers,
+          ].join(' · '),
+          style: TextStyle(color: muted),
+        ),
       ),
       trailing: Text(
         formatMoney(

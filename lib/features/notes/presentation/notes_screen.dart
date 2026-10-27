@@ -109,6 +109,10 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
                 return ListTile(
                   onTap: () =>
                       context.push(Routes.note(widget.tourId, note.id)),
+                  leading: MemberUidAvatar(
+                    members: members,
+                    uid: note.createdBy,
+                  ),
                   title: Text(
                     note.title ?? note.body,
                     maxLines: 1,
@@ -228,8 +232,10 @@ class NoteDetailScreen extends ConsumerWidget {
                   const SizedBox(height: AppSpacing.sm),
                   SelectableText(note.body),
                   const SizedBox(height: AppSpacing.lg),
-                  Text(
-                    l10n.expenseCreatedBy(
+                  MemberCaption(
+                    members: members,
+                    uid: note.createdBy,
+                    text: l10n.expenseCreatedBy(
                       memberName(
                         context,
                         members,
@@ -279,6 +285,11 @@ class NoteDetailScreen extends ConsumerWidget {
               separatorBuilder: (_, _) => const Divider(height: AppSpacing.xl),
               itemBuilder: (context, i) => RevisionTile(
                 revision: snap.data![i],
+                editorAvatar: MemberUidAvatar(
+                  members: members,
+                  uid: snap.data![i].editorUid,
+                  size: AppSizes.avatarXs,
+                ),
                 editorName: memberName(
                   context,
                   members,

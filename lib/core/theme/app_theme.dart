@@ -62,6 +62,7 @@ abstract final class AppSizes {
   static const iconSm = 16.0;
   static const iconMd = 20.0;
   static const iconLg = 24.0;
+  static const avatarXs = 20.0;
   static const avatarSm = 28.0;
   static const avatarMd = 40.0;
   static const avatarLg = 56.0;

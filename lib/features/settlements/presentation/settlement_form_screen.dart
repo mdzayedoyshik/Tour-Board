@@ -7,6 +7,7 @@ import '../../../core/errors/app_error.dart';
 import '../../../core/localization/l10n.dart';
 import '../../../core/money/currency.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/avatar.dart';
 import '../../../core/widgets/amount_field.dart';
 import '../../../core/widgets/buttons.dart';
 import '../../../core/widgets/common.dart';
@@ -163,6 +164,13 @@ class _SettlementFormScreenState extends ConsumerState<SettlementFormScreen> {
                     ? l10n.settlementPaidTo
                     : l10n.settlementReceivedFrom,
                 value: otherName,
+                leading: _otherUid == null
+                    ? null
+                    : MemberAvatar(
+                        name: otherName ?? '?',
+                        photoUrl: byUid[_otherUid]?.photoUrl,
+                        size: AppSizes.avatarXs,
+                      ),
                 onTap: () async {
                   final m = await pickFromList<Member>(
                     context,
@@ -173,6 +181,8 @@ class _SettlementFormScreenState extends ConsumerState<SettlementFormScreen> {
                     label: (m) => m.isActive
                         ? m.displayName
                         : '${m.displayName} (${l10n.memberFormer})',
+                    leading: (m) =>
+                        MemberAvatar(name: m.displayName, photoUrl: m.photoUrl),
                     selected: byUid[_otherUid],
                   );
                   if (m != null) setState(() => _otherUid = m.uid);
