@@ -1,13 +1,29 @@
 # Tour Board
 
 Plan a trip together, record every shared expense, see who owes what, and
-map the itinerary — with a deliberately simple interface.
+map the itinerary, all with a deliberately simple interface.
+
+<a href="https://play.google.com/store/apps/details?id=com.techorbit.tour_board">Get it on Google Play</a>
+
+<p>
+  <img src="docs/screenshots/01.jpg" width="200" alt="Trips">
+  <img src="docs/screenshots/02.jpg" width="200" alt="Shared expenses and balances">
+  <img src="docs/screenshots/03.jpg" width="200" alt="Day by day plan">
+  <img src="docs/screenshots/04.jpg" width="200" alt="Trip map">
+</p>
+
+**Highlights**
+
+- The client is untrusted: every Firestore write is validated in [`firestore.rules`](firestore.rules), covered by 46 emulator tests in [`rules_test`](rules_test).
+- Money is stored in integer minor units with deterministic splits, so every device computes the same balances. See [architecture](docs/ARCHITECTURE.md#money).
+- Settling up takes at most n - 1 transfers, with a submit and confirm handshake for each payment.
+- A small TypeScript backend ([Tour-Board-Backend](https://github.com/mdzayedoyshik/Tour-Board-Backend)) handles push notifications, data retention and Google place search, so no server key ships in the app.
 
 > **Current setup status and remaining steps: [docs/SETUP_GUIDE.md](docs/SETUP_GUIDE.md).**
 
 Flutter + Firebase (Auth, Cloud Firestore, Cloud Messaging) on the **Spark
 (free) plan**, plus a small Node.js backend on Render
-([Tour-Board-Backend](https://github.com/xX0ZAK0Xx/Tour-Board-Backend)) for
+([Tour-Board-Backend](https://github.com/mdzayedoyshik/Tour-Board-Backend)) for
 push notifications, daily data retention and Google place search. Client
 access control lives in `firestore.rules`; the backend verifies every
 request against Firestore.
@@ -154,3 +170,11 @@ the rules tests on pull requests.
   after their end date (members are warned a week before).
 - **Tour size**: 30 active members (60 ever) and 30 participants per expense.
 - Free tiers and provider policies change — see `docs/FREE_TIER_LIMITS.md`.
+
+## Contributing
+
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+[MIT](LICENSE) © Md. Zayed Oyshik

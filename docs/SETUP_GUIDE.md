@@ -3,7 +3,7 @@
 Firebase project **tour-board-20bd4** · Android `com.techorbit.tour_board`
 (app `1:230585437551:android:85946ccdd7d999284bac9a`) · iOS
 `com.techorbit.tourBoard` · Backend: `https://tour-board-backend.onrender.com`
-([Tour-Board-Backend](https://github.com/xX0ZAK0Xx/Tour-Board-Backend)).
+([Tour-Board-Backend](https://github.com/mdzayedoyshik/Tour-Board-Backend)).
 
 ## Status
 
