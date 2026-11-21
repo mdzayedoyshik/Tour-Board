@@ -3,6 +3,13 @@ name: Deploy to Play Store
 on:
   push:
     branches: [main]
+    # Documentation and repo housekeeping should never start a store release.
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.env.example'
+      - '.github/**'
 
 jobs:
   deploy:
